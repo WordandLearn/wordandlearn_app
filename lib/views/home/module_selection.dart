@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/components/components.dart';
+import 'package:word_and_learn/views/writing/home.dart';
 
 import 'components/module_selection_card.dart';
 
@@ -48,7 +49,13 @@ class ModuleSelection extends StatelessWidget {
                   ),
                   ModuleSelectionCard(
                     module: "Writing",
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const WritingHome(),
+                          ));
+                    },
                     assetUrl: "assets/images/boy_writing.png",
                   ),
                 ],

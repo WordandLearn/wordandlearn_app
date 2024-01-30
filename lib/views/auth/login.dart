@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
+import 'package:word_and_learn/views/home/module_selection.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,9 +18,8 @@ class _LoginPageState extends State<LoginPage> {
     Size size = MediaQuery.of(context).size;
     return CustomScaffold(
       bottomImage: Image.asset(
-        "assets/images/group_of_children.png",
-        width: size.width,
-        fit: BoxFit.cover,
+        "assets/images/joyful_kids.png",
+        height: size.height * 0.15,
       ),
       body: ListView(
         children: [
@@ -61,7 +61,13 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           PrimaryButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return const ModuleSelection();
+                },
+              ));
+            },
             child: const Text(
               "GO",
               style: TextStyle(

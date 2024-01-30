@@ -6,8 +6,12 @@ class PrimaryButton extends StatelessWidget {
     super.key,
     required this.child,
     this.onPressed,
+    this.color,
+    this.borderRadius = 40,
   });
   final Widget child;
+  final Color? color;
+  final double borderRadius;
   final void Function()? onPressed;
 
   @override
@@ -15,7 +19,7 @@ class PrimaryButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: color ?? Theme.of(context).primaryColor,
           padding: const EdgeInsets.symmetric(vertical: defaultPadding * 1.5),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(40))),
