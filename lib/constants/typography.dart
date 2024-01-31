@@ -16,6 +16,11 @@ final TextTheme fredokaOneTextTheme = TextTheme(
     fontSize: 48,
     fontWeight: FontWeight.w400,
   ),
+  headlineLarge: GoogleFonts.fredoka(
+    fontSize: 44,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.25,
+  ),
   headlineMedium: GoogleFonts.fredoka(
     fontSize: 34,
     fontWeight: FontWeight.w400,

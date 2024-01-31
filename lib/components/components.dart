@@ -7,3 +7,4 @@ export 'profile_app_bar.dart';
 export 'back_button.dart';
 export 'mascot.dart';
 export 'timed_widget.dart';
+export 'rounded_icon_button.dart';

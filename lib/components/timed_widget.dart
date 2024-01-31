@@ -26,31 +26,34 @@ class _TimedWidgetState extends State<TimedWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return timeElapsed
-        ? widget.child
-        : CircularCountDownTimer(
-            width: 30,
-            height: 30,
-            isReverse: true,
-            isReverseAnimation: true,
-            duration: widget.duration.inSeconds,
-            strokeWidth: 2.5,
-            textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.w600,
-                ),
-            strokeCap: StrokeCap.round,
-            fillColor: Colors.transparent,
-            controller: countDownController,
-            onComplete: () {
-              setState(() {
-                timeElapsed = true;
-              });
-              if (widget.onCompleted != null) {
-                widget.onCompleted!();
-              }
-            },
-            ringColor: Theme.of(context).primaryColor,
-          );
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 500),
+      child: timeElapsed
+          ? widget.child
+          : CircularCountDownTimer(
+              width: 30,
+              height: 30,
+              isReverse: true,
+              isReverseAnimation: true,
+              duration: widget.duration.inSeconds,
+              strokeWidth: 2.5,
+              textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+              strokeCap: StrokeCap.round,
+              fillColor: Colors.transparent,
+              controller: countDownController,
+              onComplete: () {
+                setState(() {
+                  timeElapsed = true;
+                });
+                if (widget.onCompleted != null) {
+                  widget.onCompleted!();
+                }
+              },
+              ringColor: Theme.of(context).primaryColor,
+            ),
+    );
   }
 }

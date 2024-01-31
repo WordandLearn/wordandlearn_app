@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
-import 'package:word_and_learn/models/example.dart';
 import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/utils/timer.dart';
 import 'package:word_and_learn/views/writing/topic/components/flash_card_container.dart';
-import 'package:word_and_learn/views/writing/topic/topic_example_page.dart';
 
 import 'components/topic_learn_appbar.dart';
 

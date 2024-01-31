@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 
 class AddCompositionButton extends StatelessWidget {
@@ -19,19 +20,13 @@ class AddCompositionButton extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: defaultPadding),
             child: Icon(Icons.arrow_right_alt),
           ),
-          ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(),
-                  backgroundColor: Theme.of(context).primaryColor),
-              onPressed: () {},
-              child: const Padding(
-                padding: EdgeInsets.all(defaultPadding * 1.5),
-                child: Icon(
-                  Icons.document_scanner,
-                  size: 30,
-                  color: Colors.black,
-                ),
-              ))
+          RoundIconButton(
+            icon: Icon(
+              Icons.document_scanner,
+              size: 30,
+              color: Colors.black,
+            ),
+          )
         ],
       ),
     );

@@ -38,23 +38,28 @@ class _TopicProgressItemState extends State<TopicProgressItem> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, "/writing/topics/learn");
-      },
-      child: Column(
-        children: [
-          _TopicProgressCard(
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, "/writing/topics/learn");
+          },
+          child: _TopicProgressCard(
             widget: widget,
           ),
-          widget.topic.excerise != null
-              ? _TopicExerciseCard(
+        ),
+        widget.topic.excerise != null
+            ? GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, "/writing/topics/exercise");
+                },
+                child: _TopicExerciseCard(
                   excerise: widget.topic.excerise!,
                   isCurrent: widget.isCurrent,
-                )
-              : const SizedBox.shrink(),
-        ],
-      ),
+                ),
+              )
+            : const SizedBox.shrink(),
+      ],
     );
   }
 }

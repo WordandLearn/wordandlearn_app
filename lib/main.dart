@@ -4,6 +4,7 @@ import 'package:word_and_learn/models/example.dart';
 import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/views/auth/login.dart';
 import 'package:word_and_learn/views/home/module_selection.dart';
+import 'package:word_and_learn/views/writing/exercise.dart';
 import 'package:word_and_learn/views/writing/home.dart';
 import 'package:word_and_learn/views/writing/lessons_page.dart';
 import 'package:word_and_learn/views/writing/topic/lesson_topics_page.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
               ],
               topic: Topic(name: "Adjectives"),
             ),
+        "/writing/topics/exercise": (context) => const ExercisePage()
       },
       title: 'Flutter Demo',
       theme: AppTheme.getTheme(),

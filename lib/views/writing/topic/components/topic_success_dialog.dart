@@ -38,9 +38,8 @@ Widget buildtopicSuccessDialog(BuildContext context, Topic topic) {
               children: [
                 InkWell(
                   onTap: () {
-                    Navigator.popUntil(context, (route) {
-                      return route.settings.name == "/writing";
-                    });
+                    Navigator.popUntil(
+                        context, ModalRoute.withName("/writing/topics"));
                   },
                   child: Row(
                     children: [
@@ -59,7 +58,11 @@ Widget buildtopicSuccessDialog(BuildContext context, Topic topic) {
                     width: 100,
                     height: 30,
                     child: CustomPrimaryButton(
-                        text: "Do Exercise", onPressed: () {}))
+                        text: "Do Exercise",
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, "/writing/topics/exercise");
+                        }))
               ],
             ),
           ),
