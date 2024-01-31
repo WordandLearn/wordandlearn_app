@@ -7,11 +7,13 @@ class CustomScaffold extends StatelessWidget {
   final Widget? appBar;
   final Widget? bottomNavigationBar;
   final Color? backgroundColor;
+  final EdgeInsets padding;
   const CustomScaffold(
       {super.key,
       required this.body,
       this.bottomImage,
       this.appBar,
+      this.padding = scrollPadding,
       this.bottomNavigationBar,
       this.backgroundColor});
 
@@ -25,7 +27,7 @@ class CustomScaffold extends StatelessWidget {
         child: Stack(
           children: [
             Padding(
-              padding: scrollPadding,
+              padding: padding,
               child: Column(
                 children: [
                   if (appBar != null) appBar!,

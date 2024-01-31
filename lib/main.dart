@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/constants/theme.dart';
 import 'package:word_and_learn/views/auth/login.dart';
-import 'package:word_and_learn/views/home/module_selection.dart';
 
 void main() {
   runApp(const MyApp());

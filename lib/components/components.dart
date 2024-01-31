@@ -4,3 +4,6 @@ export 'auth_text_field.dart';
 export 'primary_button.dart';
 export 'mascot_text.dart';
 export 'profile_app_bar.dart';
+export 'back_button.dart';
+export 'mascot.dart';
+export 'timed_widget.dart';

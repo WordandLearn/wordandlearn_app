@@ -13,8 +13,8 @@ class WritingHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-        bottomNavigationBar: AddCompositionButton(),
-        appBar: ProfileAppBar(),
+        bottomNavigationBar: const AddCompositionButton(),
+        appBar: const ProfileAppBar(),
         body: ListView(
           children: [
             CurrentLessonCard(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:word_and_learn/components/back_button.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/models.dart';

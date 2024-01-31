@@ -5,6 +5,6 @@ class CustomBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Icon(Icons.arrow_back_ios);
+    return const Icon(Icons.arrow_back_ios);
   }
 }

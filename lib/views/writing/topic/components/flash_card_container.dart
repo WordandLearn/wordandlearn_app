@@ -118,7 +118,7 @@ class _FlashCardContainerState extends State<FlashCardContainer> {
                   onPressed: () {
                     goToNext();
                   },
-                  child: Icon(Icons.chevron_right_rounded))
+                  child: const Icon(Icons.chevron_right_rounded))
             ],
           ),
         )

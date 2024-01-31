@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:word_and_learn/components/back_button.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
+import 'package:word_and_learn/models/example.dart';
 import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/views/writing/topic/components/flash_card_container.dart';
+import 'package:word_and_learn/views/writing/topic/topic_example_page.dart';
+
+import 'components/topic_learn_appbar.dart';
 
 List<FlashcardText> flashcards = [
   FlashcardText(
@@ -31,19 +34,7 @@ class _TopicLearnPageState extends State<TopicLearnPage> {
         appBar: Padding(
           padding: const EdgeInsets.symmetric(
               horizontal: defaultPadding, vertical: defaultPadding * 2),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const CustomBackButton(),
-              Text(
-                widget.topic.name,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(
-                width: 30,
-              )
-            ],
-          ),
+          child: TopicLearnAppbar(topic: widget.topic),
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -59,6 +50,29 @@ class _TopicLearnPageState extends State<TopicLearnPage> {
             CustomPrimaryButton(
               text: "Next",
               disabled: !completed,
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TopicExamplePage(
+                              examples: [
+                                Example(
+                                    beforeText:
+                                        "I always feel happy at grandma’s house.",
+                                    afterText:
+                                        "I always feel joyful at grandma’s house.",
+                                    guideText:
+                                        "Notice how the word happy has been changed to joyful? Using different words that mean the same thing makes your writing more interesting and fun! Let’s look at more examples..."),
+                                Example(
+                                    beforeText:
+                                        "I always feel sad at grandma’s house.",
+                                    afterText:
+                                        "I always feel melancholic at grandma’s house.",
+                                    guideText:
+                                        "melancholic we changed it to give more meaning to the story"),
+                              ],
+                            )));
+              },
               color: const Color(0xFF060606),
             )
           ],

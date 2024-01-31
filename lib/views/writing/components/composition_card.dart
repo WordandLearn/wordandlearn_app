@@ -38,9 +38,9 @@ class CompositionCard extends StatelessWidget {
                       textAlign: TextAlign.end,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: defaultPadding / 2),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: defaultPadding / 2),
                       child: _CompositionScore(),
                     ),
                   ],
@@ -64,7 +64,7 @@ class CompositionCard extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(10)),
-                child: Text(
+                child: const Text(
                   "Take Lessons",
                   style: TextStyle(color: Colors.white),
                 ),
@@ -78,9 +78,7 @@ class CompositionCard extends StatelessWidget {
 }
 
 class _CompositionScore extends StatelessWidget {
-  const _CompositionScore({
-    super.key,
-  });
+  const _CompositionScore();
 
   @override
   Widget build(BuildContext context) {
