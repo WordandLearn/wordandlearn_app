@@ -6,16 +6,19 @@ class CustomScaffold extends StatelessWidget {
   final Widget? bottomImage;
   final Widget? appBar;
   final Widget? bottomNavigationBar;
+  final Color? backgroundColor;
   const CustomScaffold(
       {super.key,
       required this.body,
       this.bottomImage,
       this.appBar,
-      this.bottomNavigationBar});
+      this.bottomNavigationBar,
+      this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       resizeToAvoidBottomInset: false,
       bottomNavigationBar: bottomNavigationBar,
       body: SafeArea(

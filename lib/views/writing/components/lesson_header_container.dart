@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../../constants/constants.dart';
+import 'package:word_and_learn/constants/constants.dart';
 
 class LessonHeaderContainer extends StatelessWidget {
   const LessonHeaderContainer({
