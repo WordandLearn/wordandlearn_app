@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/models/models.dart';
-import 'package:word_and_learn/views/writing/topic/topic_learn_page.dart';
 
 import '../../../../constants/constants.dart';
 
@@ -41,11 +40,7 @@ class _TopicProgressItemState extends State<TopicProgressItem> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) {
-            return TopicLearnPage(topic: widget.topic);
-          },
-        ));
+        Navigator.pushNamed(context, "/writing/topics/learn");
       },
       child: Column(
         children: [

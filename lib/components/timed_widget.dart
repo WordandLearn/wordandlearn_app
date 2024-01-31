@@ -2,9 +2,14 @@ import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 
 class TimedWidget extends StatefulWidget {
-  const TimedWidget({super.key, required this.child, required this.duration});
+  const TimedWidget(
+      {super.key,
+      required this.child,
+      required this.duration,
+      this.onCompleted});
   final Widget child;
   final Duration duration;
+  final Function()? onCompleted;
 
   @override
   State<TimedWidget> createState() => _TimedWidgetState();
@@ -41,6 +46,9 @@ class _TimedWidgetState extends State<TimedWidget> {
               setState(() {
                 timeElapsed = true;
               });
+              if (widget.onCompleted != null) {
+                widget.onCompleted!();
+              }
             },
             ringColor: Theme.of(context).primaryColor,
           );

@@ -2,16 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/example.dart';
+import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/utils/timer.dart';
+import 'package:word_and_learn/views/writing/topic/components/guide_text_dialog.dart';
 import 'package:word_and_learn/views/writing/topic/components/topic_before_after.dart';
+import 'package:word_and_learn/views/writing/topic/components/topic_success_dialog.dart';
 
 Color beforeColor = const Color(0xFF82E7FE);
 
 Color afterColor = const Color(0xFFFFE482);
 
 class TopicExamplePage extends StatefulWidget {
-  const TopicExamplePage({super.key, required this.examples});
+  const TopicExamplePage(
+      {super.key, required this.examples, required this.topic});
   final List<Example> examples;
+  final Topic topic;
 
   @override
   State<TopicExamplePage> createState() => _TopicExamplePageState();
@@ -24,138 +29,128 @@ class _TopicExamplePageState extends State<TopicExamplePage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: AnimatedContainer(
-          padding: allPadding * 2,
-          duration: const Duration(milliseconds: 500),
-          decoration: BoxDecoration(color: isBefore ? beforeColor : afterColor),
-          child: PageView.builder(
-            controller: _pageController,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: widget.examples.length,
-            itemBuilder: (context, index) {
-              Example example = widget.examples[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+        body: SafeArea(
+      child: PageView.builder(
+        controller: _pageController,
+        itemCount: widget.examples.length,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          return Stack(
+            children: [
+              SizedBox(
+                height: size.height,
+                width: size.width,
                 child: Column(
-                  mainAxisSize: MainAxisSize.max,
                   children: [
-                    Padding(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: defaultPadding),
-                      child: _PageIndicators(
-                          index: index,
-                          isBefore: isBefore,
-                          length: widget.examples.length),
-                    ),
-                    SizedBox(
-                      height: size.height * 0.1,
-                    ),
                     Expanded(
-                      child: TopicBeforeAfter(
-                        isBefore: isBefore,
-                        example: example,
-                        onBefore: () {
-                          setState(() {
-                            isBefore = true;
-                          });
-                        },
-                        onAfter: () {
-                          Future.delayed(
-                              TimerUtil.timeToRead(example.afterText), () {
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (context) => buildGuideTextDialog(
-                                  context, example.guideText),
-                            );
-                          });
-
-                          setState(() {
-                            isBefore = false;
-                          });
-                        },
-                        onNext: () {
-                          _pageController.nextPage(
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.easeInOut);
-
-                          setState(() {
-                            isBefore = true;
-                          });
-                        },
-                        onPrevious: () {
-                          _pageController.previousPage(
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.easeInOut);
-                        },
-                      ),
-                    ),
+                        child: TopicBeforeAfter(
+                      example: widget.examples[index],
+                      isBefore: true,
+                    )),
+                    Expanded(
+                        child: TopicBeforeAfter(
+                      example: widget.examples[index],
+                      isBefore: false,
+                    ))
                   ],
                 ),
-              );
-            },
-          )),
-    );
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: defaultPadding * 2),
+                child: _PageIndicators(
+                    index: index, length: widget.examples.length),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: defaultPadding * 2, horizontal: defaultPadding),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          if (index == 0) {
+                            Navigator.pop(context);
+                          } else {
+                            _pageController.previousPage(
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeIn);
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.arrow_left_rounded,
+                              size: 50,
+                            ),
+                            Text(
+                              index == 0 ? "Back To Lesson" : "Previous",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                          width: 100,
+                          height: 35,
+                          child: TimedWidget(
+                            onCompleted: () {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) {
+                                  return buildGuideTextDialog(context,
+                                      widget.examples[index].guideText);
+                                },
+                              );
+                            },
+                            duration: TimerUtil.timeToRead(
+                                widget.examples[index].beforeText +
+                                    widget.examples[index].afterText),
+                            child: CustomPrimaryButton(
+                              text: index == widget.examples.length - 1
+                                  ? "Finish"
+                                  : "Next",
+                              color: Theme.of(context).colorScheme.secondary,
+                              onPressed: () {
+                                if (index == widget.examples.length - 1) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) =>
+                                        buildtopicSuccessDialog(
+                                            context, widget.topic),
+                                  );
+                                } else {
+                                  _pageController.nextPage(
+                                      duration:
+                                          const Duration(milliseconds: 500),
+                                      curve: Curves.easeIn);
+                                }
+                              },
+                            ),
+                          )),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    ));
   }
 }
 
-Widget buildGuideTextDialog(BuildContext context, String guideText) {
-  return Dialog(
-    child: Container(
-        height: 400,
-        // padding: allPadding,
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(20)),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Padding(
-              padding: allPadding,
-              child: Container(
-                  height: 330,
-                  width: 300,
-                  padding: allPadding * 2,
-                  decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Text(
-                    guideText,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall!
-                        .copyWith(color: Colors.white),
-                  )),
-            ),
-            const Positioned(bottom: -20, left: -30, child: Mascot(size: 130)),
-            Positioned(
-              bottom: defaultPadding * 2,
-              right: defaultPadding * 2,
-              child: TimedWidget(
-                  child: SizedBox(
-                    width: 130,
-                    height: 30,
-                    child: CustomPrimaryButton(
-                      text: "I understand",
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                  duration: TimerUtil.timeToRead(guideText)),
-            )
-          ],
-        )),
-  );
-}
-
 class _PageIndicators extends StatelessWidget {
-  const _PageIndicators(
-      {super.key,
-      required this.index,
-      required this.isBefore,
-      required this.length});
+  const _PageIndicators({super.key, required this.index, required this.length});
   final int index;
-  final bool isBefore;
   final int length;
   @override
   Widget build(BuildContext context) {
@@ -167,28 +162,11 @@ class _PageIndicators extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 500),
-              width: i == index ? 25 : 20,
-              height: i == index ? 25 : 20,
+              width: i == index ? 20 : 15,
+              height: i == index ? 20 : 15,
               decoration: BoxDecoration(
-                  color: i == index
-                      ? isBefore
-                          ? Colors.white
-                          : Colors.black
-                      : Colors.grey,
+                  color: i == index ? Colors.white : Colors.grey,
                   shape: BoxShape.circle),
-              child: i == index
-                  ? Center(
-                      child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 500),
-                          height: 15,
-                          width: 15,
-                          decoration: BoxDecoration(
-                              color: isBefore
-                                  ? Theme.of(context).colorScheme.secondary
-                                  : Theme.of(context).primaryColor,
-                              shape: BoxShape.circle)),
-                    )
-                  : const SizedBox.shrink(),
             ),
           )
       ],

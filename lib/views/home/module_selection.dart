@@ -50,11 +50,7 @@ class ModuleSelection extends StatelessWidget {
                   ModuleSelectionCard(
                     module: "Writing",
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const WritingHome(),
-                          ));
+                      Navigator.pushNamed(context, "/writing");
                     },
                     assetUrl: "assets/images/boy_writing.png",
                   ),

@@ -42,11 +42,7 @@ class WritingHome extends StatelessWidget {
                             vertical: defaultPadding),
                         child: InkWell(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(
-                              builder: (context) {
-                                return const LessonsPage();
-                              },
-                            ));
+                            Navigator.pushNamed(context, "/writing/lessons");
                           },
                           child: CompositionCard(
                             composition: Composition(),

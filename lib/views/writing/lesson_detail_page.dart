@@ -35,11 +35,7 @@ class LessonDetailPage extends StatelessWidget {
           width: 300,
           child: PrimaryButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return LessonTopicsPage(lesson: lesson);
-                },
-              ));
+              Navigator.pushNamed(context, "/writing/topics");
             },
             color: Theme.of(context).colorScheme.secondary,
             child: const Text(
