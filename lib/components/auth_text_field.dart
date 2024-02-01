@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/constants/constants.dart';
 
-class AuthTextField extends StatelessWidget {
+class AuthTextField extends StatefulWidget {
   const AuthTextField({
     super.key,
     required this.hintText,
@@ -17,7 +17,7 @@ class AuthTextField extends StatelessWidget {
     this.onEditingComplete,
   });
   final String hintText;
-  final String Function(String?)? validator;
+  final String? Function(String?)? validator;
   final TextEditingController? controller;
   final bool obscureText;
   final TextInputType? keyboardType;
@@ -29,25 +29,53 @@ class AuthTextField extends StatelessWidget {
   final Function()? onEditingComplete;
 
   @override
+  State<AuthTextField> createState() => _AuthTextFieldState();
+}
+
+class _AuthTextFieldState extends State<AuthTextField> {
+  late bool isHidden;
+
+  @override
+  void initState() {
+    isHidden = widget.obscureText;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
-      validator: validator,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      textInputAction: textInputAction,
-      focusNode: focusNode,
-      onFieldSubmitted: onFieldSubmitted,
-      onChanged: onChanged,
-      onTap: onTap,
-      onEditingComplete: onEditingComplete,
+      controller: widget.controller,
+      validator: widget.validator,
+      obscureText: isHidden,
+      keyboardType: widget.keyboardType,
+      textInputAction: widget.textInputAction,
+      focusNode: widget.focusNode,
+      onFieldSubmitted: widget.onFieldSubmitted,
+      onChanged: widget.onChanged,
+      onTap: widget.onTap,
+      onEditingComplete: widget.onEditingComplete,
       decoration: InputDecoration(
-          hintText: hintText,
+          hintText: widget.hintText,
           contentPadding: const EdgeInsets.symmetric(
               horizontal: defaultPadding * 3, vertical: defaultPadding * 2),
           hintStyle: const TextStyle(fontWeight: FontWeight.w600),
           filled: true,
           fillColor: Colors.white,
+          suffixIcon: widget.obscureText
+              ? GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isHidden = !isHidden;
+                    });
+                  },
+                  child: Icon(
+                    isHidden
+                        ? Icons.visibility_rounded
+                        : Icons.visibility_off_rounded,
+                    color: Colors.grey,
+                  ),
+                )
+              : null,
           border: OutlineInputBorder(
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(40)),

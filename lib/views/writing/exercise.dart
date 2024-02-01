@@ -232,7 +232,7 @@ class _SubmissionOCRWidgetState extends State<SubmissionOCRWidget> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
-            return Text(snapshot.data!);
+            return Text("WE HAVE THE TEXT!!");
           } else {
             return const Text("No data");
           }

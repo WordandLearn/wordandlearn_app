@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:word_and_learn/constants/constants.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -8,11 +9,13 @@ class PrimaryButton extends StatelessWidget {
     this.onPressed,
     this.color,
     this.borderRadius = 40,
+    this.isLoading = false,
   });
   final Widget child;
   final Color? color;
   final double borderRadius;
   final void Function()? onPressed;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,13 @@ class PrimaryButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: defaultPadding * 1.5),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(40))),
-      child: child,
+      child: isLoading
+          ? const SpinKitRing(
+              lineWidth: 2.5,
+              color: Colors.white,
+              size: 30,
+            )
+          : child,
     );
   }
 }

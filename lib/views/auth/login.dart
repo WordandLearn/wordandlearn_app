@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
+import 'package:word_and_learn/controllers/authentication_controller.dart';
+import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/utils/http_client.dart';
 import 'package:word_and_learn/views/home/module_selection.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -13,14 +16,27 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final AuthenticationController authenticationController =
+      AuthenticationController();
+
+  bool isLoading = false;
+  String? error;
+
+  void toggleLoading() {
+    setState(() {
+      isLoading = !isLoading;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return CustomScaffold(
-      bottomImage: Image.asset(
-        "assets/images/joyful_kids.png",
-        height: size.height * 0.15,
-      ),
+      // bottomImage: Image.asset(
+      //   "assets/images/joyful_kids.png",
+      //   height: size.height * 0.15,
+      // ),
       body: ListView(
         children: [
           Padding(
@@ -31,42 +47,103 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-          Column(
-            children: [
-              AuthTextField(
-                controller: usernameController,
-                hintText: "Username",
-              ),
-              const SizedBox(
-                height: defaultPadding * 3,
-              ),
-              AuthTextField(
-                controller: passwordController,
-                hintText: "Password",
-                obscureText: true,
-              ),
-            ],
+          error != null
+              ? Padding(
+                  padding: allPadding * 2,
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.warning_rounded,
+                        color: Colors.red,
+                      ),
+                      const SizedBox(
+                        width: defaultPadding,
+                      ),
+                      Text(
+                        error!,
+                        style: const TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                )
+              : const SizedBox.shrink(),
+          Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                AuthTextField(
+                  controller: usernameController,
+                  hintText: "Username",
+                  validator: (p0) {
+                    if (p0!.isEmpty) {
+                      return "Username cannot be empty";
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(
+                  height: defaultPadding * 3,
+                ),
+                AuthTextField(
+                  controller: passwordController,
+                  hintText: "Password",
+                  obscureText: true,
+                  validator: (p0) {
+                    if (p0!.isEmpty) {
+                      return "Password cannot be empty";
+                    }
+                    return null;
+                  },
+                ),
+              ],
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: defaultPadding * 2),
             child: Align(
               alignment: Alignment.centerRight,
-              child: Text(
-                "Forgot Password?",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
+              child: InkWell(
+                onTap: () {
+                  //TODO: FORGOT PASSWORD FUNCTION
+                },
+                child: Text(
+                  "Forgot Password?",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
               ),
             ),
           ),
           PrimaryButton(
+            isLoading: isLoading,
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return const ModuleSelection();
-                },
-              ));
+              if (_formKey.currentState!.validate()) {
+                toggleLoading();
+                authenticationController
+                    .login(usernameController.text, passwordController.text)
+                    .then((HttpResponse response) {
+                  if (response.isSuccess) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                      "That was a success :)",
+                      style: TextStyle(color: Colors.green),
+                    )));
+                    Navigator.pushReplacementNamed(context, "/");
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                      "An error has occured :()",
+                      style: TextStyle(color: Colors.red),
+                    )));
+                    setState(() {
+                      error = response.data['error'];
+                    });
+                  }
+                }).whenComplete(() => toggleLoading());
+              }
             },
             child: const Text(
               "GO",
