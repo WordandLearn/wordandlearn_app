@@ -3,9 +3,11 @@ import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/models.dart';
 
 class LessonCard extends StatelessWidget {
-  const LessonCard({super.key, required this.lesson, this.isComplete = true});
+  const LessonCard({
+    super.key,
+    required this.lesson,
+  });
   final Lesson lesson;
-  final bool isComplete;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,7 +32,7 @@ class LessonCard extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        "Vocabulary",
+                        lesson.title,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
@@ -40,7 +42,7 @@ class LessonCard extends StatelessWidget {
               ],
             ),
           ),
-          isComplete
+          lesson.isCompleted
               ? const Center(
                   child: Column(
                     children: [

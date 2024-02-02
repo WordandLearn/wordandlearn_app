@@ -171,7 +171,7 @@ class _TopicProgressCard extends StatelessWidget {
                     )),
                   ),
                   Text(
-                    widget.topic.name,
+                    widget.topic.title,
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!

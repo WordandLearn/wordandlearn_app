@@ -17,9 +17,10 @@ class WritingHome extends StatelessWidget {
         appBar: const ProfileAppBar(),
         body: ListView(
           children: [
-            CurrentLessonCard(
-              lesson: Lesson(),
-            ),
+            //TODO: Add current lesson card
+            // CurrentLessonCard(
+            //   lesson: Lesson(),
+            // ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: defaultPadding * 2),
               child: Column(
@@ -42,7 +43,11 @@ class WritingHome extends StatelessWidget {
                             vertical: defaultPadding),
                         child: InkWell(
                           onTap: () {
-                            Navigator.pushNamed(context, "/writing/lessons");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LessonsPage(),
+                                ));
                           },
                           child: CompositionCard(
                             composition: Composition(),

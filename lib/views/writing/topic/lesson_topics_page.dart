@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
+import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/views/writing/components/lesson_header_container.dart';
 
 import 'components/topic_progress.dart';
 
-List<Topic> topics = [
-  Topic(name: "Synonyms & Opposites", excerise: Excerise(isCompleted: true)),
-  Topic(name: "Adjectives", excerise: Excerise(isCompleted: false)),
-  Topic(name: "Adverbs", excerise: Excerise(isCompleted: false)),
-];
-
-class LessonTopicsPage extends StatelessWidget {
+class LessonTopicsPage extends StatefulWidget {
   const LessonTopicsPage({super.key, required this.lesson});
   final Lesson lesson;
+
+  @override
+  State<LessonTopicsPage> createState() => _LessonTopicsPageState();
+}
+
+class _LessonTopicsPageState extends State<LessonTopicsPage> {
+  late Future<HttpResponse<Topic>> _future;
+  WritingController _writingController = WritingController();
+
+  @override
+  void initState() {
+    _future = _writingController.getLessonTopics(widget.lesson.id);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -28,10 +38,22 @@ class LessonTopicsPage extends StatelessWidget {
               children: [CustomBackButton()],
             ),
           ),
-          const LessonHeaderContainer(text: "Expanding Vocabulary"),
+          LessonHeaderContainer(text: widget.lesson.title),
           Padding(
             padding: EdgeInsets.symmetric(vertical: size.height * 0.05),
-            child: TopicProgress(topics: topics),
+            child: FutureBuilder<HttpResponse<Topic>>(
+                future: _future,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const LoadingSpinner();
+                  } else if (snapshot.connectionState == ConnectionState.done &&
+                      snapshot.hasData &&
+                      snapshot.data!.isSuccess) {
+                    List<Topic> topics = snapshot.data!.models;
+                    return TopicProgress(topics: topics);
+                  }
+                  return const Text("UI element for error thing ");
+                }),
           )
         ],
       ),

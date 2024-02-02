@@ -16,16 +16,16 @@ class LessonDetailPage extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: defaultPadding),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: defaultPadding),
           child: LessonHeaderContainer(
-            text: 'Expanding Vocabulary',
+            text: lesson.title,
           ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: defaultPadding),
           child: Text(
-            sampleText,
+            lesson.description,
             textAlign: TextAlign.center,
             style:
                 Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 22),
@@ -35,7 +35,11 @@ class LessonDetailPage extends StatelessWidget {
           width: 300,
           child: PrimaryButton(
             onPressed: () {
-              Navigator.pushNamed(context, "/writing/topics");
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LessonTopicsPage(lesson: lesson),
+                  ));
             },
             color: Theme.of(context).colorScheme.secondary,
             child: const Text(

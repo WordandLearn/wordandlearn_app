@@ -23,7 +23,7 @@ Widget buildtopicSuccessDialog(BuildContext context, Topic topic) {
             padding: const EdgeInsets.symmetric(
                 vertical: defaultPadding * 4, horizontal: defaultPadding),
             child: Text(
-              "You have successfully completed the topic ${topic.name}. You can try the exercises now.",
+              "You have successfully completed the topic ${topic.title}. You can try the exercises now.",
               textAlign: TextAlign.center,
               style: Theme.of(context)
                   .textTheme

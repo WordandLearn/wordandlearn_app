@@ -1,15 +1,63 @@
+import 'dart:convert';
+
+// To parse this JSON data, do
+//
+//     final topic = topicFromJson(jsonString);
+
+List<Topic> topicFromJson(String str) =>
+    List<Topic>.from(json.decode(str).map((x) => Topic.fromJson(x)));
+
+String topicToJson(List<Topic> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class Topic {
+  final int id;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final String title;
+  final String description;
+  final bool completed;
+  final String tag;
+  final int lesson;
+
+  Excerise? excerise;
+
+  Topic({
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.title,
+    required this.description,
+    required this.completed,
+    required this.tag,
+    required this.lesson,
+  });
+
+  factory Topic.fromJson(Map<String, dynamic> json) => Topic(
+        id: json["id"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+        title: json["title"],
+        description: json["description"],
+        completed: json["completed"],
+        tag: json["tag"],
+        lesson: json["lesson"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+        "title": title,
+        "description": description,
+        "completed": completed,
+        "tag": tag,
+        "lesson": lesson,
+      };
+}
+
 class Excerise {
   final bool isCompleted;
 
   Excerise({required this.isCompleted});
-}
-
-class Topic {
-  final String name;
-  final Excerise? excerise;
-
-  Topic({
-    this.excerise,
-    required this.name,
-  });
 }

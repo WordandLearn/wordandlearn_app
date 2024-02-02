@@ -3,7 +3,6 @@ import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/authentication_controller.dart';
 import 'package:word_and_learn/models/models.dart';
-import 'package:word_and_learn/utils/http_client.dart';
 import 'package:word_and_learn/views/home/module_selection.dart';
 
 class LoginPage extends StatefulWidget {
@@ -131,7 +130,11 @@ class _LoginPageState extends State<LoginPage> {
                       "That was a success :)",
                       style: TextStyle(color: Colors.green),
                     )));
-                    Navigator.pushReplacementNamed(context, "/");
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ModuleSelection(),
+                        ));
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text(

@@ -3,6 +3,9 @@ const String defaultImageUrl =
 
 const String baseUrl = "https://loyal-swine-coherent.ngrok-free.app/api/v1";
 const String authUrl = "$baseUrl/auth";
-
+const String writingUrl = "$baseUrl/writing";
 const String loginEndpoint = "$authUrl/login/";
 const String registerEndpoint = "$authUrl/register/";
+
+const String sessionLessonsUrl = "$writingUrl/session";
+const String lessonTopicsUrl = "$writingUrl/lesson";

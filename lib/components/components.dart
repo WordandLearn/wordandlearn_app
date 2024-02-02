@@ -8,3 +8,4 @@ export 'back_button.dart';
 export 'mascot.dart';
 export 'timed_widget.dart';
 export 'rounded_icon_button.dart';
+export 'loading_spinner.dart';

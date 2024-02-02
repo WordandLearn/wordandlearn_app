@@ -17,7 +17,7 @@ class TopicLearnAppbar extends StatelessWidget {
       children: [
         const CustomBackButton(),
         Text(
-          topic.name,
+          topic.title,
           style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(
