@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/example.dart';
-import 'package:word_and_learn/utils/timer.dart';
 
 Color beforeColor = const Color(0xFF82E7FE);
 
@@ -47,7 +45,8 @@ class TopicBeforeAfter extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: defaultPadding * 4),
-              child: Text(isBefore ? example.beforeText : example.afterText,
+              child: Text(
+                  isBefore ? example.originalText : example.transformedText,
                   textAlign: TextAlign.center,
                   style: Theme.of(context)
                       .textTheme

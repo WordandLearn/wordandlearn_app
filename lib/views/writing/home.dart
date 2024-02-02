@@ -4,7 +4,6 @@ import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/views/writing/components/add_composition_button.dart';
 import 'package:word_and_learn/views/writing/components/composition_card.dart';
-import 'package:word_and_learn/views/writing/components/current_lesson_card.dart';
 import 'package:word_and_learn/views/writing/lessons_page.dart';
 
 class WritingHome extends StatelessWidget {
@@ -46,7 +45,7 @@ class WritingHome extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => LessonsPage(),
+                                  builder: (context) => const LessonsPage(),
                                 ));
                           },
                           child: CompositionCard(

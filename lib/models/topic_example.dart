@@ -1,16 +1,16 @@
 // To parse this JSON data, do
 //
-//     final example = exampleFromJson(jsonString);
+//     final topicExample = topicExampleFromJson(jsonString);
 
 import 'dart:convert';
 
-List<Example> exampleFromJson(String str) =>
-    List<Example>.from(json.decode(str).map((x) => Example.fromJson(x)));
+List<TopicExample> topicExampleFromJson(String str) => List<TopicExample>.from(
+    json.decode(str).map((x) => TopicExample.fromJson(x)));
 
-String exampleToJson(List<Example> data) =>
+String topicExampleToJson(List<TopicExample> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class Example {
+class TopicExample {
   final int id;
   final String originalText;
   final String transformedText;
@@ -18,7 +18,7 @@ class Example {
   final bool completed;
   final int topic;
 
-  Example({
+  TopicExample({
     required this.id,
     required this.originalText,
     required this.transformedText,
@@ -27,7 +27,7 @@ class Example {
     required this.topic,
   });
 
-  factory Example.fromJson(Map<String, dynamic> json) => Example(
+  factory TopicExample.fromJson(Map<String, dynamic> json) => TopicExample(
         id: json["id"],
         originalText: json["original_text"],
         transformedText: json["transformed_text"],

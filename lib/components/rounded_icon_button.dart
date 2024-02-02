@@ -27,7 +27,7 @@ class RoundIconButton extends StatelessWidget {
           }
         },
         child: Padding(
-          padding: EdgeInsets.all(defaultPadding * 1.5),
+          padding: const EdgeInsets.all(defaultPadding * 1.5),
           child: icon,
         ));
   }

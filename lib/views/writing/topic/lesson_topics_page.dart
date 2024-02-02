@@ -17,7 +17,7 @@ class LessonTopicsPage extends StatefulWidget {
 
 class _LessonTopicsPageState extends State<LessonTopicsPage> {
   late Future<HttpResponse<Topic>> _future;
-  WritingController _writingController = WritingController();
+  final WritingController _writingController = WritingController();
 
   @override
   void initState() {

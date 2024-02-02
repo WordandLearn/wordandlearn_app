@@ -19,7 +19,7 @@ class _LessonsPageState extends State<LessonsPage> {
   late Future<HttpResponse<Lesson>> _future;
   @override
   void initState() {
-    _future = WritingController().getSessionLessons(1);
+    _future = WritingController().getSessionLessons(2);
     super.initState();
   }
 

@@ -20,7 +20,7 @@ class AddCompositionButton extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: defaultPadding),
             child: Icon(Icons.arrow_right_alt),
           ),
-          RoundIconButton(
+          const RoundIconButton(
             icon: Icon(
               Icons.document_scanner,
               size: 30,

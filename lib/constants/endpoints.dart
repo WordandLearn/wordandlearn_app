@@ -9,3 +9,7 @@ const String registerEndpoint = "$authUrl/register/";
 
 const String sessionLessonsUrl = "$writingUrl/session";
 const String lessonTopicsUrl = "$writingUrl/lesson";
+const String topicsUrl = "$writingUrl/topic";
+String topicFlashcardsUrl(int topicId) => "$topicsUrl/$topicId/flashcards";
+String topicExamplesUrl(int topicId) => "$topicsUrl/$topicId/examples";
+String topicExerciseUrl(int topicId) => "$topicsUrl/$topicId/exercise";

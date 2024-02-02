@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/models.dart';
@@ -26,6 +28,42 @@ class WritingController extends GetxController {
     if (response.isSuccess) {
       List<Topic> topics = topicFromJson(res.body);
       response.models = topics;
+    }
+
+    return response;
+  }
+
+  Future<HttpResponse<FlashcardText>> getTopicFlashcards(int topicId) async {
+    http.Response res = await client.get(topicFlashcardsUrl(topicId));
+
+    HttpResponse<FlashcardText> response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      List<FlashcardText> flashcards = flashcardTextFromJson(res.body);
+      response.models = flashcards;
+    }
+
+    return response;
+  }
+
+  Future<HttpResponse<Example>> getTopicExamples(int topicId) async {
+    http.Response res = await client.get(topicExamplesUrl(topicId));
+
+    HttpResponse<Example> response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      List<Example> examples = exampleFromJson(res.body);
+      response.models = examples;
+    }
+
+    return response;
+  }
+
+  Future<HttpResponse<Exercise>> getTopicExercise(int topicId) async {
+    http.Response res = await client.get(topicExerciseUrl(topicId));
+
+    HttpResponse<Exercise> response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      List<Exercise> exercises = [Exercise.fromJson(json.decode(res.body))];
+      response.models = exercises;
     }
 
     return response;

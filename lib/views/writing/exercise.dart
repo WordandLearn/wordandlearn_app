@@ -58,7 +58,7 @@ class ExercisePage extends StatelessWidget {
                   ],
                 ),
               )),
-          Expanded(child: SubmissionProcessContainer()),
+          const Expanded(child: SubmissionProcessContainer()),
         ],
       ),
     ));
@@ -232,7 +232,7 @@ class _SubmissionOCRWidgetState extends State<SubmissionOCRWidget> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
-            return Text("WE HAVE THE TEXT!!");
+            return const Text("WE HAVE THE TEXT!!");
           } else {
             return const Text("No data");
           }

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/views/writing/topic/topic_learn_page.dart';
 
 import '../../../../constants/constants.dart';
 
@@ -42,7 +43,11 @@ class _TopicProgressItemState extends State<TopicProgressItem> {
       children: [
         GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, "/writing/topics/learn");
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TopicLearnPage(topic: widget.topic),
+                ));
           },
           child: _TopicProgressCard(
             widget: widget,
@@ -50,9 +55,7 @@ class _TopicProgressItemState extends State<TopicProgressItem> {
         ),
         widget.topic.excerise != null
             ? GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, "/writing/topics/exercise");
-                },
+                onTap: () {},
                 child: _TopicExerciseCard(
                   excerise: widget.topic.excerise!,
                   isCurrent: widget.isCurrent,
@@ -141,13 +144,14 @@ class _TopicProgressCard extends StatelessWidget {
                 )
               : const SizedBox.shrink(),
           Container(
-              height: 70,
+              // height: 70,
               width: widget.isComplete
                   ? widget.isCurrent
                       ? size.width * 0.9
                       : size.width * 0.7
                   : size.width * 0.7,
-              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: defaultPadding * 2, vertical: defaultPadding),
               decoration: BoxDecoration(
                 color: widget.isComplete
                     ? widget.isCurrent
@@ -170,12 +174,17 @@ class _TopicProgressCard extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleLarge,
                     )),
                   ),
-                  Text(
-                    widget.topic.title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(fontWeight: FontWeight.w600),
+                  const SizedBox(
+                    width: defaultPadding,
+                  ),
+                  Expanded(
+                    child: Text(
+                      widget.topic.title,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(fontWeight: FontWeight.w600),
+                    ),
                   ),
                   widget.isCurrent
                       ? const CircleAvatar(
