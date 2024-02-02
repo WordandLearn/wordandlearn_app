@@ -10,6 +10,7 @@ class LoadingSpinner extends StatelessWidget {
     return SpinKitRing(
       color: color ?? Theme.of(context).primaryColor,
       size: size ?? 30,
+      lineWidth: 1.5,
     );
   }
 }

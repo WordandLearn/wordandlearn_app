@@ -1,17 +1,35 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
+import 'package:word_and_learn/controllers/controllers.dart';
+import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/utils/file_utils.dart';
 import 'package:word_and_learn/utils/ocr_utils.dart';
 
-class ExercisePage extends StatelessWidget {
-  const ExercisePage({super.key});
+class ExercisePage extends StatefulWidget {
+  const ExercisePage({super.key, required this.topic});
+  final Topic topic;
+
+  @override
+  State<ExercisePage> createState() => _ExercisePageState();
+}
+
+class _ExercisePageState extends State<ExercisePage> {
+  late Future<HttpResponse<Exercise>> _future;
+  final WritingController writingController = WritingController();
+
+  @override
+  void initState() {
+    _future = writingController.getTopicExercise(widget.topic.id);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,14 +62,36 @@ class ExercisePage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Text(
-                      "Which of the following frogs is not adapted to the sea",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineMedium!
-                          .copyWith(height: 2, fontWeight: FontWeight.w600),
-                    ),
+                    FutureBuilder<HttpResponse<Exercise>>(
+                        future: _future,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: LoadingSpinner(),
+                            );
+                          } else if (snapshot.connectionState ==
+                                  ConnectionState.done &&
+                              snapshot.hasData &&
+                              snapshot.data!.isSuccess) {
+                            return Expanded(
+                              child: AutoSizeText(
+                                snapshot.data!.models.first.description,
+                                textAlign: TextAlign.center,
+                                maxFontSize: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium!
+                                    .fontSize!,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium!
+                                    .copyWith(
+                                        height: 2, fontWeight: FontWeight.w600),
+                              ),
+                            );
+                          }
+                          return const Text("Error UI element is here");
+                        }),
                     const Align(
                         alignment: Alignment.centerRight,
                         child: Icon(Icons.volume_up_rounded))

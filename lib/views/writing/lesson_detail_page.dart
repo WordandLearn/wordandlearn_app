@@ -20,7 +20,7 @@ class LessonDetailPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: defaultPadding),
           child: LessonHeaderContainer(
-            text: lesson.title,
+            lesson: lesson,
           ),
         ),
         Padding(

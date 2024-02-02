@@ -19,19 +19,22 @@ class Topic {
   final bool completed;
   final String tag;
   final int lesson;
+  final bool isCurrent;
+  final bool isLocked;
 
   Excerise? excerise;
 
-  Topic({
-    required this.id,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.title,
-    required this.description,
-    required this.completed,
-    required this.tag,
-    required this.lesson,
-  });
+  Topic(
+      {required this.id,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.title,
+      required this.description,
+      required this.completed,
+      required this.tag,
+      required this.lesson,
+      this.isLocked = true,
+      this.isCurrent = false});
 
   factory Topic.fromJson(Map<String, dynamic> json) => Topic(
         id: json["id"],

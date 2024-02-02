@@ -8,6 +8,7 @@ class CustomScaffold extends StatelessWidget {
   final Widget? bottomNavigationBar;
   final Color? backgroundColor;
   final EdgeInsets padding;
+  final Widget? drawer;
   const CustomScaffold(
       {super.key,
       required this.body,
@@ -15,12 +16,15 @@ class CustomScaffold extends StatelessWidget {
       this.appBar,
       this.padding = scrollPadding,
       this.bottomNavigationBar,
-      this.backgroundColor});
+      this.backgroundColor,
+      this.drawer});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: key,
       backgroundColor: backgroundColor,
+      drawer: drawer,
       resizeToAvoidBottomInset: false,
       bottomNavigationBar: bottomNavigationBar,
       body: SafeArea(

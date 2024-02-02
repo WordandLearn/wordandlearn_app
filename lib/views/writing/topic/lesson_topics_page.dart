@@ -38,7 +38,7 @@ class _LessonTopicsPageState extends State<LessonTopicsPage> {
               children: [CustomBackButton()],
             ),
           ),
-          LessonHeaderContainer(text: widget.lesson.title),
+          LessonHeaderContainer(lesson: widget.lesson),
           Padding(
             padding: EdgeInsets.symmetric(vertical: size.height * 0.05),
             child: FutureBuilder<HttpResponse<Topic>>(

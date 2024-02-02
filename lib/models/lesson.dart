@@ -3,8 +3,10 @@
 //     final lesson = lessonFromJson(jsonString);
 
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/utils/color_utils.dart';
 
 List<Lesson> lessonFromJson(String str) =>
     List<Lesson>.from(json.decode(str).map((x) => Lesson.fromJson(x)));
@@ -22,6 +24,8 @@ class Lesson extends BaseModel {
   final LessonProgress? progress;
   final bool unlocked;
 
+  Color? color;
+
   Lesson(
       {required this.title,
       required this.description,
@@ -29,6 +33,7 @@ class Lesson extends BaseModel {
       required this.id,
       this.image,
       this.progress,
+      this.color,
       this.unlocked = true,
       this.isCompleted = false});
 
@@ -42,6 +47,7 @@ class Lesson extends BaseModel {
           ? LessonProgress.fromJson(json['progress'])
           : null,
       unlocked: json["unlocked"] ?? true,
+      color: ColorUtils.randomHueFromColor(),
       image: json["image"]);
 
   Map<String, dynamic> toJson() => {
@@ -50,4 +56,11 @@ class Lesson extends BaseModel {
         "created_at": createdAt.toIso8601String(),
         "id": id,
       };
+
+  Color? get surfaceColor {
+    if (color != null) {
+      return color!.withOpacity(0.4);
+    }
+    return null;
+  }
 }

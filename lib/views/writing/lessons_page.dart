@@ -29,10 +29,10 @@ class _LessonsPageState extends State<LessonsPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return CustomScaffold(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
             horizontal: defaultPadding, vertical: defaultPadding),
         bottomNavigationBar: const AddCompositionButton(),
-        appBar: ProfileAppBar(),
+        appBar: const ProfileAppBar(),
         body: ListView(children: [
           Column(
             children: [
@@ -51,7 +51,7 @@ class _LessonsPageState extends State<LessonsPage> {
                     .copyWith(fontWeight: FontWeight.normal),
               ),
               Text(
-                "Where we we?",
+                "Where were we?",
                 style: Theme.of(context)
                     .textTheme
                     .headlineSmall!

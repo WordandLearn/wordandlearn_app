@@ -21,7 +21,7 @@ class _LessonCardState extends State<LessonCard> {
 
   @override
   Widget build(BuildContext context) {
-    Color cardColor = ColorUtils.randomHueFromColor();
+    Color cardColor = widget.lesson.color ?? ColorUtils.randomHueFromColor();
 
     return SizedBox(
       height: height,

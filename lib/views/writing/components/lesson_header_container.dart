@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/constants/constants.dart';
+import 'package:word_and_learn/models/models.dart';
 
 class LessonHeaderContainer extends StatelessWidget {
   const LessonHeaderContainer({
     super.key,
-    required this.text,
+    required this.lesson,
   });
-  final String text;
+  final Lesson lesson;
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +15,10 @@ class LessonHeaderContainer extends StatelessWidget {
         padding: const EdgeInsets.symmetric(
             vertical: defaultPadding, horizontal: defaultPadding * 2),
         decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
+            color: lesson.surfaceColor ?? Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(20)),
         child: Text(
-          text,
+          lesson.title,
           style: Theme.of(context)
               .textTheme
               .headlineSmall!

@@ -12,7 +12,7 @@ class TopicProgress extends StatefulWidget {
 }
 
 class _TopicProgressState extends State<TopicProgress> {
-  int activeTopicIndex = 1;
+  int activeTopicIndex = 0;
 
   @override
   void initState() {

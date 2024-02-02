@@ -15,4 +15,6 @@ class ColorUtils {
 
     return newColor.toColor();
   }
+
+  static List<Color> cardColors = [];
 }
