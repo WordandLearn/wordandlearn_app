@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:word_and_learn/constants/constants.dart';
@@ -45,13 +46,16 @@ class TopicBeforeAfter extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: defaultPadding * 4),
-              child: Text(
-                  isBefore ? example.originalText : example.transformedText,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineSmall!
-                      .copyWith(fontWeight: FontWeight.w600, height: 1.5)),
+              child: SizedBox(
+                height: 100,
+                child: AutoSizeText(
+                    isBefore ? example.originalText : example.transformedText,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineSmall!
+                        .copyWith(fontWeight: FontWeight.w600, height: 1.5)),
+              ),
             ),
           ],
         ));

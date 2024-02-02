@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 
 class CustomBackButton extends StatelessWidget {
-  const CustomBackButton({super.key});
+  const CustomBackButton({super.key, this.onPressed});
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return const Icon(Icons.arrow_back_ios);
+    return InkWell(
+        onTap: () {
+          if (onPressed != null) {
+            onPressed!();
+          } else {
+            Navigator.pop(context);
+          }
+        },
+        child: const Icon(Icons.arrow_back_ios));
   }
 }

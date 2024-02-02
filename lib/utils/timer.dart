@@ -1,17 +1,30 @@
+import 'dart:math';
+
 class TimerUtil {
   static Duration timeToRead(String text) {
-    //GETS The approximate time to read a piece of text by a child
+    // Constants for estimation (adjusted for a 12-year-old kid)
+    const double wordsPerMinute = 150.0; // Adjusted for faster reading
+    const double averageWordLength = 5.5; // Adjusted for longer words
+    const double timePerCharacter =
+        0.25; // in seconds, adjusted for quicker character processing
+    const double timePerWord =
+        1.2; // in seconds, adjusted for faster word recognition
+    const double powerFactor = 0.8; // Power factor for non-linearity
 
-    //Average reading speed of a child is 100 words per minute
-    //Average word length is 5 characters
-    //Average time to read a character is 0.3 seconds
-    //Average time to read a word is 1.5 seconds
-
+    // Split the text into words
     List<String> words = text.split(" ");
     int wordCount = words.length;
     int charCount = text.length;
-    double time = (wordCount * 0.7) + (charCount * 0.2) * 0.05;
-    //return ceiling of time
+
+    // Calculate time based on word and character count using a power function
+    double time = pow(wordCount.toDouble(), powerFactor) * timePerWord +
+        (charCount * averageWordLength * timePerCharacter);
+
+    // Apply adjustment for a 12-year-old kid's reading speed
+    time /= wordsPerMinute / 60.0;
+    time *= 0.05;
+
+    // Return ceiling of time
     return Duration(seconds: time.ceil());
   }
 }

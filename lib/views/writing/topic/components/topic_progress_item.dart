@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:word_and_learn/components/components.dart';
+import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/views/writing/topic/topic_learn_page.dart';
 
@@ -53,68 +55,79 @@ class _TopicProgressItemState extends State<TopicProgressItem> {
             widget: widget,
           ),
         ),
-        widget.topic.excerise != null
-            ? GestureDetector(
-                onTap: () {},
-                child: _TopicExerciseCard(
-                  excerise: widget.topic.excerise!,
-                  isCurrent: widget.isCurrent,
-                ),
-              )
-            : const SizedBox.shrink(),
+        GestureDetector(
+          onTap: () {},
+          child: _TopicExerciseCard(
+            topic: widget.topic,
+            isCurrent: widget.isCurrent,
+          ),
+        )
       ],
     );
   }
 }
 
-class _TopicExerciseCard extends StatelessWidget {
+class _TopicExerciseCard extends StatefulWidget {
   const _TopicExerciseCard(
-      {super.key, required this.excerise, this.isCurrent = false});
-  final Excerise excerise;
+      {super.key, this.isCurrent = false, required this.topic});
+  final Topic topic;
   final bool isCurrent;
+
+  @override
+  State<_TopicExerciseCard> createState() => _TopicExerciseCardState();
+}
+
+class _TopicExerciseCardState extends State<_TopicExerciseCard> {
+  late Future<HttpResponse<Exercise>> _future;
+  final WritingController _writingController = WritingController();
+
+  @override
+  void initState() {
+    if (widget.topic.completed) {
+      _future = _writingController.getTopicExercise(widget.topic.id);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      child: Column(
-        children: [
-          Container(
-            width: 5,
-            height: 50,
-            decoration: BoxDecoration(
-                color: excerise.isCompleted
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey),
-          ),
-          Container(
-              height: 70,
-              width: isCurrent ? size.width * 0.8 : 200,
-              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+        duration: const Duration(milliseconds: 300),
+        child: Column(
+          children: [
+            Container(
+              width: 5,
+              height: 50,
               decoration: BoxDecoration(
-                color: excerise.isCompleted
-                    ? isCurrent
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).primaryColor
-                    : AppColors.inactiveColor,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Exercise",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(fontWeight: FontWeight.w600),
-                  ),
-                ],
-              )),
-        ],
-      ),
-    );
+                  color: widget.topic.completed
+                      ? AppColors.inactiveColor
+                      : Theme.of(context).primaryColor),
+            ),
+            Container(
+                height: 70,
+                width: widget.isCurrent ? size.width * 0.8 : 200,
+                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                decoration: BoxDecoration(
+                  color: !widget.topic.completed
+                      ? AppColors.inactiveColor
+                      : Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Exercise",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(fontWeight: FontWeight.w600),
+                    )
+                  ],
+                )),
+          ],
+        ));
   }
 }
 

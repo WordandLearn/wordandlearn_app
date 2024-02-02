@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/utils/timer.dart';
 import 'package:word_and_learn/views/writing/components/lesson_header_container.dart';
 import 'package:word_and_learn/views/writing/topic/lesson_topics_page.dart';
 
@@ -31,20 +32,23 @@ class LessonDetailPage extends StatelessWidget {
                 Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 22),
           ),
         ),
-        SizedBox(
-          width: 300,
-          child: PrimaryButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LessonTopicsPage(lesson: lesson),
-                  ));
-            },
-            color: Theme.of(context).colorScheme.secondary,
-            child: const Text(
-              "Go To Lesson",
-              style: TextStyle(color: Colors.white),
+        TimedWidget(
+          duration: TimerUtil.timeToRead(lesson.description) * 0.4,
+          child: SizedBox(
+            width: 300,
+            child: PrimaryButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LessonTopicsPage(lesson: lesson),
+                    ));
+              },
+              color: Theme.of(context).colorScheme.secondary,
+              child: const Text(
+                "Go To Lesson",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         )

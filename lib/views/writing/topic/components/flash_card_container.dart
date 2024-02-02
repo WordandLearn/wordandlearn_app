@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/flash_card_text.dart';
@@ -55,7 +56,7 @@ class _FlashCardContainerState extends State<FlashCardContainer> {
                   child: Padding(
                 padding: allPadding * 2,
                 child: Center(
-                  child: Text(
+                  child: AutoSizeText(
                     activeFlashcard.text,
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
