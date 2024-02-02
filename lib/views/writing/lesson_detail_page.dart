@@ -33,7 +33,7 @@ class LessonDetailPage extends StatelessWidget {
           ),
         ),
         TimedWidget(
-          duration: TimerUtil.timeToRead(lesson.description) * 0.4,
+          duration: TimerUtil.timeToRead(lesson.description) * 0.9,
           child: SizedBox(
             width: 300,
             child: PrimaryButton(

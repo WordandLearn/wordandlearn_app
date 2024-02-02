@@ -12,30 +12,15 @@ class ProfileAppBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const CircleAvatar(
-              backgroundImage: CachedNetworkImageProvider(defaultImageUrl),
-            ),
-            const SizedBox(
-              height: defaultPadding / 2,
-            ),
-            Text(
-              "Hello",
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            Text(
-              "Arabella",
-              style: Theme.of(context).textTheme.titleLarge,
-            )
-          ],
-        ),
         SvgPicture.asset(
           "assets/icons/menu.svg",
           height: 40,
           width: 50,
-        )
+        ),
+        const CircleAvatar(
+          backgroundImage: CachedNetworkImageProvider(defaultImageUrl),
+          radius: 20,
+        ),
       ],
     );
   }

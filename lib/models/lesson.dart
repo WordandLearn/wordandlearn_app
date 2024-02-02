@@ -19,6 +19,8 @@ class Lesson extends BaseModel {
   final int id;
   final String? image;
   final bool isCompleted;
+  final LessonProgress? progress;
+  final bool unlocked;
 
   Lesson(
       {required this.title,
@@ -26,6 +28,8 @@ class Lesson extends BaseModel {
       required this.createdAt,
       required this.id,
       this.image,
+      this.progress,
+      this.unlocked = true,
       this.isCompleted = false});
 
   factory Lesson.fromJson(Map<String, dynamic> json) => Lesson(
@@ -34,6 +38,10 @@ class Lesson extends BaseModel {
       createdAt: DateTime.parse(json["created_at"]),
       id: json["id"],
       isCompleted: json["completed"] ?? false,
+      progress: json["progress"] != null
+          ? LessonProgress.fromJson(json['progress'])
+          : null,
+      unlocked: json["unlocked"] ?? true,
       image: json["image"]);
 
   Map<String, dynamic> toJson() => {

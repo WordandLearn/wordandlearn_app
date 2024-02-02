@@ -7,3 +7,4 @@ export 'http_response.dart';
 export 'base_model.dart';
 export 'topic_example.dart';
 export 'exercise.dart';
+export 'lesson_progress.dart';
