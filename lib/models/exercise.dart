@@ -14,8 +14,8 @@ String exerciseToJson(List<Exercise> data) =>
 
 class Exercise extends BaseModel {
   final int id;
-  final BaseModel? results;
-  final BaseModel? submissions;
+  final List<BaseModel>? results;
+  final List<BaseModel>? submissions;
   final String description;
   final String test;
   final String aim;
@@ -25,8 +25,8 @@ class Exercise extends BaseModel {
 
   Exercise({
     required this.id,
-    required this.results,
-    required this.submissions,
+    this.results,
+    this.submissions,
     required this.description,
     required this.test,
     required this.aim,
@@ -37,8 +37,8 @@ class Exercise extends BaseModel {
 
   factory Exercise.fromJson(Map<String, dynamic> json) => Exercise(
         id: json["id"],
-        results: json["results"],
-        submissions: json["submissions"],
+        // results: json["results"],
+        // submissions: json["submissions"],
         description: json["description"],
         test: json["test"],
         aim: json["aim"],
@@ -49,8 +49,8 @@ class Exercise extends BaseModel {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "results": results,
-        "submissions": submissions,
+        // "results": results,
+        // "submissions": submissions,
         "description": description,
         "test": test,
         "aim": aim,

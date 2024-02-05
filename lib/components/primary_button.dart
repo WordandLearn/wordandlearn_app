@@ -45,9 +45,11 @@ class CustomPrimaryButton extends StatelessWidget {
     this.textStyle,
     this.onPressed,
     this.disabled = false,
+    this.textColor,
   });
 
   final Color? color;
+  final Color? textColor;
   final String text;
   final TextStyle? textStyle;
   final Function()? onPressed;
@@ -71,10 +73,9 @@ class CustomPrimaryButton extends StatelessWidget {
           child: Text(
             text,
             style: textStyle ??
-                Theme.of(context)
-                    .textTheme
-                    .bodyLarge!
-                    .copyWith(fontWeight: FontWeight.w600, color: Colors.white),
+                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: textColor ?? Colors.white),
           ),
         ),
       ),

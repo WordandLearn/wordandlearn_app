@@ -101,15 +101,25 @@ class WritingController extends GetxController {
 
   Future<HttpResponse<ExerciseResult>> getExerciseResults(
       int submissionId) async {
-    http.Response res =
-        await client.get(exerciseSubmissionAssessUrl(submissionId));
+    // http.Response res =
+    //     await client.get(exerciseSubmissionAssessUrl(submissionId));
 
-    HttpResponse<ExerciseResult> response = HttpResponse.fromResponse(res);
-    if (response.isSuccess) {
-      ExerciseResult result = ExerciseResult();
-      response.models = [result];
-    }
+    // HttpResponse<ExerciseResult> response = HttpResponse.fromResponse(res);
+    // if (response.isSuccess) {
+    //   ExerciseResult result = ExerciseResult();
+    //   response.models = [result];
+    // }
 
-    return response;
+    ExerciseResult exerciseResult = ExerciseResult(
+        id: 1,
+        improvement: true,
+        score: 4,
+        feedback:
+            "That was great you were able to create a really good description of your scence. Felt very real",
+        recommendation: "Use more proverbs and idioms in your sentence",
+        exercise: 20);
+
+    return HttpResponse(message: "good", statusCode: 200, data: "")
+      ..models = [exerciseResult];
   }
 }
