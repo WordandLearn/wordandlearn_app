@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/example.dart';
 
@@ -23,6 +24,7 @@ class TopicBeforeAfter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: defaultPadding * 6),
@@ -47,7 +49,7 @@ class TopicBeforeAfter extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: defaultPadding * 4),
               child: SizedBox(
-                height: 100,
+                height: size.height * 0.1,
                 child: AutoSizeText(
                     isBefore ? example.originalText : example.transformedText,
                     textAlign: TextAlign.center,
