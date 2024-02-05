@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -42,5 +44,16 @@ class HttpClient {
         authRequired ? getAuthHeaders() : getHeaders();
 
     return await http.get(Uri.parse(url), headers: headers);
+  }
+
+  Future<http.Response> upload(String url,
+      {required List<File> files, String key = 'file'}) async {
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.headers.addAll(getAuthHeaders());
+    for (var file in files) {
+      request.files.add(await http.MultipartFile.fromPath(key, file.path));
+    }
+    var response = await request.send();
+    return await http.Response.fromStream(response);
   }
 }

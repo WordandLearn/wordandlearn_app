@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
@@ -67,7 +66,7 @@ class _LessonsPageState extends State<LessonsPage> {
                     const EdgeInsets.symmetric(vertical: defaultPadding * 2),
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Colors.black,
+                      color: AppColors.blackContainerColor,
                       borderRadius: BorderRadius.circular(10)),
                   padding: const EdgeInsets.symmetric(
                       vertical: defaultPadding, horizontal: defaultPadding * 2),

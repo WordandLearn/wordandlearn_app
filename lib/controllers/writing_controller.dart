@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:word_and_learn/constants/constants.dart';
@@ -64,6 +65,49 @@ class WritingController extends GetxController {
     if (response.isSuccess) {
       List<Exercise> exercises = [Exercise.fromJson(json.decode(res.body))];
       response.models = exercises;
+    }
+
+    return response;
+  }
+
+  Future<HttpResponse<ExerciseSubmission>> uploadExercise(
+      int exerciseId, List<File> images) async {
+    http.Response res = await client.upload(exerciseUploadUrl(exerciseId),
+        files: images, key: 'image');
+
+    HttpResponse<ExerciseSubmission> response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      ExerciseSubmission submission =
+          ExerciseSubmission.fromJson(json.decode(res.body));
+      response.models = [submission];
+    }
+
+    return response;
+  }
+
+  Future getExerciseSubmission(int submissionId) async {
+    http.Response res =
+        await client.get(exerciseSubmissionDetailUrl(submissionId));
+
+    HttpResponse<ExerciseSubmission> response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      ExerciseSubmission submission =
+          ExerciseSubmission.fromJson(json.decode(res.body));
+      response.models = [submission];
+    }
+
+    return response;
+  }
+
+  Future<HttpResponse<ExerciseResult>> getExerciseResults(
+      int submissionId) async {
+    http.Response res =
+        await client.get(exerciseSubmissionAssessUrl(submissionId));
+
+    HttpResponse<ExerciseResult> response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      ExerciseResult result = ExerciseResult();
+      response.models = [result];
     }
 
     return response;

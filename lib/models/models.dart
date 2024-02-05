@@ -8,3 +8,5 @@ export 'base_model.dart';
 export 'topic_example.dart';
 export 'exercise.dart';
 export 'lesson_progress.dart';
+export 'exercise_submission.dart';
+export 'exercise_result.dart';

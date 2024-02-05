@@ -33,7 +33,7 @@ class Topic {
       required this.completed,
       required this.tag,
       required this.lesson,
-      this.isLocked = true,
+      this.isLocked = false,
       this.isCurrent = false});
 
   factory Topic.fromJson(Map<String, dynamic> json) => Topic(

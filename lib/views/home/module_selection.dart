@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/components/components.dart';
-import 'package:word_and_learn/views/writing/home.dart';
 import 'package:word_and_learn/views/writing/lessons_page.dart';
 
 import 'components/module_selection_card.dart';

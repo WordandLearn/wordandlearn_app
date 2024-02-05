@@ -1,10 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:word_and_learn/components/components.dart';
-import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
-import 'package:word_and_learn/views/writing/exercise.dart';
+import 'package:word_and_learn/views/writing/exercise_page.dart';
 import 'package:word_and_learn/views/writing/topic/topic_learn_page.dart';
 
 import '../../../../constants/constants.dart';
@@ -85,8 +83,6 @@ class _TopicExerciseCard extends StatefulWidget {
 }
 
 class _TopicExerciseCardState extends State<_TopicExerciseCard> {
-  final WritingController _writingController = WritingController();
-
   @override
   void initState() {
     if (widget.topic.completed) {}
