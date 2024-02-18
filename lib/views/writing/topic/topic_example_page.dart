@@ -174,7 +174,7 @@ class _TopicExamplePageState extends State<TopicExamplePage> {
 }
 
 class _PageIndicators extends StatelessWidget {
-  const _PageIndicators({super.key, required this.index, required this.length});
+  const _PageIndicators({required this.index, required this.length});
   final int index;
   final int length;
   @override

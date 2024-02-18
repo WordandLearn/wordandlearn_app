@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:word_and_learn/components/components.dart';
-import 'package:word_and_learn/views/writing/lessons_page.dart';
+import 'package:word_and_learn/controllers/controllers.dart';
+import 'package:word_and_learn/views/writing/lessons/lessons_page.dart';
 
 import 'components/module_selection_card.dart';
 
@@ -50,6 +52,7 @@ class ModuleSelection extends StatelessWidget {
                   ModuleSelectionCard(
                     module: "Writing",
                     onPressed: () {
+                      Get.put(WritingController());
                       Navigator.push(
                           context,
                           MaterialPageRoute(

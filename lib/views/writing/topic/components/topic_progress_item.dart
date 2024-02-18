@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/models/models.dart';
-import 'package:word_and_learn/views/writing/exercise_page.dart';
+import 'package:word_and_learn/views/writing/exercise/exercise_page.dart';
 import 'package:word_and_learn/views/writing/topic/topic_learn_page.dart';
 
 import '../../../../constants/constants.dart';
@@ -75,7 +75,7 @@ class _TopicProgressItemState extends State<TopicProgressItem> {
 }
 
 class _TopicExerciseCard extends StatefulWidget {
-  const _TopicExerciseCard({super.key, required this.topic});
+  const _TopicExerciseCard({required this.topic});
   final Topic topic;
 
   @override
@@ -135,7 +135,6 @@ class _TopicExerciseCardState extends State<_TopicExerciseCard> {
 
 class _TopicProgressCard extends StatelessWidget {
   const _TopicProgressCard({
-    super.key,
     required this.widget,
   });
 
@@ -222,9 +221,7 @@ class _TopicProgressCard extends StatelessWidget {
 }
 
 class _LockedIndicator extends StatelessWidget {
-  const _LockedIndicator({
-    super.key,
-  });
+  const _LockedIndicator();
 
   @override
   Widget build(BuildContext context) {

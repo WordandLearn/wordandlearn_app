@@ -10,3 +10,4 @@ export 'exercise.dart';
 export 'lesson_progress.dart';
 export 'exercise_submission.dart';
 export 'exercise_result.dart';
+export 'session.dart';
