@@ -17,9 +17,9 @@ class Exercise extends BaseModel {
   final List<BaseModel>? results;
   final List<BaseModel>? submissions;
   final String description;
-  final String test;
+  final String? test;
   final String aim;
-  final String difficulty;
+  final String? difficulty;
   final int topic;
   final int? lesson;
 

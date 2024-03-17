@@ -46,6 +46,7 @@ class _ExercisePageState extends State<ExercisePage> {
             } else if (snapshot.connectionState == ConnectionState.done &&
                 snapshot.hasData &&
                 snapshot.data!.isSuccess) {
+              Exercise exercise = snapshot.data!.models.first;
               return Column(
                 children: [
                   Expanded(
@@ -76,7 +77,7 @@ class _ExercisePageState extends State<ExercisePage> {
                             ),
                             Expanded(
                               child: AutoSizeText(
-                                snapshot.data!.models.first.description,
+                                "${exercise.description} \n ${exercise.test ?? ""}",
                                 textAlign: TextAlign.center,
                                 maxFontSize: Theme.of(context)
                                     .textTheme

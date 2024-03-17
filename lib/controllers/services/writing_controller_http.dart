@@ -22,6 +22,17 @@ mixin WritingControllerHttp {
     return response;
   }
 
+  Future<HttpResponse<Session>> getSessionFromCode(int sessionCode) async {
+    http.Response res =
+        await client.get("$sessionLessonsUrl/code/$sessionCode");
+    HttpResponse<Session> response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      Session session = Session.fromJson(json.decode(res.body));
+      response.models = [session];
+    }
+    return response;
+  }
+
   Future<HttpResponse<Topic>> getLessonTopics(int lessonId) async {
     http.Response res = await client.get("$lessonTopicsUrl/$lessonId/topics");
 

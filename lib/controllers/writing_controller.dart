@@ -9,13 +9,22 @@ class WritingController extends GetxController
     with WritingControllerHttp, WritingControllerDatabase {
   RxList<Session> userSessions = <Session>[].obs;
   Rx<Session?> currentUserSession = Rxn<Session>();
-
+  bool isRefreshing = false;
   @override
   void onInit() {
     super.onInit();
-    _userSessions().then((value) {
-      getCurrentSession();
-    });
+    refetch();
+  }
+
+  void refetch() {
+    if (isRefreshing == false) {
+      isRefreshing = true;
+      _userSessions().then((value) {
+        getCurrentSession();
+      }).whenComplete(() {
+        isRefreshing = false;
+      });
+    }
   }
 
   Future<void> _userSessions() async {
@@ -49,25 +58,20 @@ class WritingController extends GetxController
 
   Future<List<Lesson>> getCurrentSessionLessons() async {
     Session? session = currentUserSession.value!;
-    if (session == null) {
-      //if current session is null
-      return [];
+    // check if lessons are in db and return them
+    // if not in db fetch from server and set in db before returning
+    List<Lesson> sessionLessons = await dbGetSessionLessons(session);
+    if (sessionLessons.isNotEmpty) {
+      return sessionLessons;
     } else {
-      // check if lessons are in db and return them
-      // if not in db fetch from server and set in db before returning
-      List<Lesson> sessionLessons = await dbGetSessionLessons(session);
-      if (sessionLessons.isNotEmpty) {
-        return sessionLessons;
-      } else {
-        HttpResponse<Lesson> response = await getSessionLessons(session.id);
+      HttpResponse<Lesson> response = await getSessionLessons(session.id);
 
-        if (response.isSuccess) {
-          List<Lesson> lessons = response.models;
-          dbSetSessionLessons(session, lessons);
-          return lessons;
-        }
-        return [];
+      if (response.isSuccess) {
+        List<Lesson> lessons = response.models;
+        dbSetSessionLessons(session, lessons);
+        return lessons;
       }
+      return [];
     }
   }
 

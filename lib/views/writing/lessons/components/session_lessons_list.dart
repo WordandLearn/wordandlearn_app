@@ -6,7 +6,7 @@ import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/views/writing/lessons/components/lesson_card.dart';
 import 'package:word_and_learn/views/writing/lessons/lesson_detail_page.dart';
 
-class SessionLessonsList extends StatelessWidget {
+class SessionLessonsList extends StatefulWidget {
   const SessionLessonsList({
     super.key,
     required this.writingController,
@@ -17,9 +17,22 @@ class SessionLessonsList extends StatelessWidget {
   final Size size;
 
   @override
+  State<SessionLessonsList> createState() => _SessionLessonsListState();
+}
+
+class _SessionLessonsListState extends State<SessionLessonsList> {
+  late Future<List<Lesson>> _future;
+
+  @override
+  void initState() {
+    _future = widget.writingController.getCurrentSessionLessons();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Lesson>>(
-        future: writingController.getCurrentSessionLessons(),
+        future: _future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const LoadingSpinner();
@@ -44,7 +57,7 @@ class SessionLessonsList extends StatelessWidget {
                             builder: (context) {
                               return SizedBox(
                                   height: 600,
-                                  width: size.width,
+                                  width: widget.size.width,
                                   child: Padding(
                                     padding: allPadding,
                                     child: LessonDetailPage(lesson: lesson),

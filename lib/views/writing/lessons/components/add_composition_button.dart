@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
+import 'package:word_and_learn/views/writing/lessons/session_qr_page.dart';
 
 class AddCompositionButton extends StatelessWidget {
   const AddCompositionButton({super.key});
@@ -20,7 +21,14 @@ class AddCompositionButton extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: defaultPadding),
             child: Icon(Icons.arrow_right_alt),
           ),
-          const RoundIconButton(
+          RoundIconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SessionQRPage(),
+                  ));
+            },
             icon: Icon(
               Icons.document_scanner,
               size: 30,
