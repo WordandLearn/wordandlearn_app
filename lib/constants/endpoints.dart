@@ -1,5 +1,5 @@
 const String defaultImageUrl =
-    "https://images.unsplash.com/photo-1489673446964-e1f989187ddc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGdpcmwlMjBjaGlsZHxlbnwwfHwwfHx8MA%3D%3D";
+    "https://st3.depositphotos.com/1767687/16607/v/450/depositphotos_166074422-stock-illustration-default-avatar-profile-icon-grey.jpg";
 
 const String baseUrl = "https://api.wordandlearn.com/api/v1";
 const String authUrl = "$baseUrl/auth";

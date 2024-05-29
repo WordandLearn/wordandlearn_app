@@ -160,8 +160,8 @@ class _SubmissionProcessContainerState
               RoundIconButton(
                   onPressed: () async {
                     try {
-                      final images =
-                          await CunningDocumentScanner.getPictures(true);
+                      final images = await CunningDocumentScanner.getPictures(
+                          noOfPages: 2);
                       if (images != null) {
                         List<File> files = images
                             .map((path) => FileUtils.getFileFromPath(path))

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/authentication_controller.dart';
+import 'package:word_and_learn/controllers/writing_controller.dart';
 import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/views/home/module_selection.dart';
+import 'package:word_and_learn/views/writing/lessons/lessons_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -130,10 +133,12 @@ class _LoginPageState extends State<LoginPage> {
                       "That was a success :)",
                       style: TextStyle(color: Colors.green),
                     )));
+                    Get.put(WritingController());
+
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ModuleSelection(),
+                          builder: (context) => const LessonsPage(),
                         ));
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

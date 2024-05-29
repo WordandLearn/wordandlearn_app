@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
@@ -18,11 +19,21 @@ class LessonsPage extends StatefulWidget {
 
 class _LessonsPageState extends State<LessonsPage> {
   WritingController writingController = Get.find<WritingController>();
-
+  late Future<String> _futureName;
   @override
   void initState() {
     writingController.getCurrentSession();
+    _futureName = getName();
     super.initState();
+  }
+
+  Future<String> getName() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String name = preferences.getString("name") ?? "";
+    if (name != "") {
+      return name.split(" ")[0];
+    }
+    return name;
   }
 
   @override
@@ -49,13 +60,17 @@ class _LessonsPageState extends State<LessonsPage> {
                 // const SizedBox(
                 //   height: defaultPadding * 2,
                 // ),
-                Text(
-                  "Hello Arabella.",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontWeight: FontWeight.normal),
-                ),
+                FutureBuilder<String>(
+                    future: _futureName,
+                    builder: (context, snapshot) {
+                      return Text(
+                        "Hello ${snapshot.data}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge!
+                            .copyWith(fontWeight: FontWeight.normal),
+                      );
+                    }),
                 Text(
                   "Where were we?",
                   style: Theme.of(context)
