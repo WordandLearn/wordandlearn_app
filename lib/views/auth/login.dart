@@ -3,13 +3,14 @@ import 'package:get/get.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/authentication_controller.dart';
+import 'package:word_and_learn/controllers/teacher_controller.dart';
 import 'package:word_and_learn/controllers/writing_controller.dart';
 import 'package:word_and_learn/models/models.dart';
-import 'package:word_and_learn/views/home/module_selection.dart';
+import 'package:word_and_learn/views/teachers/home.dart';
 import 'package:word_and_learn/views/writing/lessons/lessons_page.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -128,18 +129,38 @@ class _LoginPageState extends State<LoginPage> {
                     .login(usernameController.text, passwordController.text)
                     .then((HttpResponse response) {
                   if (response.isSuccess) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text(
-                      "That was a success :)",
-                      style: TextStyle(color: Colors.green),
-                    )));
-                    Get.put(WritingController());
+                    if (response.data['user']['role'] == 'C') {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text(
+                        "That was a success :)",
+                        style: TextStyle(color: Colors.green),
+                      )));
+                      Get.put(WritingController());
 
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LessonsPage(),
-                        ));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LessonsPage(),
+                          ));
+                    } else if (response.data['user']['role'] == 'T') {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text(
+                        "That was a success :)",
+                        style: TextStyle(color: Colors.green),
+                      )));
+                      Get.put(TeacherController());
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const TeachersHome(),
+                          ));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text(
+                        "An error has occured :()",
+                        style: TextStyle(color: Colors.red),
+                      )));
+                    }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text(

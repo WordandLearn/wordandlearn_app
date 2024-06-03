@@ -1,10 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:word_and_learn/components/back_button.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
@@ -77,7 +74,7 @@ class _SessionQRPageState extends State<SessionQRPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          CustomBackButton(
+                          const CustomBackButton(
                             color: Colors.white,
                           ),
                           Text(

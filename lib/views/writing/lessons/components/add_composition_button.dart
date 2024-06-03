@@ -29,7 +29,7 @@ class AddCompositionButton extends StatelessWidget {
                     builder: (context) => const SessionQRPage(),
                   ));
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.document_scanner,
               size: 30,
               color: Colors.black,

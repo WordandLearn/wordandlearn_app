@@ -3,7 +3,9 @@ const String defaultImageUrl =
 
 const String baseUrl = "https://api.wordandlearn.com/api/v1";
 const String authUrl = "$baseUrl/auth";
+const String profileUrl = "$authUrl/me";
 const String writingUrl = "$baseUrl/writing";
+const String teachersUrl = "$baseUrl/teachers";
 const String loginEndpoint = "$authUrl/login/";
 const String registerEndpoint = "$authUrl/register/";
 
@@ -21,3 +23,7 @@ String exerciseSubmissionDetailUrl(int exerciseId) =>
     "$exerciseUrl/$exerciseId/";
 String exerciseSubmissionAssessUrl(int exerciseId) =>
     "$exerciseUrl/$exerciseId/assess/";
+
+//Teachers endpoints
+const String teacherClassesUrl = "$teachersUrl/class";
+String classStudentsUrl(int classId) => "$teacherClassesUrl/$classId/students";

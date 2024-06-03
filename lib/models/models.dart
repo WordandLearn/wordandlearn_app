@@ -11,3 +11,5 @@ export 'lesson_progress.dart';
 export 'exercise_submission.dart';
 export 'exercise_result.dart';
 export 'session.dart';
+export 'profile.dart';
+export 'class.dart';

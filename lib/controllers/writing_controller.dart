@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:get/get.dart';
 import 'package:word_and_learn/controllers/services/writing_controller_database.dart';
 import 'package:word_and_learn/controllers/services/writing_controller_http.dart';
