@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/models.dart';
 import 'package:http/http.dart' as http;
@@ -43,6 +45,24 @@ class TeacherControllerHttp implements TeacherInterface {
       return profileFromJson(res.body);
     } else {
       throw "Could not fetch students";
+    }
+  }
+
+  Future<HttpResponse> uploadStudentCompositions(
+      int studentId, List<File> files) async {
+    // Upload student compositions
+    Map<String, String> body = {"student_id": studentId.toString()};
+    Map<String, File> images = {};
+    for (int i = 0; i < files.length; i++) {
+      images["image$i"] = files[i];
+    }
+    http.Response res = await client.uploadWithKeys(uploadCompositionsUrl,
+        files: images, body: body);
+    HttpResponse response = HttpResponse.fromResponse(res);
+    if (!response.isSuccess) {
+      throw "Could not upload compositions";
+    } else {
+      return response;
     }
   }
 }

@@ -15,11 +15,11 @@ class AuthenticationController extends GetxController {
         authRequired: false);
 
     HttpResponse<User> response = HttpResponse.fromResponse(res);
-    print(response.data);
     if (response.isSuccess) {
       await client.saveAuthToken(response.data["token"]);
       response.models = [User.fromJson(response.data)];
       preferences.setString('name', response.models.first.user.profile.name);
+      await client.saveUserType(response.models.first.user.role.name);
     }
     return response;
   }

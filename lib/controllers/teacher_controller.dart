@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:word_and_learn/controllers/services/teachers/teacher_controller_database.dart';
 import 'package:word_and_learn/controllers/services/teachers/teacher_controller_http.dart';
@@ -6,6 +8,8 @@ import 'package:word_and_learn/models/models.dart';
 class TeacherController extends GetxController {
   Rx<Profile?> profile = Rx<Profile?>(null);
   RxList<Class> classes = <Class>[].obs;
+  Map<int, List<File>> compositionImages = {};
+
   TeacherControllerDatabase controllerDatabase = TeacherControllerDatabase();
   TeacherControllerHttp controllerHttp = TeacherControllerHttp();
   @override
@@ -45,5 +49,12 @@ class TeacherController extends GetxController {
       await controllerDatabase.saveClassStudents(classId, students);
     }
     return students;
+  }
+
+  Future<HttpResponse> uploadCompositions(
+      int studentId, List<File> images) async {
+    HttpResponse response =
+        await controllerHttp.uploadStudentCompositions(studentId, images);
+    return response;
   }
 }

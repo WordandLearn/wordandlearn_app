@@ -24,6 +24,11 @@ class HttpClient {
     _authToken = token;
   }
 
+  Future<void> saveUserType(String userType) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.setString("userType", userType);
+  }
+
   Map<String, String> getHeaders() {
     return {};
   }
@@ -53,6 +58,21 @@ class HttpClient {
     for (var file in files) {
       request.files.add(await http.MultipartFile.fromPath(key, file.path));
     }
+    var response = await request.send();
+    return await http.Response.fromStream(response);
+  }
+
+  Future<http.Response> uploadWithKeys(String url,
+      {required Map<String, File> files,
+      required Map<String, String> body}) async {
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+
+    request.headers.addAll(getAuthHeaders());
+    for (var key in files.keys) {
+      request.files
+          .add(await http.MultipartFile.fromPath(key, files[key]!.path));
+    }
+    request.fields.addAll(body);
     var response = await request.send();
     return await http.Response.fromStream(response);
   }

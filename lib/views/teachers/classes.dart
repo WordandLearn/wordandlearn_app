@@ -6,6 +6,7 @@ import 'package:word_and_learn/components/teachers/teacher_student_card.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/views/teachers/teacher_student_detail_page.dart';
 
 class TeacherClassesPage extends StatefulWidget {
   const TeacherClassesPage({super.key});
@@ -149,7 +150,15 @@ class _TeacherClassesPageState extends State<TeacherClassesPage> {
                                   mainAxisSpacing: defaultPadding),
                           itemBuilder: (context, index) {
                             Profile profile_ = snapshot.data![index];
-                            return TeacherStudentCard(profile: profile_);
+                            return GestureDetector(
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          TeacherStudentDetailPage(
+                                              student: profile_),
+                                    )),
+                                child: TeacherStudentCard(profile: profile_));
                           },
                         );
                       }

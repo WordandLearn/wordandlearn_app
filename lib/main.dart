@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/constants/theme.dart';
-import 'package:word_and_learn/views/auth/login.dart';
+import 'package:word_and_learn/views/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Word & Learn',
       theme: AppTheme.getTheme(),
-      home: const LoginPage(),
+      home: const SplashScreen(),
     );
   }
 }

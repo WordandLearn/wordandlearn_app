@@ -36,9 +36,9 @@ class UserClass {
   });
 
   static Role roleToEnum(String role) {
-    if (role == "teacher") {
+    if (role == "T") {
       return Role.teacher;
-    } else if (role == "school") {
+    } else if (role == "S") {
       return Role.school;
     } else {
       return Role.child;
