@@ -22,8 +22,10 @@ class _TeacherClassesPageState extends State<TeacherClassesPage> {
   Future<List<Profile>>? _studentFuture;
   @override
   void initState() {
-    _studentFuture = teacherController
-        .getClassStudents(teacherController.classes[selectedClass].id);
+    if (teacherController.classes.isNotEmpty) {
+      _studentFuture = teacherController
+          .getClassStudents(teacherController.classes[selectedClass].id);
+    }
     super.initState();
   }
 
