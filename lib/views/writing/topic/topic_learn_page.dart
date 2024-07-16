@@ -16,13 +16,11 @@ class TopicLearnPage extends StatefulWidget {
 }
 
 class _TopicLearnPageState extends State<TopicLearnPage> {
-  late Future<HttpResponse<FlashcardText>> _future;
   final WritingController _writingController = Get.find<WritingController>();
   bool completed = false;
 
   @override
   void initState() {
-    _future = _writingController.getTopicFlashcards(widget.topic.id);
     super.initState();
   }
 

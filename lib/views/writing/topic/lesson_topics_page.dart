@@ -5,12 +5,9 @@ import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
-import 'package:word_and_learn/views/writing/lessons/components/lesson_header_container.dart';
 import 'package:word_and_learn/views/writing/topic/components/topic_card.dart';
 import 'package:word_and_learn/views/writing/topic/components/topic_tab_bar.dart';
 import 'package:word_and_learn/views/writing/topic/topic_learn_page.dart';
-
-import 'components/topic_progress.dart';
 
 class LessonTopicsPage extends StatefulWidget {
   const LessonTopicsPage({super.key, required this.lesson});

@@ -25,12 +25,14 @@ class TopicPageCard extends StatelessWidget {
             decoration: BoxDecoration(
                 color: topic.isCurrent
                     ? Theme.of(context).primaryColor
-                    : Theme.of(context).primaryColor.withOpacity(0.8),
+                    : Theme.of(context).primaryColor.withOpacity(0.4),
                 shape: BoxShape.circle),
             child: Center(
               child: SvgPicture.asset(
                 "assets/icons/fire.svg",
-                color: Colors.white,
+                color: topic.isCurrent
+                    ? Colors.white
+                    : Theme.of(context).primaryColor,
                 width: 30,
                 height: 30,
               ),
