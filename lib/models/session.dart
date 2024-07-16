@@ -58,6 +58,11 @@ class Session {
       };
 
   String get titleOrDefault => title ?? "Untitled Composition";
+
+  @override
+  String toString() {
+    return titleOrDefault;
+  }
 }
 
 class Progress {

@@ -44,10 +44,11 @@ class LessonDetailPage extends StatelessWidget {
                       builder: (context) => LessonTopicsPage(lesson: lesson),
                     ));
               },
-              color: Theme.of(context).colorScheme.secondary,
+              // color: Theme.of(context).colorScheme.secondary,
               child: const Text(
                 "Go To Lesson",
-                style: TextStyle(color: Colors.white),
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
               ),
             ),
           ),

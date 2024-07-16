@@ -1,5 +1,6 @@
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
+import 'package:word_and_learn/constants/constants.dart';
 
 class TimedWidget extends StatefulWidget {
   const TimedWidget(
@@ -15,12 +16,23 @@ class TimedWidget extends StatefulWidget {
   State<TimedWidget> createState() => _TimedWidgetState();
 }
 
-class _TimedWidgetState extends State<TimedWidget> {
+class _TimedWidgetState extends State<TimedWidget>
+    with SingleTickerProviderStateMixin {
   bool timeElapsed = false;
   CountDownController countDownController = CountDownController();
+  late AnimationController _animationController;
+
+  late Animation<Color?> _colorAnimation;
 
   @override
   void initState() {
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 1200))
+      ..repeat();
+
+    _colorAnimation =
+        ColorTween(begin: AppColors.primaryColor, end: AppColors.secondaryColor)
+            .animate(_animationController);
     super.initState();
   }
 
@@ -30,30 +42,34 @@ class _TimedWidgetState extends State<TimedWidget> {
       duration: const Duration(milliseconds: 500),
       child: timeElapsed
           ? widget.child
-          : CircularCountDownTimer(
-              width: 30,
-              height: 30,
-              isReverse: true,
-              isReverseAnimation: true,
-              duration: widget.duration.inSeconds,
-              strokeWidth: 2.5,
-              textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Theme.of(context).primaryColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-              strokeCap: StrokeCap.round,
-              fillColor: Colors.transparent,
-              controller: countDownController,
-              onComplete: () {
-                setState(() {
-                  timeElapsed = true;
-                });
-                if (widget.onCompleted != null) {
-                  widget.onCompleted!();
-                }
-              },
-              ringColor: Theme.of(context).primaryColor,
-            ),
+          : AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) {
+                return CircularCountDownTimer(
+                  width: 30,
+                  height: 30,
+                  isReverse: true,
+                  isReverseAnimation: true,
+                  duration: widget.duration.inSeconds,
+                  strokeWidth: 2.5,
+                  textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                  strokeCap: StrokeCap.round,
+                  fillColor: Colors.transparent,
+                  controller: countDownController,
+                  onComplete: () {
+                    setState(() {
+                      timeElapsed = true;
+                    });
+                    if (widget.onCompleted != null) {
+                      widget.onCompleted!();
+                    }
+                  },
+                  ringColor: Theme.of(context).primaryColor,
+                );
+              }),
     );
   }
 }

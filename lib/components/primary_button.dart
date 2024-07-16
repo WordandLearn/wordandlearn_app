@@ -8,7 +8,7 @@ class PrimaryButton extends StatelessWidget {
     required this.child,
     this.onPressed,
     this.color,
-    this.borderRadius = 40,
+    this.borderRadius = 10,
     this.isLoading = false,
   });
   final Widget child;
@@ -19,20 +19,23 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-          backgroundColor: color ?? Theme.of(context).primaryColor,
-          padding: const EdgeInsets.symmetric(vertical: defaultPadding * 1.5),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(40))),
-      child: isLoading
-          ? const SpinKitRing(
-              lineWidth: 2.5,
-              color: Colors.white,
-              size: 30,
-            )
-          : child,
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        height: 50,
+        padding: const EdgeInsets.all(defaultPadding),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(borderRadius),
+            color: color ?? Theme.of(context).primaryColor),
+        child: Center(
+            child: isLoading
+                ? const SpinKitRing(
+                    lineWidth: 2.5,
+                    color: Colors.white,
+                    size: 30,
+                  )
+                : child),
+      ),
     );
   }
 }

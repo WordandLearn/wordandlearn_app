@@ -4,9 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/example.dart';
 
-Color beforeColor = const Color(0xFF82E7FE);
+Color beforeColor = AppColors.redColor;
 
-Color afterColor = const Color(0xFFFFE482);
+Color afterColor = AppColors.greenColor;
 
 class TopicBeforeAfter extends StatelessWidget {
   const TopicBeforeAfter(
@@ -23,12 +23,11 @@ class TopicBeforeAfter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Size size = MediaQuery.of(context).size;
     return Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: defaultPadding * 6),
         decoration: BoxDecoration(
-          color: isBefore ? beforeColor : afterColor,
+          color: isBefore ? AppColors.redColor : AppColors.greenColor,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -45,15 +44,17 @@ class TopicBeforeAfter extends StatelessWidget {
                   .titleLarge!
                   .copyWith(fontWeight: FontWeight.w500, fontSize: 26),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: defaultPadding * 2),
-              child: AutoSizeText(
-                  isBefore ? example.originalText : example.transformedText,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineSmall!
-                      .copyWith(fontWeight: FontWeight.w600, height: 1.5)),
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.only(top: defaultPadding * 2),
+                child: AutoSizeText(
+                    isBefore ? example.originalText : example.transformedText,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineSmall!
+                        .copyWith(fontWeight: FontWeight.w600, height: 1.5)),
+              ),
             ),
           ],
         ));

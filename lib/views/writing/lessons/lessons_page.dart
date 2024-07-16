@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -121,28 +122,30 @@ class _LessonsPageState extends State<LessonsPage> {
                               horizontal: defaultPadding * 2),
                           child: Row(
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Your current composition",
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Your current composition",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(
+                                                color:
+                                                    AppColors.inactiveColor)),
+                                    const SizedBox(
+                                      height: defaultPadding / 2,
+                                    ),
+                                    AutoSizeText(
+                                      session.titleOrDefault,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodySmall!
-                                          .copyWith(
-                                              color: AppColors.inactiveColor)),
-                                  const SizedBox(
-                                    height: defaultPadding / 2,
-                                  ),
-                                  Text(
-                                    session.titleOrDefault,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge!
-                                        .copyWith(color: Colors.white),
-                                  )
-                                ],
+                                          .titleLarge!
+                                          .copyWith(color: Colors.white),
+                                    )
+                                  ],
+                                ),
                               ),
-                              const Spacer(),
                               SvgPicture.asset(
                                 "assets/icons/exchange.svg",
                                 color: Colors.white,
