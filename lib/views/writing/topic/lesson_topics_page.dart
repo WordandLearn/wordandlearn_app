@@ -1,5 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
@@ -80,16 +82,39 @@ class _LessonTopicsPageState extends State<LessonTopicsPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            vertical: defaultPadding * 2),
-                        child: Center(
-                          child: Text(
-                            widget.lesson.title,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
+                            vertical: defaultPadding),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: defaultPadding),
+                              child: AutoSizeText(
+                                widget.lesson.title,
+                                maxLines: 1,
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall!
+                                    .copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: defaultPadding / 2,
+                            ),
+                            CircularPercentIndicator(
+                              radius: 50,
+                              percent: widget.lesson.progress!.progress,
+                              animation: true,
+                              progressColor: widget.lesson.color,
+                              center: Text(
+                                "${(widget.lesson.progress!.progress * 100).toInt()}%",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: widget.lesson.color),
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ],
@@ -141,7 +166,7 @@ class _LessonTopicsPageState extends State<LessonTopicsPage> {
                                         itemBuilder: (context, index) {
                                           return Padding(
                                             padding: const EdgeInsets.symmetric(
-                                                vertical: defaultPadding),
+                                                vertical: defaultPadding * 1.5),
                                             child: TopicPageCard(
                                                 onPressed: () {
                                                   Navigator.push(

@@ -3,7 +3,6 @@ import 'package:word_and_learn/components/loading_spinner.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
-import 'package:word_and_learn/views/writing/lessons/components/lesson_card.dart';
 import 'package:word_and_learn/views/writing/lessons/lesson_detail_page.dart';
 
 class SessionLessonsList extends StatefulWidget {
@@ -31,6 +30,7 @@ class _SessionLessonsListState extends State<SessionLessonsList> {
 
   @override
   Widget build(BuildContext context) {
+    // Size size = MediaQuery.of(context).size;
     return FutureBuilder<List<Lesson>>(
         future: _future,
         builder: (context, snapshot) {
@@ -40,12 +40,14 @@ class _SessionLessonsListState extends State<SessionLessonsList> {
               snapshot.hasData) {
             return SizedBox(
               height: 400,
-              child: ListView.separated(
-                separatorBuilder: (context, index) =>
-                    const SizedBox(width: defaultPadding * 2),
-                scrollDirection: Axis.horizontal,
-                itemCount: snapshot.data!.length,
+              child: GridView.builder(
+                primary: false,
                 shrinkWrap: true,
+                itemCount: 4,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: defaultPadding / 1.5,
+                    mainAxisSpacing: defaultPadding / 1.5),
                 itemBuilder: (context, index) {
                   Lesson lesson = snapshot.data![index];
                   return InkWell(
@@ -65,8 +67,53 @@ class _SessionLessonsListState extends State<SessionLessonsList> {
                             });
                       }
                     },
-                    child: LessonCard(
-                      lesson: lesson,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: defaultPadding * 2,
+                          horizontal: defaultPadding * 2),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            lesson.title,
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: defaultPadding),
+                            child: Text(
+                              "${lesson.progress!.progress.toInt() * 100}% Complete",
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.grey),
+                            ),
+                          ),
+                          Stack(
+                            children: [
+                              Container(
+                                height: 4,
+                                width: 200,
+                                decoration: BoxDecoration(
+                                    color: AppColors.blackContainerColor
+                                        .withOpacity(0.3),
+                                    borderRadius: BorderRadius.circular(10)),
+                              ),
+                              Container(
+                                height: 4,
+                                width: 200 * lesson.progress!.progress,
+                                decoration: BoxDecoration(
+                                    color: lesson.color,
+                                    borderRadius: BorderRadius.circular(10)),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   );
                 },

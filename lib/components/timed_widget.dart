@@ -22,18 +22,22 @@ class _TimedWidgetState extends State<TimedWidget>
   CountDownController countDownController = CountDownController();
   late AnimationController _animationController;
 
-  late Animation<Color?> _colorAnimation;
-
   @override
   void initState() {
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 1200))
       ..repeat();
 
-    _colorAnimation =
-        ColorTween(begin: AppColors.primaryColor, end: AppColors.secondaryColor)
-            .animate(_animationController);
+    // _colorAnimation =
+    //     ColorTween(begin: AppColors.primaryColor, end: AppColors.secondaryColor)
+    //         .animate(_animationController);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override

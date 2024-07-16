@@ -7,8 +7,7 @@ import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
-
-import 'components/add_composition_button.dart';
+import 'components/composition_selector.dart';
 import 'components/session_lessons_list.dart';
 
 class LessonsPage extends StatefulWidget {
@@ -20,11 +19,9 @@ class LessonsPage extends StatefulWidget {
 
 class _LessonsPageState extends State<LessonsPage> {
   WritingController writingController = Get.find<WritingController>();
-  late Future<String> _futureName;
   @override
   void initState() {
     writingController.getCurrentSession();
-    _futureName = getName();
     super.initState();
   }
 
@@ -41,9 +38,10 @@ class _LessonsPageState extends State<LessonsPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return CustomScaffold(
+        backgroundColor: Color(0xFFF8F5FE),
         padding: const EdgeInsets.symmetric(
             horizontal: defaultPadding, vertical: defaultPadding),
-        bottomNavigationBar: const AddCompositionButton(),
+        // bottomNavigationBar: const AddCompositionButton(),
         appBar: const ProfileAppBar(),
         body: RefreshIndicator(
           onRefresh: () {
@@ -51,122 +49,68 @@ class _LessonsPageState extends State<LessonsPage> {
               writingController.refetch();
             });
           },
-          child: ListView(children: [
-            Column(
-              children: [
-                // CircleAvatar(
-                //   backgroundImage: NetworkImage(defaultImageUrl),
-                //   radius: 30,
-                // ),
-                // const SizedBox(
-                //   height: defaultPadding * 2,
-                // ),
-                FutureBuilder<String>(
-                    future: _futureName,
-                    builder: (context, snapshot) {
-                      return Text(
-                        "Hello ${snapshot.data}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge!
-                            .copyWith(fontWeight: FontWeight.normal),
-                      );
-                    }),
-                Text(
-                  "Where were we?",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineSmall!
-                      .copyWith(fontWeight: FontWeight.w600, fontSize: 30),
-                )
-              ],
-            ),
-            Obx(() {
-              if (writingController.currentUserSession.value == null) {
-                return const Text("No sessions loaded will come here");
-              } else {
-                Session session = writingController.currentUserSession.value!;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: defaultPadding * 2),
-                      child: InkWell(
-                        onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (context) {
-                              return ListModalBottomSheet(
-                                title: "Your Compositions",
-                                items: writingController.userSessions,
-                                onTap: (index) {
-                                  setState(() {
-                                    Session session_ =
-                                        writingController.userSessions[index];
-                                    writingController
-                                        .setCurrentSession(session_);
-                                  });
-                                  Navigator.pop(context);
-                                },
-                              );
-                            },
-                          );
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: AppColors.blackContainerColor,
-                              borderRadius: BorderRadius.circular(10)),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: defaultPadding,
-                              horizontal: defaultPadding * 2),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Your current composition",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall!
-                                            .copyWith(
-                                                color:
-                                                    AppColors.inactiveColor)),
-                                    const SizedBox(
-                                      height: defaultPadding / 2,
-                                    ),
-                                    AutoSizeText(
-                                      session.titleOrDefault,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge!
-                                          .copyWith(color: Colors.white),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              SvgPicture.asset(
-                                "assets/icons/exchange.svg",
-                                color: Colors.white,
-                                width: 25,
-                              )
-                            ],
-                          ),
+          child: SingleChildScrollView(
+            child: Column(children: [
+              Obx(() {
+                if (writingController.currentUserSession.value == null) {
+                  return const Text("No sessions loaded will come here");
+                } else {
+                  Session session = writingController.currentUserSession.value!;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: defaultPadding),
+                        child: InkWell(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return ListModalBottomSheet(
+                                  title: "Your Compositions",
+                                  items: writingController.userSessions,
+                                  onTap: (index) {
+                                    setState(() {
+                                      Session session_ =
+                                          writingController.userSessions[index];
+                                      writingController
+                                          .setCurrentSession(session_);
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                );
+                              },
+                            );
+                          },
+                          child: CompositionSelectorContainer(session: session),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: defaultPadding * 2),
-                      child: SessionLessonsList(
-                          writingController: writingController, size: size),
-                    )
-                  ],
-                );
-              }
-            })
-          ]),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: defaultPadding * 2),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Your Lessons",
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                            const SizedBox(
+                              height: defaultPadding,
+                            ),
+                            SessionLessonsList(
+                                writingController: writingController,
+                                size: size),
+                          ],
+                        ),
+                      )
+                    ],
+                  );
+                }
+              })
+            ]),
+          ),
         ));
   }
 }

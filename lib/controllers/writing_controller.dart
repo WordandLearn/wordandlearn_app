@@ -1,7 +1,13 @@
 import 'package:get/get.dart';
+import 'package:retry/retry.dart';
 import 'package:word_and_learn/controllers/services/writing_controller_database.dart';
 import 'package:word_and_learn/controllers/services/writing_controller_http.dart';
 import 'package:word_and_learn/models/models.dart';
+
+class HttpFetchException implements Exception {
+  final String message;
+  HttpFetchException(this.message);
+}
 
 class WritingController extends GetxController
     with WritingControllerHttp, WritingControllerDatabase {
@@ -17,11 +23,12 @@ class WritingController extends GetxController
   void refetch() {
     if (isRefreshing == false) {
       isRefreshing = true;
-      _userSessions().then((value) {
-        getCurrentSession();
-      }).whenComplete(() {
-        isRefreshing = false;
-      });
+      retry(
+        () => _userSessions().then((value) {
+          getCurrentSession();
+        }),
+        retryIf: (e) => e is HttpFetchException,
+      );
     }
   }
 
@@ -31,6 +38,8 @@ class WritingController extends GetxController
     if (response.isSuccess) {
       userSessions.value = response.models;
       dbSetUserSessions(response.models);
+    } else {
+      throw HttpFetchException("Could not get your lessons.");
     }
   }
 
@@ -44,7 +53,7 @@ class WritingController extends GetxController
     Session? session = await dbGetCurrentLesson();
     if (session == null) {
       if (userSessions.isEmpty) {
-        throw "Lessons are not available at the moment. Please try again later.";
+        throw HttpFetchException("Could not get your lessons.");
       } else {
         await setCurrentSession(userSessions.first);
         return userSessions.first;
