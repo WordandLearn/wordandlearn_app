@@ -132,6 +132,9 @@ class _LessonsPageState extends State<LessonsPage> {
                     );
                   }
                 }),
+                SizedBox(
+                  height: size.height * 0.05,
+                ),
                 Obx(() {
                   Session? session = writingController.currentUserSession.value;
 

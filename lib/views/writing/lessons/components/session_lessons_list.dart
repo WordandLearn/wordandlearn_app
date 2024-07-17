@@ -40,30 +40,28 @@ class _SessionLessonsListState extends State<SessionLessonsList> {
             return const ShimmerSessionLessonsList();
           } else if (snapshot.connectionState == ConnectionState.done &&
               snapshot.hasData) {
-            return SizedBox(
-              height: 450,
-              child: GridView.custom(
-                primary: false,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverWovenGridDelegate.count(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: defaultPadding / 2,
-                  crossAxisSpacing: defaultPadding / 2,
-                  pattern: [
-                    const WovenGridTile(1),
-                    const WovenGridTile(
-                      5 / 7,
-                      crossAxisRatio: 0.9,
-                      // alignment: AlignmentDirectional.centerEnd,
-                    ),
-                  ],
-                ),
-                childrenDelegate: SliverChildBuilderDelegate((context, index) {
-                  return LessonCard(
-                    lesson: snapshot.data![index],
-                  );
-                }, childCount: snapshot.data!.length),
+            return GridView.custom(
+              shrinkWrap: true,
+              primary: false,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverWovenGridDelegate.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: defaultPadding / 2,
+                crossAxisSpacing: defaultPadding / 2,
+                pattern: [
+                  const WovenGridTile(1),
+                  const WovenGridTile(
+                    5 / 7,
+                    crossAxisRatio: 0.9,
+                    // alignment: AlignmentDirectional.centerEnd,
+                  ),
+                ],
               ),
+              childrenDelegate: SliverChildBuilderDelegate((context, index) {
+                return LessonCard(
+                  lesson: snapshot.data![index],
+                );
+              }, childCount: snapshot.data!.length),
             );
           }
           return const Text("Error UI Element will come here");

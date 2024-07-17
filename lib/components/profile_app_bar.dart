@@ -11,18 +11,22 @@ class ProfileAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
+      toolbarHeight: 40,
       backgroundColor: Colors.transparent,
-      leading: InkWell(
-        onTap: onMenuPressed,
-        child: SvgPicture.asset(
-          "assets/icons/menu.svg",
-          width: 25,
+      leading: Padding(
+        padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+        child: GestureDetector(
+          onTap: onMenuPressed,
+          child: SvgPicture.asset(
+            "assets/icons/menu.svg",
+            width: 25,
+          ),
         ),
       ),
       actions: [
         Image.asset(
           "assets/logo/Logotype.png",
-          width: 75,
+          width: 90,
         ),
         InkWell(
           onTap: onProfilePressed,
