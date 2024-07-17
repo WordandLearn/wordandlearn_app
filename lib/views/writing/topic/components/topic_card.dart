@@ -1,136 +1,160 @@
-import 'package:flutter/cupertino.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/models.dart';
-import 'package:word_and_learn/views/writing/exercise/exercise_page.dart';
+import 'package:word_and_learn/utils/sticker_utils.dart';
 
-class TopicPageCard extends StatelessWidget {
-  const TopicPageCard({
+class LessonTopicCard extends StatefulWidget {
+  const LessonTopicCard({
     super.key,
     required this.topic,
-    this.onPressed,
   });
 
   final Topic topic;
-  final void Function()? onPressed;
+
+  @override
+  State<LessonTopicCard> createState() => _LessonTopicCardState();
+}
+
+class _LessonTopicCardState extends State<LessonTopicCard> {
+  double scale = 1;
+
+  void _animateBounce() {
+    setState(() {
+      scale = 0.99;
+    });
+    Future.delayed(const Duration(milliseconds: 200), () {
+      setState(() {
+        scale = 1;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        InkWell(
-          onTap: onPressed,
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsetsDirectional.all(defaultPadding),
+    Size size = MediaQuery.of(context).size;
+    return SizedBox(
+      height: size.height * 0.5,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          GestureDetector(
+            onTap: () {
+              _animateBounce();
+            },
+            child: AnimatedScale(
+              scale: scale,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.bounceInOut,
+              child: Container(
+                height: size.height * 0.6,
+                width: size.width,
+                padding: const EdgeInsets.symmetric(
+                    horizontal: defaultPadding * 2,
+                    vertical: defaultPadding * 2),
                 decoration: BoxDecoration(
-                    color: topic.isCurrent
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).primaryColor.withOpacity(0.4),
-                    shape: BoxShape.circle),
-                child: Center(
-                  child: SvgPicture.asset(
-                    "assets/icons/fire.svg",
-                    color: topic.isCurrent
-                        ? Colors.white
-                        : Theme.of(context).primaryColor,
-                    width: 30,
-                    height: 30,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: defaultPadding,
-              ),
-              Expanded(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      topic.title,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontSize: 18),
+                    Center(
+                      child: Image.asset(
+                        widget.topic.image!,
+                        height: 120,
+                      ),
                     ),
                     const SizedBox(
-                      height: defaultPadding / 4,
+                      height: defaultPadding,
+                    ),
+                    Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: defaultPadding * 2,
+                            vertical: defaultPadding / 1.5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: AppColors.secondaryColor),
+                        child: Text(
+                          widget.topic.tag,
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.symmetric(vertical: defaultPadding),
+                      child: Center(
+                        child: AutoSizeText(
+                          widget.topic.title,
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall!
+                              .copyWith(fontWeight: FontWeight.w600),
+                        ),
+                      ),
                     ),
                     Text(
-                      topic.tag,
-                      style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                width: defaultPadding,
-              ),
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .secondary
-                        .withOpacity(0.3),
-                    shape: BoxShape.circle),
-                child: Icon(
-                  Icons.lock,
-                  color: Theme.of(context).colorScheme.secondary,
-                  size: 15,
-                ),
-              )
-            ],
-          ),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: defaultPadding),
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ExercisePage(topic: topic),
-                    ));
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: defaultPadding, vertical: defaultPadding / 1.5),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "Exercise",
+                      widget.topic.description,
+                      textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.w600, color: Colors.white),
-                    ),
-                    const SizedBox(
-                      width: defaultPadding / 2,
-                    ),
-                    const Icon(
-                      CupertinoIcons.chevron_right,
-                      size: 15,
-                      color: Colors.white,
+                          fontWeight: FontWeight.w600, color: Colors.grey),
                     )
                   ],
                 ),
               ),
             ),
           ),
-        )
-      ],
+          Positioned(
+            bottom: 4,
+            right: 0,
+            left: 0,
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: defaultPadding * 1.5, vertical: defaultPadding),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Theme.of(context).primaryColor,
+                    border: Border.all(
+                        color: AppColors.buttonColor.withOpacity(0.2)),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          offset: const Offset(0, 2),
+                          blurRadius: 5)
+                    ]),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      "assets/icons/brain.svg",
+                      width: 20,
+                      color: Colors.black,
+                    ),
+                    const SizedBox(
+                      width: defaultPadding,
+                    ),
+                    Text(
+                      "Exercise",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(fontWeight: FontWeight.w600),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

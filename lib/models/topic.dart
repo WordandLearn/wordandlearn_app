@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:word_and_learn/utils/sticker_utils.dart';
+
 // To parse this JSON data, do
 //
 //     final topic = topicFromJson(jsonString);
@@ -21,6 +23,7 @@ class Topic {
   final int lesson;
   final bool isCurrent;
   final bool isLocked;
+  final String? image;
 
   Excerise? excerise;
 
@@ -33,19 +36,20 @@ class Topic {
       required this.completed,
       required this.tag,
       required this.lesson,
+      this.image,
       this.isLocked = false,
       this.isCurrent = false});
 
   factory Topic.fromJson(Map<String, dynamic> json) => Topic(
-        id: json["id"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-        title: json["title"],
-        description: json["description"],
-        completed: json["completed"],
-        tag: json["tag"],
-        lesson: json["lesson"],
-      );
+      id: json["id"],
+      createdAt: DateTime.parse(json["created_at"]),
+      updatedAt: DateTime.parse(json["updated_at"]),
+      title: json["title"],
+      description: json["description"],
+      completed: json["completed"],
+      tag: json["tag"],
+      lesson: json["lesson"],
+      image: StickerUtils.getRandomSticker());
 
   Map<String, dynamic> toJson() => {
         "id": id,
