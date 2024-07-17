@@ -38,20 +38,22 @@ class _LessonCardState extends State<LessonCard> {
       splashColor: widget.lesson.color!.withOpacity(0.3),
       onTap: () {
         _startBounceAnimation();
-        if (widget.lesson.unlocked) {
-          showModalBottomSheet(
-              context: context,
-              backgroundColor: Colors.white,
-              builder: (context) {
-                return SizedBox(
-                    height: 600,
-                    width: size.width,
-                    child: Padding(
-                      padding: allPadding,
-                      child: LessonDetailPage(lesson: widget.lesson),
-                    ));
-              });
-        }
+        Future.delayed(const Duration(milliseconds: 200), () {
+          if (widget.lesson.unlocked) {
+            showModalBottomSheet(
+                context: context,
+                backgroundColor: Colors.white,
+                builder: (context) {
+                  return SizedBox(
+                      height: 600,
+                      width: size.width,
+                      child: Padding(
+                        padding: allPadding,
+                        child: LessonDetailPage(lesson: widget.lesson),
+                      ));
+                });
+          }
+        });
       },
       child: AnimatedScale(
         scale: scale,
