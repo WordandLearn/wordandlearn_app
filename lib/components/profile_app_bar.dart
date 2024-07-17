@@ -4,22 +4,32 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:word_and_learn/constants/constants.dart';
 
 class ProfileAppBar extends StatelessWidget {
-  const ProfileAppBar({super.key});
-
+  const ProfileAppBar({super.key, this.onMenuPressed, this.onProfilePressed});
+  final void Function()? onMenuPressed;
+  final void Function()? onProfilePressed;
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SvgPicture.asset(
+    return AppBar(
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      leading: InkWell(
+        onTap: onMenuPressed,
+        child: SvgPicture.asset(
           "assets/icons/menu.svg",
-          height: 40,
-          width: 50,
+          width: 25,
         ),
-        const CircleAvatar(
-          backgroundImage: CachedNetworkImageProvider(defaultImageUrl),
-          radius: 20,
+      ),
+      actions: [
+        Image.asset(
+          "assets/logo/Logotype.png",
+          width: 75,
+        ),
+        InkWell(
+          onTap: onProfilePressed,
+          child: const CircleAvatar(
+            backgroundImage: CachedNetworkImageProvider(defaultImageUrl),
+            radius: 15,
+          ),
         ),
       ],
     );

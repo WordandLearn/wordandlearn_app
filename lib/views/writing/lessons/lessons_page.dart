@@ -1,4 +1,4 @@
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -19,6 +19,8 @@ class LessonsPage extends StatefulWidget {
 
 class _LessonsPageState extends State<LessonsPage> {
   WritingController writingController = Get.find<WritingController>();
+  final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
+
   @override
   void initState() {
     writingController.getCurrentSession();
@@ -37,12 +39,42 @@ class _LessonsPageState extends State<LessonsPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return CustomScaffold(
-        backgroundColor: Color(0xFFF8F5FE),
-        padding: const EdgeInsets.symmetric(
-            horizontal: defaultPadding, vertical: defaultPadding),
+    return Scaffold(
+        key: _key,
+        drawer: const Drawer(),
+        backgroundColor: const Color(0xFFF8F5FE),
+        // padding: const EdgeInsets.symmetric(
+        //     horizontal: defaultPadding, vertical: defaultPadding),
         // bottomNavigationBar: const AddCompositionButton(),
-        appBar: const ProfileAppBar(),
+        appBar: AppBar(
+            elevation: 0,
+            toolbarHeight: 30,
+            backgroundColor: Colors.transparent,
+            title: Image.asset(
+              "assets/logo/Logotype.png",
+              width: 75,
+            ),
+            centerTitle: true,
+            leading: GestureDetector(
+              onTap: () {},
+              child: SvgPicture.asset(
+                "assets/icons/menu.svg",
+                width: 25,
+              ),
+            ),
+            actions: [
+              InkWell(
+                onTap: () {},
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: defaultPadding),
+                  child: CircleAvatar(
+                    backgroundImage:
+                        CachedNetworkImageProvider(defaultImageUrl),
+                    radius: 15,
+                  ),
+                ),
+              ),
+            ]),
         body: RefreshIndicator(
           onRefresh: () {
             return Future.delayed(const Duration(seconds: 1), () {
@@ -50,66 +82,75 @@ class _LessonsPageState extends State<LessonsPage> {
             });
           },
           child: SingleChildScrollView(
-            child: Column(children: [
-              Obx(() {
-                if (writingController.currentUserSession.value == null) {
-                  return const Text("No sessions loaded will come here");
-                } else {
-                  Session session = writingController.currentUserSession.value!;
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: defaultPadding),
-                        child: InkWell(
-                          onTap: () {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (context) {
-                                return ListModalBottomSheet(
-                                  title: "Your Compositions",
-                                  items: writingController.userSessions,
-                                  onTap: (index) {
-                                    setState(() {
-                                      Session session_ =
-                                          writingController.userSessions[index];
-                                      writingController
-                                          .setCurrentSession(session_);
-                                    });
-                                    Navigator.pop(context);
-                                  },
-                                );
-                              },
-                            );
-                          },
-                          child: CompositionSelectorContainer(session: session),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: defaultPadding * 2),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Your Lessons",
-                              style: Theme.of(context).textTheme.titleLarge,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+              child: Column(children: [
+                Obx(() {
+                  if (writingController.currentUserSession.value == null) {
+                    return const Text("No sessions loaded will come here");
+                  } else {
+                    Session session =
+                        writingController.currentUserSession.value!;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: defaultPadding),
+                          child: InkWell(
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return ListModalBottomSheet(
+                                    title: "Your Compositions",
+                                    items: writingController.userSessions,
+                                    onTap: (index) {
+                                      setState(() {
+                                        Session session_ = writingController
+                                            .userSessions[index];
+                                        writingController
+                                            .setCurrentSession(session_);
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: defaultPadding * 2),
+                              child: CompositionSelectorContainer(
+                                  session: session),
                             ),
-                            const SizedBox(
-                              height: defaultPadding,
-                            ),
-                            SessionLessonsList(
-                                writingController: writingController,
-                                size: size),
-                          ],
+                          ),
                         ),
-                      )
-                    ],
-                  );
-                }
-              })
-            ]),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: defaultPadding * 2),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Your Lessons",
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                              const SizedBox(
+                                height: defaultPadding,
+                              ),
+                              SessionLessonsList(
+                                  writingController: writingController,
+                                  size: size),
+                            ],
+                          ),
+                        )
+                      ],
+                    );
+                  }
+                })
+              ]),
+            ),
           ),
         ));
   }

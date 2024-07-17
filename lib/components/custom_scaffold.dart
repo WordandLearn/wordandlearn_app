@@ -9,6 +9,7 @@ class CustomScaffold extends StatelessWidget {
   final Color? backgroundColor;
   final EdgeInsets padding;
   final Widget? drawer;
+  final GlobalKey? globalKey;
   const CustomScaffold(
       {super.key,
       required this.body,
@@ -17,12 +18,13 @@ class CustomScaffold extends StatelessWidget {
       this.padding = scrollPadding,
       this.bottomNavigationBar,
       this.backgroundColor,
-      this.drawer});
+      this.drawer,
+      this.globalKey});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: key,
+      key: globalKey,
       backgroundColor: backgroundColor,
       drawer: drawer,
       resizeToAvoidBottomInset: false,
