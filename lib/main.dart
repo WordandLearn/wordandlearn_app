@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:word_and_learn/constants/theme.dart';
-import 'package:word_and_learn/views/auth/login.dart';
 import 'package:word_and_learn/views/splash_screen.dart';
 
 void main() {
@@ -19,7 +18,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Word & Learn',
       theme: AppTheme.getTheme(),
-      home: const LoginPage(),
+      home: const SplashScreen(),
     );
   }
 }

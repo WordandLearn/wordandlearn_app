@@ -14,8 +14,6 @@ class AuthenticationController extends GetxController {
         loginEndpoint, {"username": username, "password": password},
         authRequired: false);
 
-    print(res.body);
-
     HttpResponse<User> response = HttpResponse.fromResponse(res);
     if (response.isSuccess) {
       await client.saveAuthToken(response.data["token"]);

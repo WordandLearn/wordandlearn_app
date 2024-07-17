@@ -1,6 +1,5 @@
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
-import 'package:word_and_learn/constants/constants.dart';
 
 class TimedWidget extends StatefulWidget {
   const TimedWidget(

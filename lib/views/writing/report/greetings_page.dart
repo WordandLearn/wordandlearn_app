@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:word_and_learn/constants/constants.dart';
 
 class GreetingsPage extends StatefulWidget {

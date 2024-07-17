@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:word_and_learn/components/loading_spinner.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
@@ -45,6 +44,7 @@ class _SessionLessonsListState extends State<SessionLessonsList> {
               height: 450,
               child: GridView.custom(
                 primary: false,
+                physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverWovenGridDelegate.count(
                   crossAxisCount: 2,
                   mainAxisSpacing: defaultPadding / 2,

@@ -117,14 +117,14 @@ class _PageIndicators extends StatelessWidget {
         Container(
           width: size.width,
           height: 4,
-          decoration: BoxDecoration(color: Colors.white),
+          decoration: const BoxDecoration(color: Colors.white),
         ),
         AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
           width: size.width * (index + 1) / length,
           height: 4,
-          decoration: BoxDecoration(color: AppColors.secondaryColor),
+          decoration: const BoxDecoration(color: AppColors.secondaryColor),
         ),
       ],
     );

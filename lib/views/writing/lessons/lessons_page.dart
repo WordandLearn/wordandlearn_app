@@ -3,12 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:word_and_learn/components/components.dart';
-import 'package:word_and_learn/components/small_button.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
-import 'package:word_and_learn/views/writing/session_report.dart';
 import 'components/composition_selector.dart';
 import 'components/session_lessons_list.dart';
 import 'components/session_report_card.dart';
@@ -93,6 +90,7 @@ class _LessonsPageState extends State<LessonsPage> {
                   if (writingController.currentUserSession.value == null) {
                     return const Padding(
                       padding: EdgeInsets.symmetric(vertical: defaultPadding),
+                      //TODO: Do some error handling when no session is available
                       child: Text("No sessions loaded will come here"),
                     );
                   } else {
