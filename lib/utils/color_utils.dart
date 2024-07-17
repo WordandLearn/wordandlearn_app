@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class ColorUtils {
-  static const Color seedColor = Color(0xFF41C88E);
+  static const Color seedColor = Color(0xFFE3DAFF);
   static double _randomHue() {
     return Random().nextInt(360).toDouble();
   }

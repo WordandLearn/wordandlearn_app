@@ -15,7 +15,7 @@ class LessonHeaderContainer extends StatelessWidget {
         padding: const EdgeInsets.symmetric(
             vertical: defaultPadding, horizontal: defaultPadding * 2),
         decoration: BoxDecoration(
-            color: lesson.surfaceColor ?? Theme.of(context).colorScheme.surface,
+            color: lesson.color ?? Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(20)),
         child: Text(
           lesson.title,

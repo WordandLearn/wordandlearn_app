@@ -1,14 +1,15 @@
-import 'package:flutter/cupertino.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/models.dart';
-import 'package:word_and_learn/utils/color_utils.dart';
+import 'package:word_and_learn/views/writing/lessons/lesson_detail_page.dart';
 
 class LessonCard extends StatefulWidget {
   const LessonCard({
     super.key,
     required this.lesson,
   });
+
   final Lesson lesson;
 
   @override
@@ -16,172 +17,83 @@ class LessonCard extends StatefulWidget {
 }
 
 class _LessonCardState extends State<LessonCard> {
-  double width = 200;
-  double height = 400;
+  double scale = 1;
+  void _startBounceAnimation() {
+    setState(() {
+      scale = 0.9; // Set the target height for the bounce animation
+    });
 
-  @override
-  Widget build(BuildContext context) {
-    Color cardColor = widget.lesson.color ?? ColorUtils.randomHueFromColor();
-
-    return SizedBox(
-      height: height,
-      child: Stack(
-        children: [
-          Container(
-              width: width,
-              padding: const EdgeInsets.symmetric(
-                  horizontal: defaultPadding, vertical: defaultPadding * 2),
-              decoration: BoxDecoration(
-                  color: cardColor, borderRadius: BorderRadius.circular(20)),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Container(
-                  //   height: 100,
-                  //   width: 100,
-                  //   color: Colors.white,
-                  // ),
-                  Column(
-                    children: [
-                      Text(
-                        widget.lesson.title,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall!
-                            .copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 26),
-                      ),
-                    ],
-                  ),
-
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: defaultPadding),
-                    child: Column(
-                      children: [
-                        widget.lesson.progress != null
-                            ? Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: defaultPadding * 2),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: defaultPadding),
-                                      child: Text(
-                                        "${widget.lesson.progress!.completed}/${widget.lesson.progress!.total}",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge!
-                                            .copyWith(
-                                                color: Colors.grey,
-                                                fontWeight: FontWeight.w600),
-                                      ),
-                                    ),
-                                    ProgressBar(
-                                      height: 10,
-                                      width: 150,
-                                      progress:
-                                          widget.lesson.progress!.progress,
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : const SizedBox.shrink(),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: defaultPadding / 2,
-                              horizontal: defaultPadding),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.play_circle_outline,
-                                color: cardColor,
-                              ),
-                              const SizedBox(
-                                width: defaultPadding / 2,
-                              ),
-                              Text(
-                                "Continue",
-                                style: TextStyle(
-                                    color: cardColor,
-                                    fontWeight: FontWeight.w600),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              )),
-          !widget.lesson.unlocked
-              ? Container(
-                  width: width,
-                  height: 400,
-                  decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        CupertinoIcons.lock_fill,
-                        color: Colors.white,
-                      ),
-                      Text(
-                        "Locked",
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: Colors.white, fontWeight: FontWeight.w600),
-                      )
-                    ],
-                  ),
-                )
-              : const SizedBox.shrink()
-        ],
-      ),
-    );
+    Future.delayed(const Duration(milliseconds: 200), () {
+      setState(() {
+        scale = 1; // Reset the height after the bounce animation
+      });
+    });
   }
-}
 
-class ProgressBar extends StatelessWidget {
-  const ProgressBar(
-      {super.key,
-      required this.height,
-      required this.width,
-      this.progress = 0,
-      this.color});
-  final double height;
-  final double width;
-  final double progress;
-  final Color? color;
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.centerLeft,
-      children: [
-        Container(
-          width: width,
-          height: height,
+    Size size = MediaQuery.of(context).size;
+    return InkWell(
+      highlightColor: Colors.transparent,
+      splashColor: widget.lesson.color!.withOpacity(0.3),
+      onTap: () {
+        _startBounceAnimation();
+        if (widget.lesson.unlocked) {
+          showModalBottomSheet(
+              context: context,
+              backgroundColor: Colors.white,
+              builder: (context) {
+                return SizedBox(
+                    height: 600,
+                    width: size.width,
+                    child: Padding(
+                      padding: allPadding,
+                      child: LessonDetailPage(lesson: widget.lesson),
+                    ));
+              });
+        }
+      },
+      child: AnimatedScale(
+        scale: scale,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.bounceInOut,
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+              vertical: defaultPadding * 2, horizontal: defaultPadding * 2),
           decoration: BoxDecoration(
-              color: color ?? Colors.white,
-              borderRadius: BorderRadius.circular(20)),
+              borderRadius: BorderRadius.circular(20),
+              color: widget.lesson.color),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+                child: Center(
+                  child: AutoSizeText(
+                    widget.lesson.title,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Center(
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: Image.asset(
+                      widget.lesson.image!,
+                      height: 90,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-        Container(
-          width: width * progress,
-          height: height + 2,
-          decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(20)),
-        ),
-      ],
+      ),
     );
   }
 }

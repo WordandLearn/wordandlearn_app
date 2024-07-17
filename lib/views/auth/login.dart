@@ -36,6 +36,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return CustomScaffold(
+      backgroundColor: const Color(0xFFF8F5FE),
+
       // bottomImage: Image.asset(
       //   "assets/images/joyful_kids.png",
       //   height: size.height * 0.15,
@@ -122,6 +124,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           PrimaryButton(
             isLoading: isLoading,
+            color: AppColors.buttonColor,
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 toggleLoading();

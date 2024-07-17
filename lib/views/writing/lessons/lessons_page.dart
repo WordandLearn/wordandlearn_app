@@ -4,11 +4,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_and_learn/components/components.dart';
+import 'package:word_and_learn/components/small_button.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/views/writing/session_report.dart';
 import 'components/composition_selector.dart';
 import 'components/session_lessons_list.dart';
+import 'components/session_report_card.dart';
 
 class LessonsPage extends StatefulWidget {
   const LessonsPage({super.key});
@@ -83,11 +86,15 @@ class _LessonsPageState extends State<LessonsPage> {
           },
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: defaultPadding, vertical: defaultPadding),
               child: Column(children: [
                 Obx(() {
                   if (writingController.currentUserSession.value == null) {
-                    return const Text("No sessions loaded will come here");
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(vertical: defaultPadding),
+                      child: Text("No sessions loaded will come here"),
+                    );
                   } else {
                     Session session =
                         writingController.currentUserSession.value!;
@@ -97,33 +104,11 @@ class _LessonsPageState extends State<LessonsPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: defaultPadding),
-                          child: InkWell(
-                            onTap: () {
-                              showModalBottomSheet(
-                                context: context,
-                                builder: (context) {
-                                  return ListModalBottomSheet(
-                                    title: "Your Compositions",
-                                    items: writingController.userSessions,
-                                    onTap: (index) {
-                                      setState(() {
-                                        Session session_ = writingController
-                                            .userSessions[index];
-                                        writingController
-                                            .setCurrentSession(session_);
-                                      });
-                                      Navigator.pop(context);
-                                    },
-                                  );
-                                },
-                              );
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: defaultPadding * 2),
-                              child: CompositionSelectorContainer(
-                                  session: session),
-                            ),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(top: defaultPadding * 2),
+                            child:
+                                CompositionSelectorContainer(session: session),
                           ),
                         ),
                         Padding(
@@ -148,6 +133,13 @@ class _LessonsPageState extends State<LessonsPage> {
                       ],
                     );
                   }
+                }),
+                Obx(() {
+                  Session? session = writingController.currentUserSession.value;
+
+                  return SessionReportCard(
+                    session: session,
+                  );
                 })
               ]),
             ),

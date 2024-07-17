@@ -48,7 +48,7 @@ class LessonDetailPage extends StatelessWidget {
               child: const Text(
                 "Go To Lesson",
                 style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
               ),
             ),
           ),

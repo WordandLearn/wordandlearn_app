@@ -7,6 +7,7 @@ import 'dart:ui';
 
 import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/utils/color_utils.dart';
+import 'package:word_and_learn/utils/sticker_utils.dart';
 
 List<Lesson> lessonFromJson(String str) =>
     List<Lesson>.from(json.decode(str).map((x) => Lesson.fromJson(x)));
@@ -48,7 +49,7 @@ class Lesson extends BaseModel {
           : null,
       unlocked: json["unlocked"] ?? true,
       color: ColorUtils.randomHueFromColor(),
-      image: json["image"]);
+      image: StickerUtils.getRandomSticker());
 
   Map<String, dynamic> toJson() => {
         "title": title,

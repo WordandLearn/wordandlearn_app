@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:word_and_learn/components/loading_spinner.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
-import 'package:word_and_learn/views/writing/lessons/lesson_detail_page.dart';
+
+import 'lesson_card.dart';
 
 class SessionLessonsList extends StatefulWidget {
   const SessionLessonsList({
@@ -35,92 +38,72 @@ class _SessionLessonsListState extends State<SessionLessonsList> {
         future: _future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const LoadingSpinner();
+            return const ShimmerSessionLessonsList();
           } else if (snapshot.connectionState == ConnectionState.done &&
               snapshot.hasData) {
             return SizedBox(
-              height: 400,
-              child: GridView.builder(
+              height: 450,
+              child: GridView.custom(
                 primary: false,
-                shrinkWrap: true,
-                itemCount: 4,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: defaultPadding / 1.5,
-                    mainAxisSpacing: defaultPadding / 1.5),
-                itemBuilder: (context, index) {
-                  Lesson lesson = snapshot.data![index];
-                  return InkWell(
-                    onTap: () {
-                      if (lesson.unlocked) {
-                        showModalBottomSheet(
-                            context: context,
-                            backgroundColor: Colors.white,
-                            builder: (context) {
-                              return SizedBox(
-                                  height: 600,
-                                  width: widget.size.width,
-                                  child: Padding(
-                                    padding: allPadding,
-                                    child: LessonDetailPage(lesson: lesson),
-                                  ));
-                            });
-                      }
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: defaultPadding * 2,
-                          horizontal: defaultPadding * 2),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            lesson.title,
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: defaultPadding),
-                            child: Text(
-                              "${lesson.progress!.progress.toInt() * 100}% Complete",
-                              style: const TextStyle(
-                                  fontSize: 14, color: Colors.grey),
-                            ),
-                          ),
-                          Stack(
-                            children: [
-                              Container(
-                                height: 4,
-                                width: 200,
-                                decoration: BoxDecoration(
-                                    color: AppColors.blackContainerColor
-                                        .withOpacity(0.3),
-                                    borderRadius: BorderRadius.circular(10)),
-                              ),
-                              Container(
-                                height: 4,
-                                width: 200 * lesson.progress!.progress,
-                                decoration: BoxDecoration(
-                                    color: lesson.color,
-                                    borderRadius: BorderRadius.circular(10)),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
+                gridDelegate: SliverWovenGridDelegate.count(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: defaultPadding / 2,
+                  crossAxisSpacing: defaultPadding / 2,
+                  pattern: [
+                    const WovenGridTile(1),
+                    const WovenGridTile(
+                      5 / 7,
+                      crossAxisRatio: 0.9,
+                      // alignment: AlignmentDirectional.centerEnd,
                     ),
+                  ],
+                ),
+                childrenDelegate: SliverChildBuilderDelegate((context, index) {
+                  return LessonCard(
+                    lesson: snapshot.data![index],
                   );
-                },
+                }, childCount: snapshot.data!.length),
               ),
             );
           }
           return const Text("Error UI Element will come here");
         });
+  }
+}
+
+class ShimmerSessionLessonsList extends StatelessWidget {
+  const ShimmerSessionLessonsList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        height: 450,
+        child: GridView.custom(
+            primary: false,
+            gridDelegate: SliverWovenGridDelegate.count(
+              crossAxisCount: 2,
+              mainAxisSpacing: defaultPadding / 2,
+              crossAxisSpacing: defaultPadding / 2,
+              pattern: [
+                const WovenGridTile(1),
+                const WovenGridTile(
+                  5 / 7,
+                  crossAxisRatio: 0.9,
+                  // alignment: AlignmentDirectional.centerEnd,
+                ),
+              ],
+            ),
+            childrenDelegate: SliverChildBuilderDelegate((context, index) {
+              return Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Container(
+                    width: 150,
+                    height: 200,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white)),
+              );
+            }, childCount: 4)));
   }
 }
