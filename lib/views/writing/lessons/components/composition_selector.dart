@@ -86,6 +86,7 @@ class _CompositionSelectorContainerState
                     ),
                     SvgPicture.asset(
                       "assets/icons/exchange.svg",
+                      theme: SvgTheme(currentColor: Colors.black),
                       color: Colors.black,
                       width: 25,
                     )

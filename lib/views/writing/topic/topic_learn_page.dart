@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:word_and_learn/components/components.dart';
-import 'package:word_and_learn/constants/constants.dart';
-import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
-import 'package:word_and_learn/views/writing/topic/components/flash_card_container.dart';
 import 'package:word_and_learn/views/writing/topic/topic_example_page.dart';
 
 import 'components/topic_bottom_navbar.dart';
@@ -30,7 +25,7 @@ class _TopicLearnPageState extends State<TopicLearnPage> {
   int activePage = 0;
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    // Size size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: Colors.white,
         bottomNavigationBar: TopicBottomNavBar(
@@ -46,7 +41,7 @@ class _TopicLearnPageState extends State<TopicLearnPage> {
           children: [
             TopicNotesPage(topic: widget.topic, lesson: widget.lesson!),
             TopicExamplePage(topic: widget.topic),
-            Scaffold()
+            const Scaffold()
           ],
         )));
   }

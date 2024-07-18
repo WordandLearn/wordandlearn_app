@@ -32,7 +32,7 @@ class _TeacherStudentDetailPageState extends State<TeacherStudentDetailPage> {
         List<File> files =
             images.map((path) => FileUtils.getFileFromPath(path)).toList();
         teacherController.compositionImages[widget.student.id] = files;
-        if (context.mounted) {
+        if (mounted) {
           Navigator.push(
               context,
               MaterialPageRoute(

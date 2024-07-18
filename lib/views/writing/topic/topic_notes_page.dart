@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:word_and_learn/components/components.dart';
@@ -66,8 +65,13 @@ class _TopicNotesPageState extends State<TopicNotesPage> {
                                   left: index % 2 != 0 ? defaultPadding : 0,
                                   right: index % 2 == 0 ? defaultPadding : 0),
                               child: AnimatedRotation(
-                                turns: index % 2 != 0 ? -0.001 : 0.001,
-                                duration: const Duration(milliseconds: 300),
+                                turns: index == activeFlashcard
+                                    ? 0
+                                    : index % 2 != 0
+                                        ? -0.0025
+                                        : 0.0025,
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeOut,
                                 child: TopicNoteCard(
                                   flashcardText: flashcardText,
                                   onClicked: () {

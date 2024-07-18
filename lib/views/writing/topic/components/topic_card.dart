@@ -170,7 +170,8 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
                             SvgPicture.asset(
                               "assets/icons/brain.svg",
                               width: 20,
-                              color: Colors.black,
+                              theme: const SvgTheme(currentColor: Colors.black),
+                              // color: Colors.black,
                             ),
                             const SizedBox(
                               width: defaultPadding,
@@ -191,7 +192,8 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
                             SvgPicture.asset(
                               "assets/icons/lock.svg",
                               width: 20,
-                              color: Colors.grey,
+                              theme: const SvgTheme(currentColor: Colors.black),
+                              // color: Colors.grey,
                             ),
                             const SizedBox(
                               width: defaultPadding,

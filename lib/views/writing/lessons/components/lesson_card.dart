@@ -86,12 +86,9 @@ class _LessonCardState extends State<LessonCard> {
               ),
               Expanded(
                 child: Center(
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: Image.asset(
-                      widget.lesson.image!,
-                      height: 90,
-                    ),
+                  child: Image.asset(
+                    widget.lesson.image!,
+                    height: 90,
                   ),
                 ),
               ),
