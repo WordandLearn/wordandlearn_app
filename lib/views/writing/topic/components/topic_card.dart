@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/models.dart';
-import 'package:word_and_learn/utils/sticker_utils.dart';
+import 'package:word_and_learn/views/writing/exercise/exercise_page.dart';
+import 'package:word_and_learn/views/writing/topic/topic_learn_page.dart';
 
 class LessonTopicCard extends StatefulWidget {
   const LessonTopicCard({
     super.key,
     required this.topic,
+    required this.lesson,
   });
 
   final Topic topic;
+  final Lesson lesson;
 
   @override
   State<LessonTopicCard> createState() => _LessonTopicCardState();
@@ -42,6 +45,14 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
           GestureDetector(
             onTap: () {
               _animateBounce();
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TopicLearnPage(
+                      topic: widget.topic,
+                      lesson: widget.lesson,
+                    ),
+                  ));
             },
             child: AnimatedScale(
               scale: scale,
@@ -115,40 +126,87 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
             right: 0,
             left: 0,
             child: Center(
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: defaultPadding * 1.5, vertical: defaultPadding),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Theme.of(context).primaryColor,
-                    border: Border.all(
-                        color: AppColors.buttonColor.withOpacity(0.2)),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          offset: const Offset(0, 2),
-                          blurRadius: 5)
-                    ]),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      "assets/icons/brain.svg",
-                      width: 20,
-                      color: Colors.black,
-                    ),
-                    const SizedBox(
-                      width: defaultPadding,
-                    ),
-                    Text(
-                      "Exercise",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge!
-                          .copyWith(fontWeight: FontWeight.w600),
-                    )
-                  ],
+              child: GestureDetector(
+                onTap: () {
+                  if (widget.topic.completed) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ExercisePage(topic: widget.topic),
+                        ));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Complete topic to access exercise"),
+                      ),
+                    );
+                  }
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: defaultPadding * 1.5,
+                      vertical: defaultPadding),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: widget.topic.completed
+                          ? Theme.of(context).primaryColor
+                          : Colors.white70,
+                      border: widget.topic.completed
+                          ? Border.all(
+                              color: AppColors.buttonColor.withOpacity(0.2))
+                          : null,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            offset: const Offset(0, 2),
+                            blurRadius: 5)
+                      ]),
+                  child: widget.topic.completed
+                      ? Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              "assets/icons/brain.svg",
+                              width: 20,
+                              color: Colors.black,
+                            ),
+                            const SizedBox(
+                              width: defaultPadding,
+                            ),
+                            Text(
+                              "Exercise",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(fontWeight: FontWeight.w600),
+                            )
+                          ],
+                        )
+                      : Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              "assets/icons/lock.svg",
+                              width: 20,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(
+                              width: defaultPadding,
+                            ),
+                            Text(
+                              "Exercise Not Available",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.grey),
+                            )
+                          ],
+                        ),
                 ),
               ),
             ),

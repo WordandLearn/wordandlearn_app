@@ -22,19 +22,22 @@ class _SplashScreenState extends State<SplashScreen> {
         if (preferences.containsKey("userType")) {
           if (preferences.getString("userType") == "child") {
             Get.put(WritingController());
-
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LessonsPage(),
-                ));
-          } else if (preferences.getString("userType") == "teacher") {
-            Get.put(TeacherController());
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const TeachersHome(),
-                ));
+            if (mounted) {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LessonsPage(),
+                  ));
+            } else if (preferences.getString("userType") == "teacher") {
+              Get.put(TeacherController());
+              if (mounted) {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TeachersHome(),
+                    ));
+              }
+            }
           }
         }
       } else {

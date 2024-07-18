@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:word_and_learn/utils/sticker_utils.dart';
 
+import 'color_model.dart';
+
 // To parse this JSON data, do
 //
 //     final topic = topicFromJson(jsonString);
@@ -12,7 +14,7 @@ List<Topic> topicFromJson(String str) =>
 String topicToJson(List<Topic> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class Topic {
+class Topic extends ColorModel {
   final int id;
   final DateTime createdAt;
   final DateTime updatedAt;

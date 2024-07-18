@@ -13,3 +13,4 @@ export 'exercise_result.dart';
 export 'session.dart';
 export 'profile.dart';
 export 'class.dart';
+export 'color_model.dart';

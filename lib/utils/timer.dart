@@ -27,4 +27,11 @@ class TimerUtil {
     // Return ceiling of time
     return Duration(seconds: time.ceil());
   }
+
+  static String timeFormat(Duration duration) {
+    // format the time in this way: 2 minutes read, 30 seconds read
+    String minutes = duration.inMinutes > 0 ? "${duration.inMinutes}m" : "";
+    String seconds = duration.inSeconds > 0 ? "${duration.inSeconds}s" : "";
+    return "$minutes $seconds";
+  }
 }

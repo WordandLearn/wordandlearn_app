@@ -18,9 +18,9 @@ class LessonCard extends StatefulWidget {
 
 class _LessonCardState extends State<LessonCard> {
   double scale = 1;
-  void _startBounceAnimation() {
+  void _startBounceAnimation({double value = 0.98}) {
     setState(() {
-      scale = 0.9; // Set the target height for the bounce animation
+      scale = value; // Set the target height for the bounce animation
     });
 
     Future.delayed(const Duration(milliseconds: 200), () {
@@ -36,6 +36,9 @@ class _LessonCardState extends State<LessonCard> {
     return InkWell(
       highlightColor: Colors.transparent,
       splashColor: widget.lesson.color!.withOpacity(0.3),
+      onLongPress: () {
+        _startBounceAnimation(value: 0.95);
+      },
       onTap: () {
         _startBounceAnimation();
         Future.delayed(const Duration(milliseconds: 200), () {

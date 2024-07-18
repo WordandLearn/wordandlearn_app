@@ -5,6 +5,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:tinycolor2/tinycolor2.dart';
 import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/utils/color_utils.dart';
 import 'package:word_and_learn/utils/sticker_utils.dart';
@@ -63,5 +64,9 @@ class Lesson extends BaseModel {
       return color!.withOpacity(0.4);
     }
     return null;
+  }
+
+  Color get darkerColor {
+    return TinyColor.fromColor(color!).darken(10).color;
   }
 }

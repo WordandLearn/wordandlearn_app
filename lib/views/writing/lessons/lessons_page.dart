@@ -88,10 +88,12 @@ class _LessonsPageState extends State<LessonsPage> {
               child: Column(children: [
                 Obx(() {
                   if (writingController.currentUserSession.value == null) {
-                    return const Padding(
+                    return Padding(
                       padding: EdgeInsets.symmetric(vertical: defaultPadding),
                       //TODO: Do some error handling when no session is available
-                      child: Text("No sessions loaded will come here"),
+                      child: SizedBox(
+                          height: size.height * 0.9,
+                          child: Text("No sessions loaded will come here")),
                     );
                   } else {
                     Session session =

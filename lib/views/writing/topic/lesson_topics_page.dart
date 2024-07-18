@@ -71,7 +71,7 @@ class _LessonTopicsPageState extends State<LessonTopicsPage> {
                           ),
                           CircularPercentIndicator(
                             radius: 15,
-                            percent: 0.3,
+                            percent: widget.lesson.progress!.progress,
                             progressColor: widget.lesson.color,
                             backgroundColor: Colors.white,
                           )
@@ -87,35 +87,44 @@ class _LessonTopicsPageState extends State<LessonTopicsPage> {
                               ? Builder(builder: (context) {
                                   Topic topic =
                                       snapshot.data!.models[activeIndex];
-                                  return AnimatedSwitcher(
-                                    duration: const Duration(milliseconds: 300),
-                                    switchInCurve: Curves.easeIn,
-                                    switchOutCurve: Curves.easeOut,
-                                    child: Column(
-                                      key: ValueKey<int>(activeIndex),
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
+                                  return Column(
+                                    key: ValueKey<int>(activeIndex),
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      AnimatedSwitcher(
+                                        duration:
+                                            const Duration(milliseconds: 200),
+                                        switchInCurve: Curves.easeIn,
+                                        switchOutCurve: Curves.easeOut,
+                                        child: Text(
                                           topic.tag,
+                                          key: ValueKey<int>(activeIndex),
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyLarge!
                                               .copyWith(
                                                   fontWeight: FontWeight.w500),
                                         ),
-                                        const SizedBox(
-                                          height: defaultPadding / 4,
-                                        ),
-                                        AutoSizeText(
+                                      ),
+                                      const SizedBox(
+                                        height: defaultPadding / 4,
+                                      ),
+                                      AnimatedSwitcher(
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        switchInCurve: Curves.easeIn,
+                                        switchOutCurve: Curves.easeOut,
+                                        child: AutoSizeText(
                                           topic.title,
+                                          key: ValueKey<String>(topic.title),
                                           maxLines: 1,
                                           style: const TextStyle(
                                               fontSize: 26,
                                               fontWeight: FontWeight.bold),
-                                        )
-                                      ],
-                                    ),
+                                        ),
+                                      )
+                                    ],
                                   );
                                 })
                               : null,
@@ -135,6 +144,7 @@ class _LessonTopicsPageState extends State<LessonTopicsPage> {
                             List<Topic> topics = snapshot.data!.models;
                             return PageView.builder(
                                 scrollDirection: Axis.horizontal,
+                                physics: const BouncingScrollPhysics(),
                                 controller: _pageController,
                                 itemCount: topics.length,
                                 onPageChanged: (value) {
@@ -147,7 +157,10 @@ class _LessonTopicsPageState extends State<LessonTopicsPage> {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: defaultPadding),
-                                    child: LessonTopicCard(topic: topic),
+                                    child: LessonTopicCard(
+                                      topic: topic,
+                                      lesson: widget.lesson,
+                                    ),
                                   );
                                 });
                           }

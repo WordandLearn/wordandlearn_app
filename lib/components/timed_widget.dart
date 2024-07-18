@@ -1,15 +1,18 @@
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
+import 'package:word_and_learn/constants/constants.dart';
 
 class TimedWidget extends StatefulWidget {
   const TimedWidget(
       {super.key,
       required this.child,
       required this.duration,
-      this.onCompleted});
+      this.onCompleted,
+      this.color});
   final Widget child;
   final Duration duration;
   final Function()? onCompleted;
+  final Color? color;
 
   @override
   State<TimedWidget> createState() => _TimedWidgetState();
@@ -56,11 +59,10 @@ class _TimedWidgetState extends State<TimedWidget>
                   duration: widget.duration.inSeconds,
                   strokeWidth: 2.5,
                   textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.w600,
                       ),
                   strokeCap: StrokeCap.round,
-                  fillColor: Colors.transparent,
+                  fillColor: AppColors.buttonColor,
                   controller: countDownController,
                   onComplete: () {
                     setState(() {
@@ -70,7 +72,7 @@ class _TimedWidgetState extends State<TimedWidget>
                       widget.onCompleted!();
                     }
                   },
-                  ringColor: Theme.of(context).primaryColor,
+                  ringColor: widget.color ?? Theme.of(context).primaryColor,
                 );
               }),
     );
