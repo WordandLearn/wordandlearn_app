@@ -104,7 +104,10 @@ class TeacherBottomNavigationItem extends StatelessWidget {
             SvgPicture.asset(
               assetUrl,
               width: 20,
-              color: isActive ? Theme.of(context).primaryColor : Colors.white,
+              theme: SvgTheme(
+                  currentColor:
+                      isActive ? Theme.of(context).primaryColor : Colors.white),
+              // color: ,
             ),
             const SizedBox(
               width: defaultPadding,

@@ -126,7 +126,9 @@ class _TeacherClassesPageState extends State<TeacherClassesPage> {
                               const Spacer(),
                               SvgPicture.asset(
                                 "assets/icons/exchange.svg",
-                                color: Colors.white,
+                                theme:
+                                    const SvgTheme(currentColor: Colors.white),
+                                // color: Colors.white,
                                 width: 25,
                               )
                             ],

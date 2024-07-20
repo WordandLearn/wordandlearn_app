@@ -42,7 +42,8 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          GestureDetector(
+          InkWell(
+            
             onTap: () {
               _animateBounce();
               Navigator.push(

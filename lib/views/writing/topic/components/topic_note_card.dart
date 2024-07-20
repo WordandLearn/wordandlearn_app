@@ -36,14 +36,13 @@ class _TopicNoteCardState extends State<TopicNoteCard> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
-          margin: const EdgeInsets.symmetric(vertical: defaultPadding),
+          margin: const EdgeInsets.only(bottom: defaultPadding * 2),
           padding: const EdgeInsets.symmetric(
               horizontal: defaultPadding * 2, vertical: defaultPadding),
           decoration: BoxDecoration(
               color: widget.flashcardText.colorValue,
-              border: widget.flashcardText.completed != null &&
-                      widget.flashcardText.completed!
-                  ? Border.all(color: AppColors.greenColor, width: 1)
+              border: widget.flashcardText.completed
+                  ? Border.all(color: Colors.green, width: 1)
                   : null,
               borderRadius: BorderRadius.circular(20)),
           child: Column(
@@ -93,15 +92,34 @@ class _TopicNoteCardState extends State<TopicNoteCard> {
                     const EdgeInsets.symmetric(vertical: defaultPadding / 2),
                 child: Row(
                   children: [
-                    widget.isOpened
-                        ? const Text(
-                            "* Click To Take Lesson",
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600),
-                          )
-                        : const SizedBox.shrink(),
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: widget.flashcardText.completed
+                          ? const Row(
+                              children: [
+                                Icon(
+                                  Icons.done_rounded,
+                                  color: Colors.green,
+                                ),
+                                Text(
+                                  "Completed",
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.green),
+                                )
+                              ],
+                            )
+                          : widget.isOpened
+                              ? const Text(
+                                  "* Click To Take Lesson",
+                                  style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600),
+                                )
+                              : const SizedBox.shrink(),
+                    ),
                     const Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,

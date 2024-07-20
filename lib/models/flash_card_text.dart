@@ -19,7 +19,7 @@ class FlashcardText extends ColorModel {
   final String text;
   final int topic;
   String? title;
-  bool? completed;
+  bool completed;
 
   FlashcardText(
       {required this.id,
@@ -33,7 +33,7 @@ class FlashcardText extends ColorModel {
       text: json["text"],
       topic: json["topic"],
       title: json["title"],
-      completed: json["completed"]);
+      completed: json["completed"] ?? false);
 
   Map<String, dynamic> toJson() => {
         "id": id,

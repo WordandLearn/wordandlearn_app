@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_swipe_detector/flutter_swipe_detector.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
-import 'package:word_and_learn/controllers/controllers.dart';
+import 'package:word_and_learn/controllers/writing_controller.dart';
 import 'package:word_and_learn/models/models.dart';
-import 'package:word_and_learn/views/writing/topic/components/topic_before_after.dart';
-
-Color beforeColor = const Color(0xFF82E7FE);
-
-Color afterColor = const Color(0xFFFFE482);
+import 'package:word_and_learn/views/writing/topic/components/topic_example_card.dart';
 
 class TopicExamplePage extends StatefulWidget {
   const TopicExamplePage({super.key, required this.topic});
@@ -19,7 +16,6 @@ class TopicExamplePage extends StatefulWidget {
 }
 
 class _TopicExamplePageState extends State<TopicExamplePage> {
-  final PageController _pageController = PageController();
   final WritingController _writingController = WritingController();
   late Future<HttpResponse<Example>> _future;
 
@@ -35,97 +31,186 @@ class _TopicExamplePageState extends State<TopicExamplePage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        body: SafeArea(
-      child: FutureBuilder<HttpResponse<Example>>(
+      backgroundColor: Colors.white,
+      body: FutureBuilder<HttpResponse<Example>>(
           future: _future,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const LoadingSpinner();
-            } else if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.hasData &&
-                snapshot.data!.isSuccess) {
-              List<Example> examples = snapshot.data!.models;
-
-              return SwipeDetector(
-                onSwipeRight: (offset) {
-                  _pageController.previousPage(
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.easeIn);
-                  if (index != 0) {
-                    setState(() {
-                      index--;
-                    });
-                  }
-                },
-                onSwipeLeft: (offset) {
-                  _pageController.nextPage(
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.easeIn);
-                  if (index < examples.length) {
-                    setState(() {
-                      index++;
-                    });
-                  }
-                },
-                child: Stack(
-                  children: [
-                    PageView.builder(
-                      controller: _pageController,
-                      itemCount: examples.length,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return SizedBox(
-                          height: size.height,
-                          width: size.width,
-                          child: Column(
-                            children: [
-                              Expanded(
-                                  child: TopicBeforeAfter(
-                                example: examples[index],
-                                isBefore: true,
-                              )),
-                              Expanded(
-                                  child: TopicBeforeAfter(
-                                example: examples[index],
-                                isBefore: false,
-                              ))
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                    _PageIndicators(index: index, length: examples.length),
-                  ],
-                ),
-              );
+              return Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: Container(
+                    height: size.height * 0.6,
+                    width: size.width,
+                    color: Colors.white,
+                  ));
             }
-            return const Text("UI thing when there is an error");
+            if (snapshot.hasData && snapshot.data!.isSuccess) {
+              return _ExampleWidget(examples: snapshot.data!.models);
+            }
+            return const LoadingSpinner();
           }),
-    ));
+    );
   }
 }
 
-class _PageIndicators extends StatelessWidget {
-  const _PageIndicators({required this.index, required this.length});
-  final int index;
-  final int length;
+class _ExampleWidget extends StatefulWidget {
+  const _ExampleWidget({required this.examples});
+  final List<Example> examples;
+
+  @override
+  State<_ExampleWidget> createState() => __ExampleWidgetState();
+}
+
+class __ExampleWidgetState extends State<_ExampleWidget> {
+  int index = 0;
+
+  late List<bool> understoodExamples;
+
+  @override
+  void initState() {
+    understoodExamples = List.generate(
+        widget.examples.length, (index) => widget.examples[index].completed);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Stack(
+    return Column(
       children: [
-        Container(
-          width: size.width,
-          height: 4,
-          decoration: const BoxDecoration(color: Colors.white),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+              vertical: defaultPadding * 2, horizontal: defaultPadding),
+          child: Builder(builder: (context) {
+            Example example = widget.examples[index];
+            return Stack(
+              clipBehavior: Clip.none,
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeOut,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            blurRadius: 10,
+                            offset: const Offset(0, 5))
+                      ],
+                      borderRadius: BorderRadius.circular(20)),
+                  child: TopicExampleCard(
+                    example: example,
+                    index: index,
+                    onUnderstand: (example) {
+                      //TODO: Call API and set example to complete
+                      setState(() {
+                        understoodExamples[example] = true;
+                        widget.examples[index].completed = true;
+                      });
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ],
+            );
+          }),
         ),
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-          width: size.width * (index + 1) / length,
-          height: 4,
-          decoration: const BoxDecoration(color: AppColors.secondaryColor),
-        ),
+        const Spacer(),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+              horizontal: defaultPadding * 2, vertical: defaultPadding),
+          child: SizedBox(
+            height: 70,
+            child: Row(
+              children: [
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: index != 0
+                      ? TapBounce(
+                          onTap: () {
+                            if (index > 0) {
+                              setState(() {
+                                index--;
+                              });
+                            }
+                          },
+                          child: const Row(
+                            children: [
+                              Icon(
+                                Icons.chevron_left,
+                                size: 30,
+                              ),
+                              Text(
+                                'Previous',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        )
+                      : const SizedBox(
+                          width: 40,
+                        ),
+                ),
+                const Spacer(),
+                Row(
+                    children: List.generate(
+                  widget.examples.length,
+                  (index_) {
+                    return AnimatedSize(
+                      duration: const Duration(milliseconds: 300),
+                      child: InkWell(
+                        onTap: index_ == index
+                            ? () {
+                                if (!understoodExamples[index]) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              "Please read the instructions before proceeding")));
+                                } else {
+                                  if (index < widget.examples.length - 1) {
+                                    setState(() {
+                                      index++;
+                                    });
+                                  }
+                                }
+                              }
+                            : null,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: defaultPadding / 4),
+                          height: index_ == index ? 45 : 10,
+                          width: index_ == index ? 45 : 10,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Theme.of(context).primaryColor),
+                          child: index_ == index
+                              ? AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 300),
+                                  child: understoodExamples[index]
+                                      ? index == widget.examples.length - 1
+                                          ? const Icon(
+                                              Icons.star_rounded,
+                                              size: 30,
+                                            )
+                                          : const Icon(
+                                              Icons.chevron_right_rounded,
+                                              size: 30,
+                                            )
+                                      : const LoadingSpinner(
+                                          color: Colors.black,
+                                          size: 20,
+                                        ),
+                                )
+                              : null,
+                        ),
+                      ),
+                    );
+                  },
+                ))
+              ],
+            ),
+          ),
+        )
       ],
     );
   }

@@ -4,18 +4,20 @@
 
 import 'dart:convert';
 
+import 'package:word_and_learn/models/models.dart';
+
 List<Example> exampleFromJson(String str) =>
     List<Example>.from(json.decode(str).map((x) => Example.fromJson(x)));
 
 String exampleToJson(List<Example> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class Example {
+class Example extends ColorModel {
   final int id;
   final String originalText;
   final String transformedText;
   final String guide;
-  final bool completed;
+  bool completed;
   final int topic;
 
   Example({
@@ -32,7 +34,7 @@ class Example {
         originalText: json["original_text"],
         transformedText: json["transformed_text"],
         guide: json["guide"],
-        completed: json["completed"],
+        completed: json["completed"] ?? false,
         topic: json["topic"],
       );
 

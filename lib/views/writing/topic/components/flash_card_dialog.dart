@@ -26,15 +26,17 @@ class _FlashCardDialogState extends State<FlashCardDialog> {
   double rotation = 0.001;
 
   void _animateRotation() {
-    setState(() {
-      rotation = 0;
-    });
-
-    Future.delayed(const Duration(milliseconds: 300), () {
+    if (mounted) {
       setState(() {
-        rotation = 0.002;
+        rotation = 0;
       });
-    });
+
+      Future.delayed(const Duration(milliseconds: 300), () {
+        setState(() {
+          rotation = 0.002;
+        });
+      });
+    }
   }
 
   @override
@@ -93,8 +95,7 @@ class _FlashCardDialogState extends State<FlashCardDialog> {
             ),
           ),
         ),
-        widget.flashcardText.completed != null &&
-                widget.flashcardText.completed!
+        widget.flashcardText.completed
             ? const SizedBox.shrink()
             : Positioned(
                 bottom: -30,

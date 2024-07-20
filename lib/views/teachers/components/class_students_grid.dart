@@ -40,7 +40,7 @@ class _ClassStudentsGridState extends State<ClassStudentsGrid> {
         List<File> files =
             images.map((path) => FileUtils.getFileFromPath(path)).toList();
         teacherController.compositionImages[student.id] = files;
-        if (context.mounted) {
+        if (mounted) {
           Navigator.push(
               context,
               MaterialPageRoute(
