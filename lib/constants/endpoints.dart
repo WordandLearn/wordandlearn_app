@@ -22,7 +22,7 @@ String exerciseUploadUrl(int exerciseId) => "$exerciseUrl/$exerciseId/upload/";
 String exerciseSubmissionDetailUrl(int exerciseId) =>
     "$exerciseUrl/$exerciseId/";
 String exerciseSubmissionAssessUrl(int exerciseId) =>
-    "$exerciseUrl/$exerciseId/assess/";
+    "$exerciseUrl/submission/$exerciseId/assess/";
 
 //Teachers endpoints
 const String teacherClassesUrl = "$teachersUrl/class";

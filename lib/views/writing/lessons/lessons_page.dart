@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
@@ -91,11 +92,10 @@ class _LessonsPageState extends State<LessonsPage> {
                     return Padding(
                       padding:
                           const EdgeInsets.symmetric(vertical: defaultPadding),
-                      //TODO: Do some error handling when no session is available
+                      //TODO: Do some error handling when no session is available,guide on creating new session
                       child: SizedBox(
                           height: size.height * 0.9,
-                          child:
-                              const Text("No sessions loaded will come here")),
+                          child: const Center(child: LoadingSpinner())),
                     );
                   } else {
                     Session session =

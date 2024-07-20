@@ -111,6 +111,7 @@ mixin WritingControllerHttp {
         await client.get(exerciseSubmissionDetailUrl(submissionId));
 
     HttpResponse<ExerciseSubmission> response = HttpResponse.fromResponse(res);
+    print(response.data);
     if (response.isSuccess) {
       ExerciseSubmission submission =
           ExerciseSubmission.fromJson(json.decode(res.body));

@@ -11,6 +11,7 @@ import 'package:word_and_learn/views/writing/exercise/components/exercise_action
 
 import 'components/exercise_appbar.dart';
 import 'exercise_details_page.dart';
+import 'exercise_results_page.dart';
 import 'exercise_submission_page.dart';
 
 class ExercisePage extends StatefulWidget {
@@ -35,18 +36,20 @@ class _ExercisePageState extends State<ExercisePage> {
   int currentPage = 0;
   bool isUploading = false;
   List<String?>? submissionImagePaths = [];
-
-  void _selectImages() async {
+  ExerciseSubmission? exerciseSubmission;
+  ExerciseResult? exerciseResult;
+  Future<List<String?>?> _selectImages() async {
     List<String?>? imagePaths = await CunningDocumentScanner.getPictures(
         isGalleryImportAllowed: true, noOfPages: 1);
     if (imagePaths != null) {
       setState(() {
         submissionImagePaths = imagePaths;
-        if (currentPage == 0) {
-          currentPage++;
-        }
+        // if (currentPage == 0) {
+        //   currentPage++;
+        // }
       });
     }
+    return imagePaths;
   }
 
   void _submitExercise(Exercise exercise) async {
@@ -59,16 +62,22 @@ class _ExercisePageState extends State<ExercisePage> {
     if (response.isSuccess) {
       setState(() {
         isUploading = false;
-        currentPage++;
+        exerciseSubmission = response.models.first;
       });
+      if (mounted) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ExerciseResultsPage(
+                      exerciseSubmission: exerciseSubmission,
+                      topic: widget.topic,
+                      exercise: exercise,
+                    )));
+      }
     } else {
       setState(() {
         isUploading = false;
       });
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Could not upload submission. ${response.data}")));
-      }
     }
   }
 
@@ -113,11 +122,6 @@ class _ExercisePageState extends State<ExercisePage> {
                               imagePaths: submissionImagePaths,
                             ),
                           ),
-                          const Scaffold(
-                            body: Center(
-                              child: Text("Exercise Submission Page"),
-                            ),
-                          )
                         ],
                       ),
                     ),
@@ -127,7 +131,7 @@ class _ExercisePageState extends State<ExercisePage> {
                       child: Container(
                         height: snapshot.hasData && snapshot.data!.isSuccess
                             ? 100
-                            : 50,
+                            : 60,
                         width: size.width,
                         decoration: const BoxDecoration(
                             color: Colors.white,
@@ -150,9 +154,9 @@ class _ExercisePageState extends State<ExercisePage> {
                                         currentPage: currentPage,
                                         selectImages: _selectImages,
                                         uploading: isUploading,
-                                        onContinue: () {
+                                        onContinue: () async {
                                           if (currentPage == 0) {
-                                            _selectImages();
+                                            await _selectImages();
                                             setState(() {
                                               currentPage++;
                                             });

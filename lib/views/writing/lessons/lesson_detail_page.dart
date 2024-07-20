@@ -41,8 +41,9 @@ class LessonDetailPage extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => LessonTopicsPage(lesson: lesson),
-                    ));
+                        builder: (context) => LessonTopicsPage(lesson: lesson),
+                        settings:
+                            const RouteSettings(name: "LessonTopicsPage")));
               },
               // color: Theme.of(context).colorScheme.secondary,
               child: const Text(

@@ -22,11 +22,13 @@ class Exercise extends BaseModel {
   final String? difficulty;
   final int topic;
   final int? lesson;
+  bool completed;
 
   Exercise({
     required this.id,
     this.results,
     this.submissions,
+    this.completed = false,
     required this.description,
     required this.test,
     required this.aim,
@@ -36,16 +38,16 @@ class Exercise extends BaseModel {
   });
 
   factory Exercise.fromJson(Map<String, dynamic> json) => Exercise(
-        id: json["id"],
-        // results: json["results"],
-        // submissions: json["submissions"],
-        description: json["description"],
-        test: json["test"],
-        aim: json["aim"],
-        difficulty: json["difficulty"],
-        topic: json["topic"],
-        lesson: json["lesson"],
-      );
+      id: json["id"],
+      // results: json["results"],
+      // submissions: json["submissions"],
+      description: json["description"],
+      test: json["test"],
+      aim: json["aim"],
+      difficulty: json["difficulty"],
+      topic: json["topic"],
+      lesson: json["lesson"],
+      completed: json["completed"] ?? false);
 
   Map<String, dynamic> toJson() => {
         "id": id,

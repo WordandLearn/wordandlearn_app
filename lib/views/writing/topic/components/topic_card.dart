@@ -43,17 +43,16 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
         clipBehavior: Clip.none,
         children: [
           InkWell(
-            
             onTap: () {
               _animateBounce();
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TopicLearnPage(
-                      topic: widget.topic,
-                      lesson: widget.lesson,
-                    ),
-                  ));
+                      builder: (context) => TopicLearnPage(
+                            topic: widget.topic,
+                            lesson: widget.lesson,
+                          ),
+                      settings: RouteSettings(name: "TopicLearnPage")));
             },
             child: AnimatedScale(
               scale: scale,
@@ -133,9 +132,10 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              ExercisePage(topic: widget.topic),
-                        ));
+                            builder: (context) =>
+                                ExercisePage(topic: widget.topic),
+                            settings:
+                                const RouteSettings(name: "ExercisePage")));
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
