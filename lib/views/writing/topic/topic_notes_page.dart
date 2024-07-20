@@ -12,10 +12,12 @@ class TopicNotesPage extends StatefulWidget {
       {super.key,
       required this.topic,
       required this.lesson,
-      required this.onProgress});
+      required this.onProgress,
+      required this.onComplete});
   final Topic topic;
   final Lesson lesson;
   final void Function(double progress) onProgress;
+  final void Function() onComplete;
 
   @override
   State<TopicNotesPage> createState() => _TopicNotesPageState();
@@ -118,6 +120,9 @@ class _TopicNotesPageState extends State<TopicNotesPage> {
                                                         _notesProgress(snapshot
                                                             .data!.models);
                                                     widget.onProgress(progress);
+                                                    if (progress == 1) {
+                                                      widget.onComplete();
+                                                    }
                                                     Navigator.pop(context);
                                                   },
                                                 ),

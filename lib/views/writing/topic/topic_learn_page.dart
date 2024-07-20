@@ -66,13 +66,26 @@ class _TopicLearnPageState extends State<TopicLearnPage> {
                   TopicNotesPage(
                     topic: widget.topic,
                     lesson: widget.lesson!,
+                    onComplete: () {
+                      setState(() {
+                        completedStatus[0] = true;
+                      });
+                    },
                     onProgress: (progress) {
                       setState(() {
                         this.progress = progress;
                       });
                     },
                   ),
-                  TopicExamplePage(topic: widget.topic),
+                  TopicExamplePage(
+                    topic: widget.topic,
+                    onComplete: () {
+                      setState(() {
+                        completedStatus[1] = true;
+                        widget.topic.completed = true;
+                      });
+                    },
+                  ),
                 ],
               ),
             ),

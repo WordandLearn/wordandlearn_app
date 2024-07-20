@@ -8,8 +8,10 @@ import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/views/writing/topic/components/topic_example_card.dart';
 
 class TopicExamplePage extends StatefulWidget {
-  const TopicExamplePage({super.key, required this.topic});
+  const TopicExamplePage(
+      {super.key, required this.topic, required this.onComplete});
   final Topic topic;
+  final void Function() onComplete;
 
   @override
   State<TopicExamplePage> createState() => _TopicExamplePageState();
@@ -46,7 +48,10 @@ class _TopicExamplePageState extends State<TopicExamplePage> {
                   ));
             }
             if (snapshot.hasData && snapshot.data!.isSuccess) {
-              return _ExampleWidget(examples: snapshot.data!.models);
+              return _ExampleWidget(
+                examples: snapshot.data!.models,
+                onComplete: widget.onComplete,
+              );
             }
             return const LoadingSpinner();
           }),
@@ -55,8 +60,9 @@ class _TopicExamplePageState extends State<TopicExamplePage> {
 }
 
 class _ExampleWidget extends StatefulWidget {
-  const _ExampleWidget({required this.examples});
+  const _ExampleWidget({required this.examples, required this.onComplete});
   final List<Example> examples;
+  final void Function() onComplete;
 
   @override
   State<_ExampleWidget> createState() => __ExampleWidgetState();
@@ -171,6 +177,9 @@ class __ExampleWidgetState extends State<_ExampleWidget> {
                                     setState(() {
                                       index++;
                                     });
+                                  } else if (index ==
+                                      widget.examples.length - 1) {
+                                    widget.onComplete();
                                   }
                                 }
                               }

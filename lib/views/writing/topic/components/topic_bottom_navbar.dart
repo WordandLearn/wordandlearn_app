@@ -144,48 +144,36 @@ class _NavItem extends StatelessWidget {
             : EdgeInsets.zero,
         child: Row(
           children: [
-            isComplete
-                ? AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    height: 25,
-                    width: 25,
-                    decoration: BoxDecoration(
-                      color: AppColors.greenColor,
-                      border: isComplete
-                          ? null
-                          : Border.all(
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              height: 25,
+              width: 25,
+              decoration: BoxDecoration(
+                color: isComplete ? AppColors.greenColor : null,
+                border: isComplete
+                    ? null
+                    : Border.all(
+                        color: isActive ? AppColors.buttonColor : Colors.grey,
+                        width: 1.4),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                  child: isComplete
+                      ? const Icon(
+                          Icons.done_rounded,
+                          color: Colors.white,
+                          size: 15,
+                        )
+                      : Text(
+                          "$index",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
                               color: isActive
                                   ? AppColors.buttonColor
-                                  : Colors.grey,
-                              width: 1.4),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                        child: isComplete
-                            ? const Icon(
-                                Icons.done_rounded,
-                                color: Colors.white,
-                                size: 15,
-                              )
-                            : Text(
-                                "$index",
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: isActive
-                                        ? AppColors.buttonColor
-                                        : Colors.grey),
-                              )),
-                  )
-                : AnimatedScale(
-                    scale: isActive ? 1 : 0.9,
-                    duration: const Duration(milliseconds: 300),
-                    child: Image.asset(
-                      assetImage,
-                      width: 25,
-                      height: 25,
-                    ),
-                  ),
+                                  : Colors.grey),
+                        )),
+            ),
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: defaultPadding / 2),

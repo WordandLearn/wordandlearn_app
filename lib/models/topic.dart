@@ -20,7 +20,7 @@ class Topic extends ColorModel {
   final DateTime updatedAt;
   final String title;
   final String description;
-  final bool completed;
+  bool completed;
   final String tag;
   final int lesson;
   final bool isCurrent;
