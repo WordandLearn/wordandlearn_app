@@ -84,7 +84,7 @@ class _TopicExampleCardState extends State<TopicExampleCard> {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
       child: SizedBox(
-        height: size.height * 0.65,
+        height: size.height * 0.6,
         child: Column(
           key: ValueKey<String>(widget.example.originalText),
           children: [

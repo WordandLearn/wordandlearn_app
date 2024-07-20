@@ -82,6 +82,7 @@ class __ExampleWidgetState extends State<_ExampleWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // Size size = MediaQuery.of(context).size;
     return Column(
       children: [
         Padding(

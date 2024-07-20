@@ -78,11 +78,11 @@ class _AuthTextFieldState extends State<AuthTextField> {
               : null,
           border: OutlineInputBorder(
               borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(40)),
+              borderRadius: BorderRadius.circular(10)),
           focusedBorder: OutlineInputBorder(
               borderSide:
                   BorderSide(color: Theme.of(context).primaryColor, width: 1.5),
-              borderRadius: BorderRadius.circular(40))),
+              borderRadius: BorderRadius.circular(10))),
     );
   }
 }
