@@ -9,6 +9,22 @@ class StickerUtils {
     "think.png",
     "painting.png",
     "painting_2.png",
+    "banana_read.png",
+    "bear_learn.png",
+    "brain_3.png",
+    "brain_4.png",
+    "cow_globe.png",
+    "dog.png",
+    "dolphin.png",
+    "elephant.png",
+    "fox_read.png",
+    "geek_rabbit.png",
+    "lion_learn.png",
+    "rabbit_cap.png",
+    "rabbit_math.png",
+    "seal_book.png",
+    "owl_cap.png",
+    "owl_idea.png"
   ];
 
   static String getRandomSticker() {

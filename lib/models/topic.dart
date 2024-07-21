@@ -26,6 +26,7 @@ class Topic extends ColorModel {
   final bool isCurrent;
   final bool isLocked;
   final String? image;
+  bool exerciseCompleted;
 
   Excerise? excerise;
 
@@ -39,6 +40,7 @@ class Topic extends ColorModel {
       required this.tag,
       required this.lesson,
       this.image,
+      this.exerciseCompleted = false,
       this.isLocked = false,
       this.isCurrent = false});
 
@@ -51,6 +53,7 @@ class Topic extends ColorModel {
       completed: json["completed"],
       tag: json["tag"],
       lesson: json["lesson"],
+      exerciseCompleted: json["exercise_completed"] ?? false,
       image: StickerUtils.getRandomSticker());
 
   Map<String, dynamic> toJson() => {

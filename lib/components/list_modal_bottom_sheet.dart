@@ -39,8 +39,7 @@ class ListModalBottomSheet<T> extends StatelessWidget {
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: defaultPadding,
-                          vertical: defaultPadding / 2),
+                          horizontal: defaultPadding, vertical: defaultPadding),
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20),

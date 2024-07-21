@@ -106,24 +106,35 @@ class _ExercisePageState extends State<ExercisePage> {
                       },
                     ),
                     Expanded(
-                      child: FadeIndexedStack(
-                        duration: const Duration(milliseconds: 300),
-                        index: currentPage,
-                        children: [
-                          ExerciseDetailsPage(
-                            snapshot: snapshot,
-                            topic: widget.topic,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: defaultPadding,
-                                horizontal: defaultPadding),
-                            child: ExerciseSubmissionPage(
-                              imagePaths: submissionImagePaths,
-                            ),
-                          ),
-                        ],
-                      ),
+                      child: snapshot.hasData && snapshot.data!.isSuccess
+                          ? Builder(builder: (context) {
+                              Exercise exercise = snapshot.data!.models.first;
+                              if (exercise.completed) {
+                                return const Center(
+                                  child: Text(
+                                      "You have already completed this exercise"),
+                                );
+                              }
+                              return FadeIndexedStack(
+                                duration: const Duration(milliseconds: 300),
+                                index: currentPage,
+                                children: [
+                                  ExerciseDetailsPage(
+                                    snapshot: snapshot,
+                                    topic: widget.topic,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: defaultPadding,
+                                        horizontal: defaultPadding),
+                                    child: ExerciseSubmissionPage(
+                                      imagePaths: submissionImagePaths,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            })
+                          : const LoadingSpinner(),
                     ),
                     AnimatedSize(
                       duration: const Duration(milliseconds: 500),

@@ -129,13 +129,21 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
               child: GestureDetector(
                 onTap: () {
                   if (widget.topic.completed) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ExercisePage(topic: widget.topic),
-                            settings:
-                                const RouteSettings(name: "ExercisePage")));
+                    if (widget.topic.exerciseCompleted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Good job you completed this exercise"),
+                        ),
+                      );
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ExercisePage(topic: widget.topic),
+                              settings:
+                                  const RouteSettings(name: "ExercisePage")));
+                    }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -151,11 +159,15 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       color: widget.topic.completed
-                          ? Theme.of(context).primaryColor
+                          ? widget.topic.exerciseCompleted
+                              ? AppColors.greenColor
+                              : Theme.of(context).primaryColor
                           : Colors.white70,
                       border: widget.topic.completed
-                          ? Border.all(
-                              color: AppColors.buttonColor.withOpacity(0.2))
+                          ? widget.topic.exerciseCompleted
+                              ? Border.all(
+                                  color: AppColors.buttonColor.withOpacity(0.2))
+                              : null
                           : null,
                       boxShadow: [
                         BoxShadow(
@@ -178,7 +190,9 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
                               width: defaultPadding,
                             ),
                             Text(
-                              "Exercise",
+                              widget.topic.exerciseCompleted
+                                  ? "Exercise Completed"
+                                  : "Attempt Exercise",
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge!
