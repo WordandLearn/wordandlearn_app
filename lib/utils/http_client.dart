@@ -44,6 +44,13 @@ class HttpClient {
     return await http.post(Uri.parse(url), body: body, headers: headers);
   }
 
+  Future<http.Response> put(String url, Map<String, dynamic> body,
+      {bool authRequired = true}) async {
+    Map<String, String> headers =
+        authRequired ? getAuthHeaders() : getHeaders();
+    return await http.put(Uri.parse(url), body: body, headers: headers);
+  }
+
   Future<http.Response> get(String url, {bool authRequired = true}) async {
     Map<String, String> headers =
         authRequired ? getAuthHeaders() : getHeaders();

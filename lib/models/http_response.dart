@@ -21,4 +21,15 @@ class HttpResponse<T> {
   }
 
   bool get isSuccess => statusCode <= 210;
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return {
+      'message': message,
+      'statusCode': statusCode,
+      'data': data,
+      'models': models,
+    }.toString();
+  }
 }

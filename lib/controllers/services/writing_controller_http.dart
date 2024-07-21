@@ -57,6 +57,20 @@ mixin WritingControllerHttp {
     return response;
   }
 
+  Future<HttpResponse<FlashcardText>> markFlashcardCompleted(
+      FlashcardText flashcard) async {
+    http.Response res =
+        await client.put(flashcardCompletedUrl(flashcard.id), {});
+
+    HttpResponse<FlashcardText> response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      FlashcardText flashcard = FlashcardText.fromJson(json.decode(res.body));
+      response.models = [flashcard];
+    }
+
+    return response;
+  }
+
   Future<HttpResponse<Example>> getTopicExamples(int topicId) async {
     http.Response res = await client.get(topicExamplesUrl(topicId));
 
@@ -69,6 +83,18 @@ mixin WritingControllerHttp {
     return response;
   }
 
+  Future<HttpResponse<Example>> markExampleCompleted(Example example) async {
+    http.Response res = await client.put(exampleCompletedUrl(example.id), {});
+
+    HttpResponse<Example> response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      Example example = Example.fromJson(json.decode(res.body));
+      response.models = [example];
+    }
+
+    return response;
+  }
+
   Future<HttpResponse<Exercise>> getTopicExercise(int topicId) async {
     http.Response res = await client.get(topicExerciseUrl(topicId));
 
@@ -76,6 +102,19 @@ mixin WritingControllerHttp {
     if (response.isSuccess) {
       List<Exercise> exercises = [Exercise.fromJson(json.decode(res.body))];
       response.models = exercises;
+    }
+
+    return response;
+  }
+
+  Future<HttpResponse<Exercise>> markExerciseCompleted(
+      Exercise exercise) async {
+    http.Response res = await client.put(exerciseCompletedUrl(exercise.id), {});
+
+    HttpResponse<Exercise> response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      Exercise example = Exercise.fromJson(response.data);
+      response.models = [example];
     }
 
     return response;
@@ -111,7 +150,6 @@ mixin WritingControllerHttp {
         await client.get(exerciseSubmissionDetailUrl(submissionId));
 
     HttpResponse<ExerciseSubmission> response = HttpResponse.fromResponse(res);
-    print(response.data);
     if (response.isSuccess) {
       ExerciseSubmission submission =
           ExerciseSubmission.fromJson(json.decode(res.body));
@@ -123,25 +161,14 @@ mixin WritingControllerHttp {
 
   Future<HttpResponse<ExerciseResult>> getExerciseResults(
       int submissionId) async {
-    // http.Response res =
-    //     await client.get(exerciseSubmissionAssessUrl(submissionId));
+    http.Response res =
+        await client.get(exerciseSubmissionAssessUrl(submissionId));
 
-    // HttpResponse<ExerciseResult> response = HttpResponse.fromResponse(res);
-    // if (response.isSuccess) {
-    //   ExerciseResult result = ExerciseResult();
-    //   response.models = [result];
-    // }
-
-    ExerciseResult exerciseResult = ExerciseResult(
-        id: 1,
-        improvement: true,
-        score: 4,
-        feedback:
-            "That was great you were able to create a really good description of your scence. Felt very real",
-        recommendation: "Use more proverbs and idioms in your sentence",
-        exercise: 20);
-
-    return HttpResponse(message: "good", statusCode: 200, data: "")
-      ..models = [exerciseResult];
+    HttpResponse<ExerciseResult> response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      ExerciseResult result = ExerciseResult.fromJson(response.data);
+      response.models = [result];
+    }
+    return response;
   }
 }

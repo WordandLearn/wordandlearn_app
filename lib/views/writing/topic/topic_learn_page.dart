@@ -52,44 +52,49 @@ class _TopicLearnPageState extends State<TopicLearnPage> {
             ));
           },
         ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(defaultPadding),
-              child: buildAppbar(context),
-            ),
-            Expanded(
-              child: FadeIndexedStack(
-                duration: const Duration(milliseconds: 300),
-                index: activePage,
-                children: [
-                  TopicNotesPage(
-                    topic: widget.topic,
-                    lesson: widget.lesson!,
-                    onComplete: () {
-                      setState(() {
-                        completedStatus[0] = true;
-                      });
-                    },
-                    onProgress: (progress) {
-                      setState(() {
-                        this.progress = progress;
-                      });
-                    },
-                  ),
-                  TopicExamplePage(
-                    topic: widget.topic,
-                    onComplete: () {
-                      setState(() {
-                        completedStatus[1] = true;
-                        widget.topic.completed = true;
-                      });
-                    },
-                  ),
-                ],
+        body: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(defaultPadding),
+                child: buildAppbar(context),
               ),
-            ),
-          ],
+              Expanded(
+                child: FadeIndexedStack(
+                  duration: const Duration(milliseconds: 300),
+                  index: activePage,
+                  children: [
+                    TopicNotesPage(
+                      topic: widget.topic,
+                      lesson: widget.lesson!,
+                      onComplete: () {
+                        setState(() {
+                          completedStatus[0] = true;
+                        });
+                      },
+                      onProgress: (progress) {
+                        setState(() {
+                          this.progress = progress;
+                          if (progress == 1) {
+                            completedStatus[0] = true;
+                          }
+                        });
+                      },
+                    ),
+                    TopicExamplePage(
+                      topic: widget.topic,
+                      onComplete: () {
+                        setState(() {
+                          completedStatus[1] = true;
+                          widget.topic.completed = true;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ));
   }
 

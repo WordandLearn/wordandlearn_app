@@ -62,7 +62,6 @@ class FlashcardText extends ColorModel {
   }
 
   void setCompleted() {
-    //TODO: Update Database
     completed = true;
   }
 }

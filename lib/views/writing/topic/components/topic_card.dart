@@ -52,7 +52,7 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
                             topic: widget.topic,
                             lesson: widget.lesson,
                           ),
-                      settings: RouteSettings(name: "TopicLearnPage")));
+                      settings: const RouteSettings(name: "TopicLearnPage")));
             },
             child: AnimatedScale(
               scale: scale,

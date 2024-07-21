@@ -18,7 +18,6 @@ class _GreetingsPageState extends State<GreetingsPage> {
         .text(
             "Rephrase this, its for a child's learning application we help improve the compositions. 'Hello Edwin, Thank you for using WordandLearn, here is a summary of a composition you had written. We have provided a few lessons to help you improve. Make sure to have fun'")
         .then((value) => value!.content!.parts!.map((e) => e.text).join(""));
-    // TODO: implement initState
     super.initState();
   }
 

@@ -131,7 +131,7 @@ class _ExercisePageState extends State<ExercisePage> {
                       child: Container(
                         height: snapshot.hasData && snapshot.data!.isSuccess
                             ? 100
-                            : 60,
+                            : 80,
                         width: size.width,
                         decoration: const BoxDecoration(
                             color: Colors.white,

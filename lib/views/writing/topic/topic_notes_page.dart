@@ -49,101 +49,135 @@ class _TopicNotesPageState extends State<TopicNotesPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    // Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: FutureBuilder<HttpResponse<FlashcardText>>(
           future: _future,
           builder: (context, snapshot) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(
-                //       vertical: defaultPadding, horizontal: defaultPadding),
-                //   child: Text(
-                //     "Lesson Notes",
-                //     style: Theme.of(context)
-                //         .textTheme
-                //         .bodyLarge!
-                //         .copyWith(fontWeight: FontWeight.bold),
-                //   ),
-                // ),
-                Expanded(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: defaultPadding),
-                    child: snapshot.hasData && snapshot.data!.isSuccess
-                        ? ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.models.length,
-                            itemBuilder: (context, index) {
-                              FlashcardText flashcardText =
-                                  snapshot.data!.models[index];
-                              return Padding(
-                                padding: EdgeInsets.only(
-                                    left: index % 2 != 0 ? defaultPadding : 0,
-                                    right: index % 2 == 0 ? defaultPadding : 0),
-                                child: AnimatedRotation(
-                                  turns: index == activeFlashcard
-                                      ? 0
-                                      : index % 2 != 0
-                                          ? -0.00125
-                                          : 0.00125,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.easeOut,
-                                  child: TopicNoteCard(
-                                    flashcardText: flashcardText,
-                                    onClicked: () {
-                                      if (activeFlashcard != index) {
-                                        setState(() {
-                                          activeFlashcard = index;
-                                        });
-                                      } else {
-                                        showDialog(
-                                          context: context,
-                                          barrierDismissible:
-                                              flashcardText.completed,
-                                          builder: (context) {
-                                            return SizedBox(
-                                              height: 300,
-                                              child: Center(
-                                                child: FlashCardDialog(
-                                                  size: size,
-                                                  flashcardText: flashcardText,
-                                                  onUnderstand: () {
-                                                    //TODO: Update Api with progress and an indicator if the last flashcard is understood trigger examples
-                                                    setState(() {
-                                                      flashcardText
-                                                          .setCompleted();
-                                                    });
-                                                    double progress =
-                                                        _notesProgress(snapshot
-                                                            .data!.models);
-                                                    widget.onProgress(progress);
-                                                    if (progress == 1) {
-                                                      widget.onComplete();
-                                                    }
-                                                    Navigator.pop(context);
-                                                  },
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      }
-                                    },
-                                    isOpened: index == activeFlashcard,
-                                  ),
-                                ),
-                              );
-                            },
-                          )
-                        : const LoadingSpinner(),
-                  ),
-                )
-              ],
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                child: snapshot.hasData && snapshot.data!.isSuccess
+                    ? FlashcardList(
+                        flashCards: snapshot.data!.models,
+                        onUnderstand: (int index) {
+                          FlashcardText flashcardText =
+                              snapshot.data!.models[index];
+                          if (!flashcardText.completed) {
+                            _writingController
+                                .markFlashcardCompleted(flashcardText);
+                            setState(() {
+                              flashcardText.setCompleted();
+                            });
+                          }
+                          double progress =
+                              _notesProgress(snapshot.data!.models);
+                          widget.onProgress(progress);
+                          if (progress == 1) {
+                            widget.onComplete();
+                          }
+                          Navigator.pop(context);
+                        },
+                        onLoad: () {
+                          //update progress
+                          _notesProgress(snapshot.data!.models);
+                        })
+                    : const LoadingSpinner(),
+              ),
             );
           }),
+    );
+  }
+}
+
+class FlashcardList extends StatefulWidget {
+  const FlashcardList(
+      {super.key,
+      required this.flashCards,
+      required this.onUnderstand,
+      required this.onLoad});
+
+  final List<FlashcardText> flashCards;
+  final void Function(int index) onUnderstand;
+  final void Function() onLoad;
+
+  @override
+  State<FlashcardList> createState() => _FlashcardListState();
+}
+
+class _FlashcardListState extends State<FlashcardList> {
+  int activeFlashcard = 0;
+  @override
+  void initState() {
+    Future.delayed(const Duration(seconds: 2), () {
+      widget.onLoad();
+    });
+    _makeFirstNotCompletedActive();
+    super.initState();
+  }
+
+  void _makeFirstNotCompletedActive() {
+    for (int i = 0; i < widget.flashCards.length; i++) {
+      if (!widget.flashCards[i].completed) {
+        setState(() {
+          activeFlashcard = i;
+        });
+        break;
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return ListView.builder(
+      // shrinkWrap: true,
+      itemCount: widget.flashCards.length,
+      itemBuilder: (context, index) {
+        FlashcardText flashcardText = widget.flashCards[index];
+        return Padding(
+          padding: EdgeInsets.only(
+              left: index % 2 != 0 ? defaultPadding : 0,
+              right: index % 2 == 0 ? defaultPadding : 0),
+          child: AnimatedRotation(
+            turns: index == activeFlashcard
+                ? 0
+                : index % 2 != 0
+                    ? -0.00125
+                    : 0.00125,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeOut,
+            child: TopicNoteCard(
+              flashcardText: flashcardText,
+              onClicked: () {
+                if (activeFlashcard != index) {
+                  setState(() {
+                    activeFlashcard = index;
+                  });
+                } else {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: flashcardText.completed,
+                    builder: (context) {
+                      return SizedBox(
+                        height: 300,
+                        child: Center(
+                          child: FlashCardDialog(
+                            size: size,
+                            flashcardText: flashcardText,
+                            onUnderstand: () => widget.onUnderstand(index),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
+              isOpened: index == activeFlashcard,
+            ),
+          ),
+        );
+      },
     );
   }
 }

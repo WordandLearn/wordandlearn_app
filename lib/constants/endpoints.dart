@@ -12,11 +12,18 @@ const String registerEndpoint = "$authUrl/register/";
 const String sessionLessonsUrl = "$writingUrl/session";
 const String lessonTopicsUrl = "$writingUrl/lesson";
 const String topicsUrl = "$writingUrl/topic";
+String topicCompletedUrl(int topicId) => "$topicsUrl/$topicId/completed";
 const String exerciseUrl = "$writingUrl/exercise";
 const String exerciseSubmissionUrl = "$writingUrl/exercise/submission";
 String topicFlashcardsUrl(int topicId) => "$topicsUrl/$topicId/flashcards";
+String flashcardCompletedUrl(int flashcardId) =>
+    "$writingUrl/flashcard/$flashcardId/complete/";
 String topicExamplesUrl(int topicId) => "$topicsUrl/$topicId/examples";
+String exampleCompletedUrl(int exampleId) =>
+    "$writingUrl/example/$exampleId/complete/";
 String topicExerciseUrl(int topicId) => "$topicsUrl/$topicId/exercise";
+String exerciseCompletedUrl(int exerciseId) =>
+    "$writingUrl/exercise/$exerciseId/complete/";
 
 String exerciseUploadUrl(int exerciseId) => "$exerciseUrl/$exerciseId/upload/";
 String exerciseSubmissionDetailUrl(int exerciseId) =>

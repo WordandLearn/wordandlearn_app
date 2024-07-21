@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/components.dart';
@@ -72,12 +73,26 @@ class __ExampleWidgetState extends State<_ExampleWidget> {
   int index = 0;
 
   late List<bool> understoodExamples;
+  final WritingController _writingController = Get.find<WritingController>();
 
   @override
   void initState() {
     understoodExamples = List.generate(
         widget.examples.length, (index) => widget.examples[index].completed);
+
+    _moveToExampleNotCompleted();
     super.initState();
+  }
+
+  void _moveToExampleNotCompleted() {
+    for (int i = 0; i < widget.examples.length; i++) {
+      if (!understoodExamples[i]) {
+        setState(() {
+          index = i;
+        });
+        break;
+      }
+    }
   }
 
   @override
@@ -109,7 +124,10 @@ class __ExampleWidgetState extends State<_ExampleWidget> {
                     example: example,
                     index: index,
                     onUnderstand: (example) {
-                      //TODO: Call API and set example to complete
+                      Example example_ = widget.examples[index];
+                      if (!example_.completed) {
+                        _writingController.markExampleCompleted(example_);
+                      }
                       setState(() {
                         understoodExamples[example] = true;
                         widget.examples[index].completed = true;

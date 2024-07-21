@@ -53,6 +53,10 @@ class _ExerciseResultsPageState extends State<ExerciseResultsPage> {
             FutureBuilder<HttpResponse<ExerciseResult>>(
                 future: _future,
                 builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(child: Text(snapshot.error.toString()));
+                  }
+
                   ExerciseResult? result = snapshot.data?.models.first;
                   return Expanded(
                     child: Column(
@@ -69,7 +73,7 @@ class _ExerciseResultsPageState extends State<ExerciseResultsPage> {
                                     child: Row(
                                       children: [
                                         Image.asset(
-                                          result.improvement
+                                          result.success
                                               ? "assets/stickers/cat_happy.png"
                                               : "assets/stickers/duck_sad.png",
                                           height: 80,
@@ -90,9 +94,7 @@ class _ExerciseResultsPageState extends State<ExerciseResultsPage> {
                                                       BorderRadius.circular(
                                                           20)),
                                               child: Text(
-                                                result.improvement
-                                                    ? "Awesome. I knew you could do it"
-                                                    : "Oh no! You'll have to try again",
+                                                result.message,
                                                 style: const TextStyle(
                                                     fontWeight: FontWeight.w500,
                                                     fontSize: 12),
@@ -110,7 +112,7 @@ class _ExerciseResultsPageState extends State<ExerciseResultsPage> {
                                         horizontal: defaultPadding * 2,
                                         vertical: defaultPadding * 2),
                                     decoration: BoxDecoration(
-                                        color: result.improvement
+                                        color: result.success
                                             ? AppColors.greenColor
                                             : AppColors.redColor,
                                         borderRadius: BorderRadius.circular(5)),
@@ -189,7 +191,9 @@ class _ExerciseResultsPageState extends State<ExerciseResultsPage> {
                                         ? const LoadingSpinner()
                                         : Builder(builder: (context) {
                                             return Text(
-                                              result.recommendation,
+                                              result.recommendation.isEmpty
+                                                  ? "No recommendation from us"
+                                                  : result.recommendation,
                                               style: const TextStyle(height: 2),
                                             );
                                           }),
@@ -202,11 +206,12 @@ class _ExerciseResultsPageState extends State<ExerciseResultsPage> {
                         result != null
                             ? TapBounce(
                                 onTap: () {
-                                  if (!result.improvement) {
+                                  if (!result.success) {
                                     Navigator.pop(context);
                                   } else {
+                                    writingController
+                                        .markExerciseCompleted(widget.exercise);
                                     setState(() {
-                                      //TODO: Set Exercise to be completed on api
                                       widget.exercise.completed = true;
                                     });
                                     //Navigate to topic page using push and remove until
@@ -218,20 +223,20 @@ class _ExerciseResultsPageState extends State<ExerciseResultsPage> {
                                   }
                                 },
                                 child: PrimaryButton(
-                                    color: result.improvement
+                                    color: result.success
                                         ? AppColors.greenColor
                                         : AppColors.redColor,
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Text(result.improvement
+                                        Text(result.success
                                             ? "Finish Topic"
                                             : "Retry Exercise"),
                                         const SizedBox(
                                           width: defaultPadding / 2,
                                         ),
-                                        Icon(result.improvement
+                                        Icon(result.success
                                             ? Icons.star_rounded
                                             : CupertinoIcons.refresh)
                                       ],
