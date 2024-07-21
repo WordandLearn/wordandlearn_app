@@ -2,12 +2,14 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/components/small_button.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
-import 'package:word_and_learn/views/writing/session_report.dart';
+import 'package:word_and_learn/views/writing/upload/composition_upload_page.dart';
+import 'package:word_and_learn/views/writing/upload/onboarding.dart';
 
 class CompositionSelectorContainer extends StatefulWidget {
   const CompositionSelectorContainer({
@@ -104,23 +106,34 @@ class _CompositionSelectorContainerState
           Positioned(
             right: 0,
             bottom: -17,
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SessionReportPage(
-                        session: widget.session,
-                      ),
-                    ));
+            child: SmallButton(
+              onPressed: () async {
+                print("Wubba Lubba");
+                SharedPreferences preferences =
+                    await SharedPreferences.getInstance();
+                if (!preferences.containsKey("uploadOnboarded")) {
+                  if (context.mounted) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const UploadOnboardingPage()));
+                  }
+                } else {
+                  if (context.mounted) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const CompositionUploadPage()));
+                  }
+                }
               },
-              child: const SmallButton(
-                text: "Scan New Composition",
-                icon: Icon(
-                  Icons.document_scanner,
-                  color: Colors.black,
-                  size: 15,
-                ),
+              text: "Scan New Composition",
+              icon: Icon(
+                Icons.document_scanner,
+                color: Colors.black,
+                size: 15,
               ),
             ),
           )

@@ -21,20 +21,23 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onPressed,
-      child: Container(
-        height: 50,
-        padding: const EdgeInsets.all(defaultPadding),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(borderRadius),
-            color: color ?? Theme.of(context).primaryColor),
-        child: Center(
-            child: isLoading
-                ? const SpinKitRing(
-                    lineWidth: 2.5,
-                    color: Colors.white,
-                    size: 30,
-                  )
-                : child),
+      child: AnimatedSize(
+        duration: const Duration(milliseconds: 500),
+        child: Container(
+          height: 50,
+          padding: const EdgeInsets.all(defaultPadding),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(borderRadius),
+              color: color ?? Theme.of(context).primaryColor),
+          child: Center(
+              child: isLoading
+                  ? const SpinKitRing(
+                      lineWidth: 2.5,
+                      color: Colors.white,
+                      size: 30,
+                    )
+                  : child),
+        ),
       ),
     );
   }
