@@ -85,6 +85,7 @@ class _TopicExampleCardState extends State<TopicExampleCard> {
       duration: const Duration(milliseconds: 300),
       child: SizedBox(
         height: size.height * 0.6,
+        width: size.width,
         child: Column(
           key: ValueKey<String>(widget.example.originalText),
           children: [
@@ -93,12 +94,14 @@ class _TopicExampleCardState extends State<TopicExampleCard> {
               child: AnimatedSize(
                 duration: const Duration(milliseconds: 300),
                 child: Container(
+                  width: size.width,
                   padding: const EdgeInsets.all(defaultPadding * 2),
                   decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius:
                           BorderRadius.vertical(top: Radius.circular(20))),
                   child: AutoSizeText(widget.example.originalText,
+                      // textAlign: TextAlign.left,
                       style: const TextStyle(fontSize: 18, height: 2)),
                 ),
               ),
@@ -107,6 +110,7 @@ class _TopicExampleCardState extends State<TopicExampleCard> {
               child: AnimatedSize(
                 duration: const Duration(milliseconds: 300),
                 child: Container(
+                  width: size.width,
                   padding: const EdgeInsets.all(defaultPadding * 2),
                   decoration: const BoxDecoration(
                       color: AppColors.greenColor,

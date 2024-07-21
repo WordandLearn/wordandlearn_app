@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:word_and_learn/components/fade_indexed_stack.dart';
 import 'package:word_and_learn/constants/constants.dart';
+import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/views/writing/topic/topic_example_page.dart';
 
@@ -18,7 +20,7 @@ class TopicLearnPage extends StatefulWidget {
 
 class _TopicLearnPageState extends State<TopicLearnPage> {
   bool completed = false;
-
+  final WritingController writingController = Get.find<WritingController>();
   @override
   void initState() {
     super.initState();
@@ -84,6 +86,7 @@ class _TopicLearnPageState extends State<TopicLearnPage> {
                     TopicExamplePage(
                       topic: widget.topic,
                       onComplete: () {
+                        writingController.markTopicCompleted(widget.topic);
                         setState(() {
                           completedStatus[1] = true;
                           widget.topic.completed = true;

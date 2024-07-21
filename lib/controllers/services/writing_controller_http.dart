@@ -45,6 +45,18 @@ mixin WritingControllerHttp {
     return response;
   }
 
+  Future<HttpResponse<Topic>> markTopicCompleted(Topic topic) async {
+    http.Response res = await client.put(topicCompleteUrl(topic.id), {});
+
+    HttpResponse<Topic> response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      Topic topic = Topic.fromJson(json.decode(res.body));
+      response.models = [topic];
+    }
+
+    return response;
+  }
+
   Future<HttpResponse<FlashcardText>> getTopicFlashcards(int topicId) async {
     http.Response res = await client.get(topicFlashcardsUrl(topicId));
 

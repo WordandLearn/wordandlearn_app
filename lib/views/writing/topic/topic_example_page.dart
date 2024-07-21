@@ -128,6 +128,10 @@ class __ExampleWidgetState extends State<_ExampleWidget> {
                       if (!example_.completed) {
                         _writingController.markExampleCompleted(example_);
                       }
+                      if (index == widget.examples.length - 1) {
+                        widget.onComplete();
+                      }
+
                       setState(() {
                         understoodExamples[example] = true;
                         widget.examples[index].completed = true;
