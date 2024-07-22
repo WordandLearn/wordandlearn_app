@@ -54,7 +54,8 @@ class _ExerciseSubmissionPageState extends State<ExerciseSubmissionPage> {
           ),
           files.length > 1
               ? Center(
-                  child: Container(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20)),
@@ -65,20 +66,30 @@ class _ExerciseSubmissionPageState extends State<ExerciseSubmissionPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(
                           files.length,
-                          (index) => Container(
-                                decoration: BoxDecoration(
-                                    border: activeIndex == index
-                                        ? Border.all(
-                                            color: AppColors.buttonColor,
-                                            width: 2)
-                                        : null,
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(5),
-                                  child: Image.file(
-                                    files[index],
-                                    width: 50,
-                                    height: 70,
+                          (index) => InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    activeIndex = index;
+                                  });
+                                },
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 300),
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: defaultPadding / 2),
+                                  decoration: BoxDecoration(
+                                      border: activeIndex == index
+                                          ? Border.all(
+                                              color: AppColors.buttonColor,
+                                              width: 2)
+                                          : null,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(5),
+                                    child: Image.file(
+                                      files[index],
+                                      width: 50,
+                                      height: 70,
+                                    ),
                                   ),
                                 ),
                               )),
