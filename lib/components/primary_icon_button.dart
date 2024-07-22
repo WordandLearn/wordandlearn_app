@@ -5,13 +5,15 @@ import 'package:word_and_learn/constants/constants.dart';
 import 'primary_button.dart';
 
 class PrimaryIconButton extends StatelessWidget {
-  const PrimaryIconButton({super.key, required this.text, required this.icon});
+  const PrimaryIconButton(
+      {super.key, required this.text, required this.icon, this.color});
   final String text;
   final Widget icon;
+  final Color? color;
   @override
   Widget build(BuildContext context) {
     return PrimaryButton(
-      color: AppColors.buttonColor,
+      color: color ?? AppColors.buttonColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

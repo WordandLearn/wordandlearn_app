@@ -34,6 +34,16 @@ class _CompositionUploadPageState extends State<CompositionUploadPage> {
     super.initState();
   }
 
+  void _retake() async {
+    List<String?>? paths = await CunningDocumentScanner.getPictures(
+        isGalleryImportAllowed: true, noOfPages: 2);
+    if (paths != null) {
+      setState(() {
+        imagePaths = paths;
+      });
+    }
+  }
+
   final WritingController writingController = Get.find<WritingController>();
 
   void _uploadComposition(List<File> images) {
@@ -41,7 +51,7 @@ class _CompositionUploadPageState extends State<CompositionUploadPage> {
       showDialog(
           barrierDismissible: false,
           context: context,
-          builder: (context) {
+          builder: (context_) {
             return AlertDialog(
               actions: [
                 Row(
@@ -49,7 +59,7 @@ class _CompositionUploadPageState extends State<CompositionUploadPage> {
                     children: [
                       TapBounce(
                         onTap: () {
-                          Navigator.pop(context);
+                          Navigator.pop(context_);
                         },
                         child: const Row(
                           children: [
@@ -87,6 +97,42 @@ class _CompositionUploadPageState extends State<CompositionUploadPage> {
                                             taskId: value.data['task_id']),
                                       );
                                     });
+                              } else {
+                                if (value.statusCode == 400) {
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: const Text(
+                                          "Error",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 20),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        content: Text(
+                                          value.data["error"]["message"],
+                                          style: const TextStyle(
+                                              fontSize: 16, height: 2),
+                                        ),
+                                        actions: [
+                                          TapBounce(
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                                _retake();
+                                              },
+                                              child: const PrimaryIconButton(
+                                                  text: "Retake Submission",
+                                                  icon: Icon(
+                                                    CupertinoIcons.refresh,
+                                                    color: Colors.white,
+                                                  )))
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
                               }
                             },
                           ).whenComplete(
@@ -256,17 +302,7 @@ class _CompositionUploadPageState extends State<CompositionUploadPage> {
                       AnimatedSwitcher(
                           duration: const Duration(milliseconds: 200),
                           child: TapBounce(
-                            onTap: () async {
-                              List<String?>? paths =
-                                  await CunningDocumentScanner.getPictures(
-                                      isGalleryImportAllowed: true,
-                                      noOfPages: 2);
-                              if (paths != null) {
-                                setState(() {
-                                  imagePaths = paths;
-                                });
-                              }
-                            },
+                            onTap: _retake,
                             scale: 1.001,
                             child: const Row(
                               children: [
