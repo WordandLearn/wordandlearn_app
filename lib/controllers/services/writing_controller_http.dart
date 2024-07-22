@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:word_and_learn/constants/constants.dart';
+import 'package:word_and_learn/models/http_response.dart';
 import 'package:word_and_learn/utils/http_client.dart';
 
 import '../../models/models.dart';
@@ -180,6 +181,39 @@ mixin WritingControllerHttp {
     if (response.isSuccess) {
       ExerciseResult result = ExerciseResult.fromJson(response.data);
       response.models = [result];
+    }
+    return response;
+  }
+
+  Future<HttpResponse> uploadComposition(List<File> images) async {
+    Map<String, File> imageMap = {};
+    File image1 = images[0];
+    imageMap['image1'] = image1;
+    if (images.length > 1) {
+      File? image2 = images[1];
+      imageMap['image2'] = image2;
+    }
+
+    http.Response res = await client
+        .uploadWithKeys(compositionUploadUrl, files: imageMap, body: {});
+    HttpResponse response = HttpResponse.fromResponse(res);
+
+    return response;
+  }
+
+  Future<HttpResponse<TaskProgress>> getTaskState(String taskId) async {
+    // TaskProgress taskProgress = TaskProgress(
+    //     state: TaskState.success,
+    //     progress: 1,
+    //     message: "Generating Session Plan");
+    // HttpResponse<TaskProgress> response =
+    //     HttpResponse(message: "", statusCode: 200, data: {})
+    //       ..models = [taskProgress];
+    http.Response res = await client.get("$writingUrl/task/$taskId/state");
+    HttpResponse<TaskProgress> response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      TaskProgress taskState = TaskProgress.fromJson(json.decode(res.body));
+      response.models = [taskState];
     }
     return response;
   }

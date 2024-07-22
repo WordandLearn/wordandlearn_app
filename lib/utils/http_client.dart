@@ -69,6 +69,17 @@ class HttpClient {
     return await http.Response.fromStream(response);
   }
 
+  // Future<http.Response> uploadWithKeys(String url, {required Map<String,File> files}) async {
+  //   var request = http.MultipartRequest('POST', Uri.parse(url));
+  //   request.headers.addAll(getAuthHeaders());
+  //   for (var key in files.keys) {
+  //     request.files
+  //         .add(await http.MultipartFile.fromPath(key, files[key]!.path));
+  //   }
+  //   var response = await request.send();
+  //   return await http.Response.fromStream(response);
+  // }
+
   Future<http.Response> uploadWithKeys(String url,
       {required Map<String, File> files,
       required Map<String, String> body}) async {
