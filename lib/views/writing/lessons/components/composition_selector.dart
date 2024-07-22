@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -108,7 +109,6 @@ class _CompositionSelectorContainerState
             bottom: -17,
             child: SmallButton(
               onPressed: () async {
-                print("Wubba Lubba");
                 SharedPreferences preferences =
                     await SharedPreferences.getInstance();
                 if (!preferences.containsKey("uploadOnboarded")) {
@@ -121,16 +121,24 @@ class _CompositionSelectorContainerState
                   }
                 } else {
                   if (context.mounted) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const CompositionUploadPage()));
+                    List<String?>? pictures =
+                        await CunningDocumentScanner.getPictures(
+                            noOfPages: 2, isGalleryImportAllowed: true);
+                    if (pictures != null) {
+                      if (context.mounted) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CompositionUploadPage(
+                                      imagePaths: pictures,
+                                    )));
+                      }
+                    }
                   }
                 }
               },
               text: "Scan New Composition",
-              icon: Icon(
+              icon: const Icon(
                 Icons.document_scanner,
                 color: Colors.black,
                 size: 15,

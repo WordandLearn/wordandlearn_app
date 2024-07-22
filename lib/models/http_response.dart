@@ -24,7 +24,6 @@ class HttpResponse<T> {
 
   @override
   String toString() {
-    // TODO: implement toString
     return {
       'message': message,
       'statusCode': statusCode,
