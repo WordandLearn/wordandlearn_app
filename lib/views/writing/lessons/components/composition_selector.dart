@@ -116,8 +116,9 @@ class _CompositionSelectorContainerState
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                const UploadOnboardingPage()));
+                            builder: (context) => const UploadOnboardingPage(),
+                            settings: const RouteSettings(
+                                name: "UploadOnboardingPage")));
                   }
                 } else {
                   if (context.mounted) {

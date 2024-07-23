@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
@@ -47,7 +48,7 @@ class _CompositionWaitingPageState extends State<CompositionWaitingPage> {
     return SafeArea(
       child: Container(
         width: double.infinity,
-        height: 300,
+        height: 350,
         padding: const EdgeInsetsDirectional.all(defaultPadding * 2),
         decoration: const BoxDecoration(
             color: Colors.white,
@@ -118,12 +119,18 @@ class _CompositionWaitingPageState extends State<CompositionWaitingPage> {
             const Spacer(),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: defaultPadding),
-              child: PrimaryButton(
-                child: const Text(
-                  "Go To Home",
-                  style: TextStyle(fontWeight: FontWeight.w600),
+              child: TapBounce(
+                onTap: () {
+                  Navigator.popUntil(
+                      context, (route) => route.settings.name == "LessonsPage");
+                },
+                child: PrimaryButton(
+                  color: Colors.grey.withOpacity(0.2),
+                  child: const Text(
+                    "Go To Home",
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
                 ),
-                color: Colors.grey.withOpacity(0.2),
               ),
             )
           ],

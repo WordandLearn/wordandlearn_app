@@ -207,8 +207,8 @@ class _CompositionUploadPageState extends State<CompositionUploadPage> {
                                       ValueKey<String>(files[activeIndex].path),
                                   child: Image.file(
                                     files[activeIndex],
-                                    width: 200,
-                                    height: 200,
+                                    // width: 200,
+                                    height: size.height * 0.6,
                                   ),
                                 ),
                               ),

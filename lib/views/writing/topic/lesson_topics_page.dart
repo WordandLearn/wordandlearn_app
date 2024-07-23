@@ -69,12 +69,14 @@ class _LessonTopicsPageState extends State<LessonTopicsPage> {
                                   size: 35,
                                 )),
                           ),
-                          CircularPercentIndicator(
-                            radius: 15,
-                            percent: widget.lesson.progress!.progress,
-                            progressColor: widget.lesson.color,
-                            backgroundColor: Colors.white,
-                          )
+                          widget.lesson.progress != null
+                              ? CircularPercentIndicator(
+                                  radius: 15,
+                                  percent: widget.lesson.progress!.progress,
+                                  progressColor: widget.lesson.color,
+                                  backgroundColor: Colors.white,
+                                )
+                              : const SizedBox.shrink()
                         ],
                       ),
                       Padding(

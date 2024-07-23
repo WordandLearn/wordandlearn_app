@@ -26,16 +26,16 @@ class _SplashScreenState extends State<SplashScreen> {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const LessonsPage(),
-                  ));
+                      builder: (context) => const LessonsPage(),
+                      settings: const RouteSettings(name: "LessonsPage")));
             } else if (preferences.getString("userType") == "teacher") {
               Get.put(TeacherController());
               if (mounted) {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const TeachersHome(),
-                    ));
+                        builder: (context) => const TeachersHome(),
+                        settings: const RouteSettings(name: "TeachersHome")));
               }
             }
           }
