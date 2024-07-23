@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/components.dart';
@@ -141,8 +140,7 @@ class _CompositionWaitingPageState extends State<CompositionWaitingPage> {
 }
 
 class _ProgressWidget extends StatefulWidget {
-  const _ProgressWidget(
-      {super.key, this.isLoading = false, required this.progress});
+  const _ProgressWidget({this.isLoading = false, required this.progress});
 
   final bool isLoading;
   final double progress;

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:word_and_learn/constants/constants.dart';
-import 'package:word_and_learn/models/http_response.dart';
 import 'package:word_and_learn/utils/http_client.dart';
 
 import '../../models/models.dart';

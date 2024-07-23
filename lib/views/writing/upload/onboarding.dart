@@ -193,7 +193,6 @@ class _UploadOnboardingPageState extends State<UploadOnboardingPage> {
 
 class _UploadOnboardingPageItem extends StatefulWidget {
   const _UploadOnboardingPageItem({
-    super.key,
     required this.illustrationUrl,
     required this.title,
     required this.description,

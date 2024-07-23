@@ -3,6 +3,7 @@ import 'package:retry/retry.dart';
 import 'package:word_and_learn/controllers/services/writing_controller_database.dart';
 import 'package:word_and_learn/controllers/services/writing_controller_http.dart';
 import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/views/writing/upload/onboarding.dart';
 
 class HttpFetchException implements Exception {
   final String message;
@@ -37,6 +38,10 @@ class WritingController extends GetxController
 
     if (response.isSuccess) {
       userSessions.value = response.models;
+      if (response.models.isEmpty) {
+        return Get.to(() => const UploadOnboardingPage(),
+            routeName: "UploadOnboardingPage");
+      }
       dbSetUserSessions(response.models);
     } else {
       throw HttpFetchException("Could not get your lessons.");
