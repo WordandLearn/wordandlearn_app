@@ -96,11 +96,16 @@ class _LessonsPageState extends State<LessonsPage> {
                   horizontal: defaultPadding, vertical: defaultPadding),
               child: Column(children: [
                 Obx(() {
+                  if (writingController.userSessions.isEmpty) {
+                    //TODO: Do some error handling when no session is available,guide on creating new session
+
+                    return const Text("No Compositions, Add a new one");
+                  }
+
                   if (writingController.currentUserSession.value == null) {
                     return Padding(
                       padding:
                           const EdgeInsets.symmetric(vertical: defaultPadding),
-                      //TODO: Do some error handling when no session is available,guide on creating new session
                       child: SizedBox(
                           height: size.height * 0.9,
                           child: const Center(child: LoadingSpinner())),

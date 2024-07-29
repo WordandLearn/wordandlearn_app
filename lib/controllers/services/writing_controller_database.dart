@@ -23,6 +23,6 @@ mixin WritingControllerDatabase {
   }
 
   Future<void> dbLogout() async {
-    return null;
+    //return null;
   }
 }

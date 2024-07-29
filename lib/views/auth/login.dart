@@ -212,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(
                     width: defaultPadding / 2,
                   ),
-                  Text(
+                  const Text(
                     "Sign Up",
                   )
                 ],

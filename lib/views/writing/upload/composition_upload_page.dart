@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/components.dart';
-import 'package:word_and_learn/components/primary_icon_button.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/views/writing/upload/composition_waiting_page.dart';

@@ -29,6 +29,7 @@ class _LessonDrawerState extends State<LessonDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -107,9 +108,9 @@ class _LessonDrawerState extends State<LessonDrawer> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: defaultPadding * 2),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: ListView(
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,24 +142,27 @@ class _LessonDrawerState extends State<LessonDrawer> {
                     )
                   ],
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Notifications",
-                      style: TextStyle(
-                          color: AppColors.inactiveColor, fontSize: 14),
-                    ),
-                    Divider(color: AppColors.inactiveColor.withOpacity(0.2)),
-                    const SizedBox(
-                      height: defaultPadding,
-                    ),
-                    _DrawerTile(
-                      icon: const Icon(CupertinoIcons.bell),
-                      title: "Push Notifications",
-                      onTap: () {},
-                    )
-                  ],
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: size.height * 0.05),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Notifications",
+                        style: TextStyle(
+                            color: AppColors.inactiveColor, fontSize: 14),
+                      ),
+                      Divider(color: AppColors.inactiveColor.withOpacity(0.2)),
+                      const SizedBox(
+                        height: defaultPadding,
+                      ),
+                      _DrawerTile(
+                        icon: const Icon(CupertinoIcons.bell),
+                        title: "Push Notifications",
+                        onTap: () {},
+                      )
+                    ],
+                  ),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,24 +191,27 @@ class _LessonDrawerState extends State<LessonDrawer> {
                     )
                   ],
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Talk to Us",
-                      style: TextStyle(
-                          color: AppColors.inactiveColor, fontSize: 14),
-                    ),
-                    Divider(color: AppColors.inactiveColor.withOpacity(0.2)),
-                    const SizedBox(
-                      height: defaultPadding,
-                    ),
-                    _DrawerTile(
-                      icon: const Icon(CupertinoIcons.mail),
-                      title: "Contact Us",
-                      onTap: () {},
-                    ),
-                  ],
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: size.height * 0.05),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Talk to Us",
+                        style: TextStyle(
+                            color: AppColors.inactiveColor, fontSize: 14),
+                      ),
+                      Divider(color: AppColors.inactiveColor.withOpacity(0.2)),
+                      const SizedBox(
+                        height: defaultPadding,
+                      ),
+                      _DrawerTile(
+                        icon: const Icon(CupertinoIcons.mail),
+                        title: "Contact Us",
+                        onTap: () {},
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
