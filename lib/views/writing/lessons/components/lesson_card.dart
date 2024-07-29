@@ -87,7 +87,7 @@ class _LessonCardState extends State<LessonCard> {
               Expanded(
                 child: Center(
                   child: FractionallySizedBox(
-                    heightFactor: 0.5,
+                    heightFactor: 0.7,
                     child: Image.asset(
                       widget.lesson.image!,
                       // height: 90,

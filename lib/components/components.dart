@@ -12,3 +12,4 @@ export 'loading_spinner.dart';
 export 'icon_container.dart';
 export 'teachers/bottom_navigation_bar.dart';
 export 'list_modal_bottom_sheet.dart';
+export 'primary_icon_button.dart';

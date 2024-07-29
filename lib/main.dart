@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
+import 'package:get/get.dart';
 import 'package:word_and_learn/constants/theme.dart';
 import 'package:word_and_learn/views/splash_screen.dart';
 
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Word & Learn',
       theme: AppTheme.getTheme(),

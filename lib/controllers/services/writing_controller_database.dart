@@ -21,4 +21,8 @@ mixin WritingControllerDatabase {
       Session session, List<Lesson> lessons) async {
     return null;
   }
+
+  Future<void> dbLogout() async {
+    return null;
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:retry/retry.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_and_learn/controllers/services/writing_controller_database.dart';
 import 'package:word_and_learn/controllers/services/writing_controller_http.dart';
 import 'package:word_and_learn/models/models.dart';
@@ -85,6 +86,12 @@ class WritingController extends GetxController
       }
       return [];
     }
+  }
+
+  Future<void> logout() async {
+    await dbLogout();
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.clear();
   }
 
   // Future<Session?> get currentSession async {

@@ -2,11 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/views/writing/lessons/components/lesson_drawer.dart';
 import 'components/composition_selector.dart';
 import 'components/session_lessons_list.dart';
 import 'components/session_report_card.dart';
@@ -28,21 +28,25 @@ class _LessonsPageState extends State<LessonsPage> {
     super.initState();
   }
 
-  Future<String> getName() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    String name = preferences.getString("name") ?? "";
-    if (name != "") {
-      return name.split(" ")[0];
-    }
-    return name;
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         key: _key,
-        drawer: const Drawer(),
+        drawer: Drawer(
+          width: 270,
+          backgroundColor: Colors.white,
+          child: SafeArea(
+            child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: defaultPadding * 2, vertical: defaultPadding),
+                child: LessonDrawer(
+                  onClose: () {
+                    _key.currentState!.closeDrawer();
+                  },
+                )),
+          ),
+        ),
         backgroundColor: const Color(0xFFF8F5FE),
         // padding: const EdgeInsets.symmetric(
         //     horizontal: defaultPadding, vertical: defaultPadding),
@@ -56,13 +60,17 @@ class _LessonsPageState extends State<LessonsPage> {
               width: 75,
             ),
             centerTitle: true,
-            leading: GestureDetector(
-              onTap: () {},
-              child: SvgPicture.asset(
-                "assets/icons/menu.svg",
-                width: 25,
-              ),
-            ),
+            leading: Builder(builder: (context) {
+              return GestureDetector(
+                onTap: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                child: SvgPicture.asset(
+                  "assets/icons/menu.svg",
+                  width: 25,
+                ),
+              );
+            }),
             actions: [
               InkWell(
                 onTap: () {},

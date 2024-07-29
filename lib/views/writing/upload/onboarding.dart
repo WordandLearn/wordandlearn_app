@@ -43,149 +43,147 @@ class _UploadOnboardingPageState extends State<UploadOnboardingPage> {
     // Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: PageView(
-                controller: _pageController,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  _UploadOnboardingPageItem(
-                    illustrationUrl: "assets/illustrations/cloud_upload.png",
-                    title: "Uploading a Composition",
-                    onSwipeRight: _goToPreviousPage,
-                    onSwipeLeft: _goToNextPage,
-                    description:
-                        "Let us show you how you can upload your composition and start learning. Exciting!",
-                    activePage: activePage,
-                  ),
-                  _UploadOnboardingPageItem(
-                    illustrationUrl: "assets/illustrations/photo_upload.png",
-                    title: "Take a Photo of Your Composition",
-                    description:
-                        "Take a clear photo of your composition. Make sure it's easy to read so we can enjoy your writing.",
-                    activePage: activePage,
-                    onSwipeRight: _goToPreviousPage,
-                    onSwipeLeft: _goToNextPage,
-                  ),
-                  _UploadOnboardingPageItem(
-                    illustrationUrl: "assets/illustrations/confirm.png",
-                    title: "Confirm & Upload",
-                    description:
-                        "Check your photo to ensure every page is clear. Once you're ready, hit the upload button to send us your composition.",
-                    activePage: activePage,
-                    onSwipeRight: _goToPreviousPage,
-                    onSwipeLeft: _goToNextPage,
-                  ),
-                  _UploadOnboardingPageItem(
-                    illustrationUrl: "assets/illustrations/chill.png",
-                    title: "Sit Back & Relax",
-                    description:
-                        "You're all set! Now you can sit back and relax for about 2 minutes while we review your work. Thanks for sharing your writing with us.",
-                    activePage: activePage,
-                    onSwipeRight: _goToPreviousPage,
-                    onSwipeLeft: _goToNextPage,
-                  ),
-                ],
-              ),
+      body: Column(
+        children: [
+          Expanded(
+            child: PageView(
+              controller: _pageController,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                _UploadOnboardingPageItem(
+                  illustrationUrl: "assets/illustrations/cloud_upload.png",
+                  title: "Uploading a Composition",
+                  onSwipeRight: _goToPreviousPage,
+                  onSwipeLeft: _goToNextPage,
+                  description:
+                      "Let us show you how you can upload your composition and start learning. Exciting!",
+                  activePage: activePage,
+                ),
+                _UploadOnboardingPageItem(
+                  illustrationUrl: "assets/illustrations/photo_upload.png",
+                  title: "Take a Photo of Your Composition",
+                  description:
+                      "Take a clear photo of your composition. Make sure it's easy to read so we can enjoy your writing.",
+                  activePage: activePage,
+                  onSwipeRight: _goToPreviousPage,
+                  onSwipeLeft: _goToNextPage,
+                ),
+                _UploadOnboardingPageItem(
+                  illustrationUrl: "assets/illustrations/confirm.png",
+                  title: "Confirm & Upload",
+                  description:
+                      "Check your photo to ensure every page is clear. Once you're ready, hit the upload button to send us your composition.",
+                  activePage: activePage,
+                  onSwipeRight: _goToPreviousPage,
+                  onSwipeLeft: _goToNextPage,
+                ),
+                _UploadOnboardingPageItem(
+                  illustrationUrl: "assets/illustrations/chill.png",
+                  title: "Sit Back & Relax",
+                  description:
+                      "You're all set! Now you can sit back and relax for about 2 minutes while we review your work. Thanks for sharing your writing with us.",
+                  activePage: activePage,
+                  onSwipeRight: _goToPreviousPage,
+                  onSwipeLeft: _goToNextPage,
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: defaultPadding * 2, horizontal: defaultPadding * 2),
-              child: Row(
-                children: [
-                  TapBounce(
-                    onTap: () {
-                      if (activePage > 0) {
-                        _pageController.animateToPage(activePage - 1,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeIn);
-                        setState(() {
-                          activePage--;
-                        });
-                      } else {
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: const Row(
-                      children: [
-                        Icon(Icons.chevron_left_rounded),
-                        SizedBox(
-                          width: defaultPadding,
-                        ),
-                        Text(
-                          "Back",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 16),
-                        ),
-                      ],
-                    ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+                vertical: defaultPadding * 2, horizontal: defaultPadding * 2),
+            child: Row(
+              children: [
+                TapBounce(
+                  onTap: () {
+                    if (activePage > 0) {
+                      _pageController.animateToPage(activePage - 1,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeIn);
+                      setState(() {
+                        activePage--;
+                      });
+                    } else {
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(Icons.chevron_left_rounded),
+                      SizedBox(
+                        width: defaultPadding,
+                      ),
+                      Text(
+                        "Back",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 16),
+                      ),
+                    ],
                   ),
-                  const Spacer(),
-                  TapBounce(
-                    onTap: () async {
-                      if (activePage < 3) {
-                        _pageController.animateToPage(activePage + 1,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeIn);
-                        setState(() {
-                          activePage++;
-                        });
-                      } else {
-                        List<String?>? pictures =
-                            await CunningDocumentScanner.getPictures(
-                                isGalleryImportAllowed: true, noOfPages: 2);
-                        if (pictures != null) {
-                          if (context.mounted) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CompositionUploadPage(
-                                          imagePaths: pictures,
-                                        ),
-                                    settings: const RouteSettings(
-                                        name: "CompositionUploadPage")));
-                          }
+                ),
+                const Spacer(),
+                TapBounce(
+                  onTap: () async {
+                    if (activePage < 3) {
+                      _pageController.animateToPage(activePage + 1,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeIn);
+                      setState(() {
+                        activePage++;
+                      });
+                    } else {
+                      List<String?>? pictures =
+                          await CunningDocumentScanner.getPictures(
+                              isGalleryImportAllowed: true, noOfPages: 2);
+                      if (pictures != null) {
+                        if (context.mounted) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CompositionUploadPage(
+                                        imagePaths: pictures,
+                                      ),
+                                  settings: const RouteSettings(
+                                      name: "CompositionUploadPage")));
                         }
                       }
-                    },
-                    child: PrimaryButton(
-                        color: AppColors.buttonColor,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: defaultPadding),
-                          child: Row(
-                            children: [
-                              Text(
-                                activePage == 3 ? "Proceed to Upload" : "Next",
-                                style: const TextStyle(color: Colors.white),
+                    }
+                  },
+                  child: PrimaryButton(
+                      color: AppColors.buttonColor,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: defaultPadding),
+                        child: Row(
+                          children: [
+                            Text(
+                              activePage == 3 ? "Proceed to Upload" : "Next",
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            const SizedBox(
+                              width: defaultPadding,
+                            ),
+                            Container(
+                              height: 30,
+                              width: 30,
+                              // padding: const EdgeInsets.all(defaultPadding / 2),
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: const Icon(
+                                CupertinoIcons.forward,
+                                color: Colors.white,
+                                size: 20,
                               ),
-                              const SizedBox(
-                                width: defaultPadding,
-                              ),
-                              Container(
-                                height: 30,
-                                width: 30,
-                                // padding: const EdgeInsets.all(defaultPadding / 2),
-                                decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: const Icon(
-                                  CupertinoIcons.forward,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                              )
-                            ],
-                          ),
-                        )),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
+                            )
+                          ],
+                        ),
+                      )),
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
@@ -231,32 +229,30 @@ class _UploadOnboardingPageItemState extends State<_UploadOnboardingPageItem> {
     Size size = MediaQuery.of(context).size;
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: defaultPadding),
-          child: SwipeDetector(
-            onSwipeLeft: (offset) {
-              _animateSwipe(false);
-              Future.delayed(const Duration(milliseconds: 100), () {
-                widget.onSwipeLeft();
-              });
-            },
-            onSwipeRight: (offset) {
-              _animateSwipe(true);
-              Future.delayed(const Duration(milliseconds: 300), () {
-                widget.onSwipeRight();
-              });
-            },
-            child: Container(
-                height: size.height * 0.6,
-                padding:
-                    const EdgeInsets.symmetric(vertical: defaultPadding * 2),
-                decoration: BoxDecoration(
-                  color: AppColors.secondaryContainer,
-                  gradient: LinearGradient(colors: [
-                    AppColors.secondaryColor,
-                    AppColors.primaryColor.withOpacity(0.5)
-                  ], begin: Alignment.topRight, end: Alignment.bottomLeft),
-                ),
+        SwipeDetector(
+          onSwipeLeft: (offset) {
+            _animateSwipe(false);
+            Future.delayed(const Duration(milliseconds: 100), () {
+              widget.onSwipeLeft();
+            });
+          },
+          onSwipeRight: (offset) {
+            _animateSwipe(true);
+            Future.delayed(const Duration(milliseconds: 300), () {
+              widget.onSwipeRight();
+            });
+          },
+          child: Container(
+              height: size.height * 0.6,
+              padding: const EdgeInsets.symmetric(vertical: defaultPadding * 2),
+              decoration: BoxDecoration(
+                color: AppColors.secondaryContainer,
+                gradient: LinearGradient(colors: [
+                  AppColors.secondaryColor,
+                  AppColors.primaryColor.withOpacity(0.5)
+                ], begin: Alignment.topRight, end: Alignment.bottomLeft),
+              ),
+              child: SafeArea(
                 child: Column(
                   children: [
                     Row(
@@ -284,8 +280,8 @@ class _UploadOnboardingPageItemState extends State<_UploadOnboardingPageItem> {
                         duration: const Duration(milliseconds: 500),
                         child: Image.asset(widget.illustrationUrl)),
                   ],
-                )),
-          ),
+                ),
+              )),
         ),
         Expanded(
           child: Container(
