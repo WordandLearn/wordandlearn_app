@@ -1,14 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:word_and_learn/components/animation/tap_bounce.dart';
+import 'package:word_and_learn/components/circle_profile_avatar.dart';
 import 'package:word_and_learn/components/primary_icon_button.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
+import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/views/auth/login.dart';
 
 class LessonDrawer extends StatefulWidget {
@@ -21,10 +21,13 @@ class LessonDrawer extends StatefulWidget {
 
 class _LessonDrawerState extends State<LessonDrawer> {
   final WritingController writingController = Get.find<WritingController>();
-  Future<String> getName() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    String name = preferences.getString("name") ?? "";
-    return name;
+
+  late Future<Profile?> _profileFuture;
+
+  @override
+  void initState() {
+    _profileFuture = writingController.getChildProfile();
+    super.initState();
   }
 
   @override
@@ -35,68 +38,110 @@ class _LessonDrawerState extends State<LessonDrawer> {
       children: [
         Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    const CircleAvatar(
-                      backgroundImage: CachedNetworkImageProvider(
-                        defaultImageUrl,
+            FutureBuilder<Profile?>(
+                future: _profileFuture,
+                builder: (context, snapshot) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          const CircleProfileAvatar(),
+                          const SizedBox(
+                            width: defaultPadding,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 300),
+                                key: ValueKey<bool>(snapshot.hasData),
+                                child: Builder(
+                                  builder: (context) {
+                                    if (snapshot.hasData) {
+                                      return SizedBox(
+                                        width: 150,
+                                        child: Text(
+                                          snapshot.data!.name,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 14),
+                                        ),
+                                      );
+                                    }
+                                    return Shimmer.fromColors(
+                                        baseColor: Colors.grey[300]!,
+                                        highlightColor: Colors.grey[100]!,
+                                        child: Container(
+                                          width: 100,
+                                          height: 10,
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                        ));
+                                  },
+                                ),
+                              ),
+                              const SizedBox(
+                                height: defaultPadding / 3,
+                              ),
+                              AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 300),
+                                child: Builder(
+                                    key: ValueKey<bool>(snapshot.hasData),
+                                    builder: (context) {
+                                      if (snapshot.hasData) {
+                                        return snapshot.data!.school != null
+                                            ? SizedBox(
+                                                width: 150,
+                                                child: Text(
+                                                  snapshot.data!.school!.name,
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                      color: AppColors
+                                                          .inactiveColor,
+                                                      fontSize: 12),
+                                                ),
+                                              )
+                                            : const SizedBox.shrink();
+                                      } else {
+                                        return Shimmer.fromColors(
+                                            baseColor: Colors.grey[300]!,
+                                            highlightColor: Colors.grey[100]!,
+                                            child: Container(
+                                              width: 60,
+                                              height: 10,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20)),
+                                            ));
+                                      }
+                                    }),
+                              )
+                            ],
+                          )
+                        ],
                       ),
-                      radius: 20,
-                    ),
-                    const SizedBox(
-                      width: defaultPadding,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        FutureBuilder<String>(
-                          future: getName(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Text(
-                                snapshot.data!,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 14),
-                              );
-                            }
-                            return Shimmer.fromColors(
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                                child: Container(
-                                  width: 100,
-                                  height: 10,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(20)),
-                                ));
-                          },
-                        ),
-                        const Text(
-                          "Nova Pioneer",
-                          style: TextStyle(
-                              color: AppColors.inactiveColor, fontSize: 12),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-                InkWell(
-                  onTap: widget.onClose,
-                  child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          shape: BoxShape.circle),
-                      padding: const EdgeInsets.all(defaultPadding / 4),
-                      child: const Icon(
-                        Icons.close_rounded,
-                        size: 20,
-                      )),
-                )
-              ],
-            ),
+                      InkWell(
+                        onTap: widget.onClose,
+                        child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                shape: BoxShape.circle),
+                            padding: const EdgeInsets.all(defaultPadding / 4),
+                            child: const Icon(
+                              Icons.close_rounded,
+                              size: 20,
+                            )),
+                      )
+                    ],
+                  );
+                }),
             const SizedBox(
               height: defaultPadding,
             ),

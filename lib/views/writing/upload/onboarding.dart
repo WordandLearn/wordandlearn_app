@@ -287,29 +287,27 @@ class _UploadOnboardingPageItemState extends State<_UploadOnboardingPageItem> {
           child: Container(
             padding: const EdgeInsets.symmetric(
                 horizontal: defaultPadding, vertical: defaultPadding),
-            child: Expanded(
-              child: Column(
-                children: [
-                  Text(
-                    widget.title,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  widget.title,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 22),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+                  child: Text(
+                    widget.description,
                     style: const TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: 22),
+                        fontSize: 14,
+                        color: Colors.grey,
+                        height: 1.7,
+                        fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.center,
                   ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: defaultPadding),
-                    child: Text(
-                      widget.description,
-                      style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                          height: 1.7,
-                          fontWeight: FontWeight.w600),
-                      textAlign: TextAlign.center,
-                    ),
-                  )
-                ],
-              ),
+                )
+              ],
             ),
           ),
         ),

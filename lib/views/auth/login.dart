@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
       // ),
       body: SizedBox(
         height: size.height,
-        child: Column(
+        child: ListView(
           children: [
             Padding(
               padding: EdgeInsets.symmetric(vertical: size.height * 0.1),
@@ -125,7 +125,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            const Spacer(),
+            const SizedBox(
+              height: defaultPadding * 0.1,
+            ),
             TapBounce(
               onTap: () {
                 if (_formKey.currentState!.validate()) {

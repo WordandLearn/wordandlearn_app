@@ -2,13 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:word_and_learn/constants/constants.dart';
+import 'package:word_and_learn/controllers/services/writing/writing_interface.dart';
 import 'package:word_and_learn/utils/http_client.dart';
 
 import '../../models/models.dart';
 import 'package:http/http.dart' as http;
 
-mixin WritingControllerHttp {
+mixin WritingControllerHttp implements WritingInterface {
   HttpClient client = HttpClient();
+
   Future<HttpResponse<Lesson>> getSessionLessons(int sessionID) async {
     http.Response res =
         await client.get("$sessionLessonsUrl/$sessionID/lessons");
@@ -215,5 +217,27 @@ mixin WritingControllerHttp {
       response.models = [taskState];
     }
     return response;
+  }
+
+  @override
+  Future<Profile?> getChildProfile() async {
+    http.Response res = await client.get(profileUrl);
+    HttpResponse response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      Profile profile = Profile.fromJson(response.data['profile']);
+      return profile;
+    }
+    return null;
+  }
+
+  @override
+  Future<ProfilePicture?> getProfilePicture() async {
+    http.Response res = await client.get(profilePictureUrl);
+    HttpResponse<ProfilePicture> response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      ProfilePicture? picture = ProfilePicture.fromJson(response.data);
+      return picture;
+    }
+    return null;
   }
 }

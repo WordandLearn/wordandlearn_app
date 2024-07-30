@@ -15,3 +15,5 @@ export 'profile.dart';
 export 'class.dart';
 export 'color_model.dart';
 export 'task_state.dart';
+export "school.dart";
+export 'profile_picture.dart';

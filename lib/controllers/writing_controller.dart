@@ -40,6 +40,8 @@ class WritingController extends GetxController
     if (response.isSuccess) {
       userSessions.value = response.models;
       if (response.models.isEmpty) {
+        Get.snackbar(
+            "Add a New Composition", "Add a new composition to start off");
         return Get.to(() => const UploadOnboardingPage(),
             routeName: "UploadOnboardingPage");
       }

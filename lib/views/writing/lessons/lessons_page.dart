@@ -1,7 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:word_and_learn/components/circle_profile_avatar.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
@@ -76,10 +76,8 @@ class _LessonsPageState extends State<LessonsPage> {
                 onTap: () {},
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: defaultPadding),
-                  child: CircleAvatar(
-                    backgroundImage:
-                        CachedNetworkImageProvider(defaultImageUrl),
-                    radius: 15,
+                  child: CircleProfileAvatar(
+                    radius: 20,
                   ),
                 ),
               ),
