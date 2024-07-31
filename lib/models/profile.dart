@@ -77,6 +77,7 @@ class Profile {
   bool? isActive;
   String? slug;
   School? school;
+  int? grade;
   int user;
 
   Profile(
@@ -87,6 +88,7 @@ class Profile {
       this.address,
       this.phone,
       this.email,
+      this.grade,
       this.slug,
       this.school});
 
@@ -99,6 +101,7 @@ class Profile {
       isActive: json["is_active"],
       slug: json["slug"],
       user: json["user"],
+      grade: json["grade"],
       school: json["school"] != null ? School.fromJson(json["school"]) : null);
 
   Map<String, dynamic> toJson() => {

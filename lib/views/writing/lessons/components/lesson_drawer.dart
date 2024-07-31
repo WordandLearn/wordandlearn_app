@@ -10,6 +10,7 @@ import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/views/auth/login.dart';
+import 'package:word_and_learn/views/writing/settings/profile/profile_settings.dart';
 
 class LessonDrawer extends StatefulWidget {
   const LessonDrawer({super.key, required this.onClose});
@@ -172,19 +173,44 @@ class _LessonDrawerState extends State<LessonDrawer> {
                     _DrawerTile(
                       icon: const Icon(CupertinoIcons.person),
                       title: "My Profile",
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return const ProfileSettings();
+                          },
+                        ));
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: size.height * 0.05,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Subscription & Payments",
+                      style: TextStyle(
+                          color: AppColors.inactiveColor, fontSize: 14),
+                    ),
+                    Divider(color: AppColors.inactiveColor.withOpacity(0.2)),
+                    const SizedBox(
+                      height: defaultPadding,
+                    ),
+                    _DrawerTile(
+                      icon: const Icon(CupertinoIcons.creditcard),
+                      title: "Payment Methods",
                       onTap: () {},
                     ),
                     const SizedBox(
                       height: defaultPadding * 2,
                     ),
                     _DrawerTile(
-                      icon: SvgPicture.asset(
-                        "assets/icons/account.svg",
-                        height: 20,
-                      ),
-                      title: "My Account",
+                      icon: const Icon(CupertinoIcons.money_dollar),
+                      title: "Manage Subscription",
                       onTap: () {},
-                    )
+                    ),
                   ],
                 ),
                 Padding(

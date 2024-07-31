@@ -50,43 +50,38 @@ class _TopicNotesPageState extends State<TopicNotesPage> {
   @override
   Widget build(BuildContext context) {
     // Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: FutureBuilder<HttpResponse<FlashcardText>>(
-          future: _future,
-          builder: (context, snapshot) {
-            return Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: snapshot.hasData && snapshot.data!.isSuccess
-                    ? FlashcardList(
-                        flashCards: snapshot.data!.models,
-                        onUnderstand: (int index) {
-                          FlashcardText flashcardText =
-                              snapshot.data!.models[index];
-                          if (!flashcardText.completed) {
-                            _writingController
-                                .markFlashcardCompleted(flashcardText);
-                            setState(() {
-                              flashcardText.setCompleted();
-                            });
-                          }
-                          double progress =
-                              _notesProgress(snapshot.data!.models);
-                          widget.onProgress(progress);
-                          if (progress == 1) {
-                            widget.onComplete();
-                          }
-                          Navigator.pop(context);
-                        },
-                        onLoad: () {
-                          //update progress
-                          _notesProgress(snapshot.data!.models);
-                        })
-                    : const LoadingSpinner(),
-              ),
-            );
-          }),
-    );
+    return FutureBuilder<HttpResponse<FlashcardText>>(
+        future: _future,
+        builder: (context, snapshot) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+            child: snapshot.hasData && snapshot.data!.isSuccess
+                ? FlashcardList(
+                    flashCards: snapshot.data!.models,
+                    onUnderstand: (int index) {
+                      FlashcardText flashcardText =
+                          snapshot.data!.models[index];
+                      if (!flashcardText.completed) {
+                        _writingController
+                            .markFlashcardCompleted(flashcardText);
+                        setState(() {
+                          flashcardText.setCompleted();
+                        });
+                      }
+                      double progress = _notesProgress(snapshot.data!.models);
+                      widget.onProgress(progress);
+                      if (progress == 1) {
+                        widget.onComplete();
+                      }
+                      Navigator.pop(context);
+                    },
+                    onLoad: () {
+                      //update progress
+                      _notesProgress(snapshot.data!.models);
+                    })
+                : const LoadingSpinner(),
+          );
+        });
   }
 }
 
@@ -131,7 +126,6 @@ class _FlashcardListState extends State<FlashcardList> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return ListView.builder(
-      // shrinkWrap: true,
       itemCount: widget.flashCards.length,
       itemBuilder: (context, index) {
         FlashcardText flashcardText = widget.flashCards[index];

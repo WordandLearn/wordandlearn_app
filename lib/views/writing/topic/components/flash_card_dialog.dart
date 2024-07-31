@@ -32,9 +32,11 @@ class _FlashCardDialogState extends State<FlashCardDialog> {
       });
 
       Future.delayed(const Duration(milliseconds: 300), () {
-        setState(() {
-          rotation = 0.002;
-        });
+        if (mounted) {
+          setState(() {
+            rotation = 0.002;
+          });
+        }
       });
     }
   }

@@ -129,6 +129,8 @@ class _LoginPageState extends State<LoginPage> {
               height: defaultPadding * 0.1,
             ),
             TapBounce(
+              scale: 0.99,
+              duration: const Duration(milliseconds: 150),
               onTap: () {
                 if (_formKey.currentState!.validate()) {
                   toggleLoading();
