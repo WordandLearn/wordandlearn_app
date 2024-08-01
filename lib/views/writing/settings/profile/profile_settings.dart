@@ -4,9 +4,11 @@ import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/circle_profile_avatar.dart';
+import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/writing_controller.dart';
 import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/views/writing/settings/components/build_settings_app_bar.dart';
 
 class ProfileSettings extends StatefulWidget {
   const ProfileSettings({super.key});
@@ -30,23 +32,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         future: _future,
         builder: (context, snapshot) {
           return Scaffold(
-            backgroundColor: AppColors.secondaryContainer,
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              title: const Text(
-                "Profile Settings",
-                style: TextStyle(fontSize: 16),
-              ),
-              centerTitle: true,
-              leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(
-                    Icons.chevron_left,
-                    size: 30,
-                  )),
-            ),
+            backgroundColor: Colors.white,
+            appBar: buildSettingsAppBar(context, title: "Profile Settings"),
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -57,60 +44,85 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                       color: Colors.white,
                       border: Border.symmetric(
                           vertical: BorderSide(color: Colors.grey))),
-                  child: Row(
+                  child: Column(
                     children: [
-                      const CircleProfileAvatar(
-                        radius: 25,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const CircleProfileAvatar(
+                            radius: 25,
+                          ),
+                          const SizedBox(
+                            width: defaultPadding,
+                          ),
+                          Builder(builder: (context) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                snapshot.hasData
+                                    ? Text(
+                                        snapshot.data!.name,
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600),
+                                      )
+                                    : Shimmer.fromColors(
+                                        baseColor: Colors.grey[300]!,
+                                        highlightColor: Colors.grey[100]!,
+                                        child: Container(
+                                          height: 10,
+                                          width: 100,
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                        )),
+                                const SizedBox(
+                                  height: defaultPadding / 2,
+                                ),
+                                snapshot.hasData
+                                    ? snapshot.data!.grade != null
+                                        ? Text(
+                                            "Grade ${snapshot.data!.grade}",
+                                            style:
+                                                const TextStyle(fontSize: 12),
+                                          )
+                                        : const SizedBox.shrink()
+                                    : Shimmer.fromColors(
+                                        baseColor: Colors.grey[300]!,
+                                        highlightColor: Colors.grey[100]!,
+                                        child: Container(
+                                          height: 10,
+                                          width: 60,
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                        )),
+                              ],
+                            );
+                          }),
+                        ],
                       ),
                       const SizedBox(
-                        width: defaultPadding,
+                        height: defaultPadding * 2,
                       ),
-                      Builder(builder: (context) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            snapshot.hasData
-                                ? Text(
-                                    snapshot.data!.name,
-                                    style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600),
-                                  )
-                                : Shimmer.fromColors(
-                                    baseColor: Colors.grey[300]!,
-                                    highlightColor: Colors.grey[100]!,
-                                    child: Container(
-                                      height: 10,
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                    )),
-                            const SizedBox(
-                              height: defaultPadding / 2,
+                      SizedBox(
+                        width: 150,
+                        child: TapBounce(
+                          onTap: () {
+                            //TODO: GO To Profile Page
+                          },
+                          child: const PrimaryButton(
+                            color: AppColors.buttonColor,
+                            borderRadius: 40,
+                            child: Text(
+                              "Edit Profile",
+                              style: TextStyle(color: Colors.white),
                             ),
-                            snapshot.hasData
-                                ? snapshot.data!.grade != null
-                                    ? Text(
-                                        "Grade ${snapshot.data!.grade}",
-                                        style: const TextStyle(fontSize: 12),
-                                      )
-                                    : const SizedBox.shrink()
-                                : Shimmer.fromColors(
-                                    baseColor: Colors.grey[300]!,
-                                    highlightColor: Colors.grey[100]!,
-                                    child: Container(
-                                      height: 10,
-                                      width: 60,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                    )),
-                          ],
-                        );
-                      })
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -137,22 +149,15 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                               Column(
                                 children: [
                                   SettingsListItem(
-                                    text: "Edit Profile Details",
-                                    icon: const Icon(
-                                      CupertinoIcons.pencil,
-                                      color: Colors.grey,
-                                      size: 20,
-                                    ),
-                                    onPressed: () {},
-                                  ),
-                                  SettingsListItem(
                                       text: "Update Profile Picture",
                                       icon: const Icon(
                                         CupertinoIcons.photo_camera,
                                         color: Colors.grey,
                                         size: 20,
                                       ),
-                                      onPressed: () {}),
+                                      onPressed: () {
+                                        //TODO: Implement Update Profile Picture
+                                      }),
                                   SettingsListItem(
                                       text: "Link To Your School",
                                       icon: const Icon(
@@ -160,7 +165,9 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                         color: Colors.grey,
                                         size: 20,
                                       ),
-                                      onPressed: () {}),
+                                      onPressed: () {
+                                        //TODO: Show that this is coming school
+                                      }),
                                   SettingsListItem(
                                       text: "Change Your Grade",
                                       iconBackgroundColor:
@@ -173,7 +180,9 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                       textStyle: const TextStyle(
                                           color: Colors.red,
                                           fontWeight: FontWeight.w600),
-                                      onPressed: () {}),
+                                      onPressed: () {
+                                        //TODO: Implement change your grade option
+                                      }),
                                 ],
                               )
                             ],
@@ -194,7 +203,9 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                 children: [
                                   SettingsListItem(
                                     text: "Update Email Address",
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      //TODO: Implement Email Address Update
+                                    },
                                     icon: const Icon(
                                       CupertinoIcons.mail,
                                       size: 20,
@@ -208,7 +219,19 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                         size: 20,
                                         color: Colors.grey,
                                       ),
-                                      onPressed: () {}),
+                                      onPressed: () {
+                                        //TODO: Implement Password Change
+                                      }),
+                                  SettingsListItem(
+                                      text: "Request Your Data",
+                                      icon: const Icon(
+                                        CupertinoIcons.archivebox,
+                                        size: 20,
+                                        color: Colors.grey,
+                                      ),
+                                      onPressed: () {
+                                        //TODO: Implement Request Data
+                                      }),
                                   SettingsListItem(
                                       text: "Disable or Delete Your Account",
                                       iconBackgroundColor:
@@ -221,7 +244,9 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                         size: 20,
                                         color: Colors.red,
                                       ),
-                                      onPressed: () {}),
+                                      onPressed: () {
+                                        //TODO: Implement Account Deletion
+                                      }),
                                 ],
                               )
                             ],
@@ -289,17 +314,11 @@ class SettingsListItem extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              Container(
-                  padding: const EdgeInsets.all(defaultPadding / 2),
-                  decoration: BoxDecoration(
-                      color:
-                          iconBackgroundColor ?? AppColors.secondaryContainer,
-                      shape: BoxShape.circle),
-                  child: Icon(
-                    Icons.chevron_right,
-                    size: 20,
-                    color: textStyle?.color,
-                  ))
+              Icon(
+                Icons.chevron_right,
+                size: 20,
+                color: textStyle?.color,
+              )
             ],
           ),
         ),

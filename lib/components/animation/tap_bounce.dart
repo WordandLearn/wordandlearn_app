@@ -4,8 +4,8 @@ class TapBounce extends StatefulWidget {
   const TapBounce(
       {super.key,
       required this.child,
-      this.duration = const Duration(milliseconds: 300),
-      this.scale = 0.95,
+      this.duration = const Duration(milliseconds: 150),
+      this.scale = 0.99,
       this.onTap,
       this.curve = Curves.easeOut});
   final Widget child;

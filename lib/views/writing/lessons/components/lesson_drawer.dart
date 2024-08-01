@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:word_and_learn/components/animation/tap_bounce.dart';
@@ -10,7 +9,9 @@ import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/views/auth/login.dart';
+import 'package:word_and_learn/views/writing/settings/profile/alert_settings.dart';
 import 'package:word_and_learn/views/writing/settings/profile/profile_settings.dart';
+import 'package:word_and_learn/views/writing/settings/profile/subscription_settings.dart';
 
 class LessonDrawer extends StatefulWidget {
   const LessonDrawer({super.key, required this.onClose});
@@ -174,11 +175,14 @@ class _LessonDrawerState extends State<LessonDrawer> {
                       icon: const Icon(CupertinoIcons.person),
                       title: "My Profile",
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) {
-                            return const ProfileSettings();
-                          },
-                        ));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) {
+                                  return const ProfileSettings();
+                                },
+                                settings: const RouteSettings(
+                                    name: "ProfileSettings")));
                       },
                     ),
                   ],
@@ -199,17 +203,35 @@ class _LessonDrawerState extends State<LessonDrawer> {
                       height: defaultPadding,
                     ),
                     _DrawerTile(
-                      icon: const Icon(CupertinoIcons.creditcard),
-                      title: "Payment Methods",
-                      onTap: () {},
+                      icon: const Icon(CupertinoIcons.calendar),
+                      title: "Subscription Plan",
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) {
+                                  return const SubscriptionSettings();
+                                },
+                                settings: const RouteSettings(
+                                    name: "SubscriptionSettings")));
+                      },
                     ),
                     const SizedBox(
                       height: defaultPadding * 2,
                     ),
                     _DrawerTile(
-                      icon: const Icon(CupertinoIcons.money_dollar),
-                      title: "Manage Subscription",
-                      onTap: () {},
+                      icon: const Icon(CupertinoIcons.creditcard),
+                      title: "Payment Methods",
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) {
+                                  return const SubscriptionSettings();
+                                },
+                                settings: const RouteSettings(
+                                    name: "SubscriptionSettings")));
+                      },
                     ),
                   ],
                 ),
@@ -219,7 +241,7 @@ class _LessonDrawerState extends State<LessonDrawer> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "Notifications",
+                        "Alerts",
                         style: TextStyle(
                             color: AppColors.inactiveColor, fontSize: 14),
                       ),
@@ -229,8 +251,15 @@ class _LessonDrawerState extends State<LessonDrawer> {
                       ),
                       _DrawerTile(
                         icon: const Icon(CupertinoIcons.bell),
-                        title: "Push Notifications",
-                        onTap: () {},
+                        title: "Notifications",
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const AlertSettings(),
+                                  settings: const RouteSettings(
+                                      name: "AlertSettings")));
+                        },
                       )
                     ],
                   ),
