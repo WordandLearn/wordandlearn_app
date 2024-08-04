@@ -38,3 +38,7 @@ const String compositionUploadUrl = "$writingUrl/composition/upload/";
 const String teacherClassesUrl = "$teachersUrl/class";
 String classStudentsUrl(int classId) => "$teacherClassesUrl/$classId/students";
 const String uploadCompositionsUrl = "$teachersUrl/upload/";
+
+//Settings endpoints
+const String settingsUrl = "$baseUrl/settings";
+const String alertSettingsUrl = "$settingsUrl/alert-settings/";

@@ -7,11 +7,10 @@ class AppTheme {
         colorScheme: const ColorScheme.light(
           primary: AppColors.primaryColor,
           secondary: AppColors.secondaryColor,
-          background: AppColors.backgroundColor,
           surface: AppColors.containerColor,
           onPrimary: AppColors.textColor,
           onSecondary: AppColors.textColor,
-          onBackground: AppColors.textColor,
+          onSurface: AppColors.textColor,
         ),
         textTheme: fredokaOneTextTheme,
         useMaterial3: true

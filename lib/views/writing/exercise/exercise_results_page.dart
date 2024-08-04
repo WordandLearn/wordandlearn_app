@@ -27,7 +27,7 @@ class ExerciseResultsPage extends StatefulWidget {
 
 class _ExerciseResultsPageState extends State<ExerciseResultsPage> {
   final WritingController writingController = WritingController();
-  late Future<HttpResponse<ExerciseResult>> _future;
+  late Future<ExerciseResult?> _future;
   @override
   void initState() {
     _future =
@@ -50,14 +50,14 @@ class _ExerciseResultsPageState extends State<ExerciseResultsPage> {
                 Navigator.pop(context);
               },
             ),
-            FutureBuilder<HttpResponse<ExerciseResult>>(
+            FutureBuilder<ExerciseResult?>(
                 future: _future,
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     return Center(child: Text(snapshot.error.toString()));
                   }
 
-                  ExerciseResult? result = snapshot.data?.models.first;
+                  ExerciseResult? result = snapshot.data;
                   return Expanded(
                     child: Column(
                       children: [

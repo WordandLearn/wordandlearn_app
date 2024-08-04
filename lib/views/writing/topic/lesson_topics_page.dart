@@ -17,7 +17,7 @@ class LessonTopicsPage extends StatefulWidget {
 }
 
 class _LessonTopicsPageState extends State<LessonTopicsPage> {
-  late Future<HttpResponse<Topic>> _future;
+  late Future<List<Topic>?> _future;
   final WritingController _writingController = WritingController();
 
   @override
@@ -36,7 +36,7 @@ class _LessonTopicsPageState extends State<LessonTopicsPage> {
       backgroundColor:
           TinyColor.fromColor(widget.lesson.color!).darken(10).color,
       body: SafeArea(
-          child: FutureBuilder<HttpResponse<Topic>>(
+          child: FutureBuilder<List<Topic>?>(
               future: _future,
               builder: (context, snapshot) {
                 return Padding(
@@ -84,11 +84,9 @@ class _LessonTopicsPageState extends State<LessonTopicsPage> {
                             vertical: defaultPadding * 2),
                         child: SizedBox(
                           height: 70,
-                          child: snapshot.hasData &&
-                                  snapshot.data!.models.isNotEmpty
+                          child: snapshot.hasData && snapshot.data!.isNotEmpty
                               ? Builder(builder: (context) {
-                                  Topic topic =
-                                      snapshot.data!.models[activeIndex];
+                                  Topic topic = snapshot.data![activeIndex];
                                   return Column(
                                     key: ValueKey<int>(activeIndex),
                                     crossAxisAlignment:
@@ -141,9 +139,8 @@ class _LessonTopicsPageState extends State<LessonTopicsPage> {
                           } else if (snapshot.connectionState ==
                                   ConnectionState.done &&
                               snapshot.hasData &&
-                              snapshot.data!.isSuccess &&
-                              snapshot.data!.models.isNotEmpty) {
-                            List<Topic> topics = snapshot.data!.models;
+                              snapshot.data!.isNotEmpty) {
+                            List<Topic> topics = snapshot.data!;
                             return PageView.builder(
                                 scrollDirection: Axis.horizontal,
                                 physics: const BouncingScrollPhysics(),
@@ -180,7 +177,7 @@ class _LessonTopicsPageState extends State<LessonTopicsPage> {
                           } else if (snapshot.connectionState ==
                                   ConnectionState.done &&
                               snapshot.hasData) {
-                            List<Topic> topics = snapshot.data!.models;
+                            List<Topic> topics = snapshot.data!;
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: List.generate(

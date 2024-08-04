@@ -9,7 +9,7 @@ import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/views/auth/login.dart';
-import 'package:word_and_learn/views/writing/settings/profile/alert_settings.dart';
+import 'package:word_and_learn/views/writing/settings/profile/alert_settings_page.dart';
 import 'package:word_and_learn/views/writing/settings/profile/profile_settings.dart';
 import 'package:word_and_learn/views/writing/settings/profile/subscription_settings.dart';
 
@@ -203,8 +203,8 @@ class _LessonDrawerState extends State<LessonDrawer> {
                       height: defaultPadding,
                     ),
                     _DrawerTile(
-                      icon: const Icon(CupertinoIcons.calendar),
-                      title: "Subscription Plan",
+                      icon: const Icon(CupertinoIcons.creditcard),
+                      title: "My Subscription",
                       onTap: () {
                         Navigator.push(
                             context,
@@ -220,7 +220,7 @@ class _LessonDrawerState extends State<LessonDrawer> {
                       height: defaultPadding * 2,
                     ),
                     _DrawerTile(
-                      icon: const Icon(CupertinoIcons.creditcard),
+                      icon: const Icon(Icons.wallet_outlined),
                       title: "Payment Methods",
                       onTap: () {
                         Navigator.push(

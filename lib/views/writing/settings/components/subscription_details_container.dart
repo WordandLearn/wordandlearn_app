@@ -27,12 +27,12 @@ class SubscriptionDetailsContainer extends StatelessWidget {
                 // color: Colors.blue
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(colors: [
+                  Colors.white,
                   AppColors.primaryColor,
                   AppColors.secondaryColor,
-                  AppColors.greenColor,
                 ], stops: [
                   0.1,
-                  0.8,
+                  0.4,
                   0.9
                 ], begin: Alignment.bottomLeft, end: Alignment.topRight)),
               ),

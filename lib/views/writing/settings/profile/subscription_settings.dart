@@ -22,6 +22,7 @@ class SubscriptionSettings extends StatelessWidget {
             decoration: const BoxDecoration(color: Colors.white),
             child: Column(
               children: [
+                //Fetch Subscription from API
                 const SubscriptionDetailsContainer(),
                 const Padding(
                   padding: EdgeInsets.symmetric(
@@ -55,18 +56,21 @@ class SubscriptionSettings extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: defaultPadding),
                   child: Row(
                     children: [
-                      TapBounce(
-                        onTap: () {},
-                        child: PrimaryButton(
-                          color: AppColors.redColor.withOpacity(0.4),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: defaultPadding / 2),
-                            child: Text(
-                              "Cancel Plan",
-                              style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.w500),
+                      Expanded(
+                        flex: 2,
+                        child: TapBounce(
+                          onTap: () {},
+                          child: PrimaryButton(
+                            color: AppColors.redColor.withOpacity(0.4),
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: defaultPadding),
+                              child: Text(
+                                "Cancel Plan",
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.w500),
+                              ),
                             ),
                           ),
                         ),
@@ -75,6 +79,7 @@ class SubscriptionSettings extends StatelessWidget {
                         width: defaultPadding * 2,
                       ),
                       Expanded(
+                        flex: 3,
                         child: TapBounce(
                           onTap: () {},
                           child: const PrimaryIconButton(
@@ -139,7 +144,7 @@ class _SubscriptionDetail extends StatelessWidget {
             style: const TextStyle(
                 fontSize: 14,
                 color: AppColors.inactiveColor,
-                fontWeight: FontWeight.w600),
+                fontWeight: FontWeight.w500),
           ),
           Text(
             detail,

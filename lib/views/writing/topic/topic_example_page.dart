@@ -20,7 +20,7 @@ class TopicExamplePage extends StatefulWidget {
 
 class _TopicExamplePageState extends State<TopicExamplePage> {
   final WritingController _writingController = WritingController();
-  late Future<HttpResponse<Example>> _future;
+  late Future<List<Example>?> _future;
 
   @override
   void initState() {
@@ -35,7 +35,7 @@ class _TopicExamplePageState extends State<TopicExamplePage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: FutureBuilder<HttpResponse<Example>>(
+      body: FutureBuilder<List<Example>?>(
           future: _future,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -48,9 +48,9 @@ class _TopicExamplePageState extends State<TopicExamplePage> {
                     color: Colors.white,
                   ));
             }
-            if (snapshot.hasData && snapshot.data!.isSuccess) {
+            if (snapshot.hasData) {
               return _ExampleWidget(
-                examples: snapshot.data!.models,
+                examples: snapshot.data!,
                 onComplete: widget.onComplete,
               );
             }

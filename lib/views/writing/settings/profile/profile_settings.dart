@@ -289,7 +289,7 @@ class SettingsListItem extends StatelessWidget {
         onTap: () {},
         child: Container(
           padding: const EdgeInsets.symmetric(
-              vertical: defaultPadding * 1.5, horizontal: defaultPadding),
+              vertical: defaultPadding * 2, horizontal: defaultPadding),
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),

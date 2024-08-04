@@ -1,19 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_and_learn/constants/constants.dart';
+import 'package:word_and_learn/controllers/writing_controller.dart';
 import 'package:word_and_learn/views/writing/settings/components/build_settings_app_bar.dart';
 
-class AlertSettings extends StatelessWidget {
+class AlertSettings extends StatefulWidget {
   const AlertSettings({super.key});
 
   @override
+  State<AlertSettings> createState() => _AlertSettingsState();
+}
+
+class _AlertSettingsState extends State<AlertSettings> {
+  final WritingController _writingController = Get.find<WritingController>();
+  bool pushPreference = true;
+  bool emailPreference = true;
+  bool smsPreference = true;
+  @override
+  void initState() {
+    getStoredPreferences();
+    super.initState();
+  }
+
+  void getStoredPreferences() {
+    SharedPreferences.getInstance().then((preferences) {
+      setState(() {
+        pushPreference = preferences.getBool("push_notifications") ?? true;
+        emailPreference = preferences.getBool("email_notifications") ?? true;
+        smsPreference = preferences.getBool("sms_notifications") ?? true;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    //TODO: Fetch Values from Backend Server and Update also backend
+    print(pushPreference);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: buildSettingsAppBar(context, title: "Notifications"),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             padding: const EdgeInsets.symmetric(
@@ -53,29 +80,40 @@ class AlertSettings extends StatelessWidget {
                 children: [
                   AlertSettingsSwitch(
                     text: "Push Notifications",
-                    value: true,
+                    value: pushPreference,
                     onChanged: (value) async {
                       SharedPreferences preferences =
                           await SharedPreferences.getInstance();
                       preferences.setBool("push_notifications", value);
+
+                      _writingController.updateUserAlertSettings({
+                        "push": value,
+                      });
                     },
                   ),
                   AlertSettingsSwitch(
                     text: "Email Alerts",
-                    value: true,
+                    value: emailPreference,
                     onChanged: (value) async {
                       SharedPreferences preferences =
                           await SharedPreferences.getInstance();
                       preferences.setBool("email_notifications", value);
+
+                      _writingController.updateUserAlertSettings({
+                        "email": value,
+                      });
                     },
                   ),
                   AlertSettingsSwitch(
                     text: "SMS",
-                    value: false,
+                    value: smsPreference,
                     onChanged: (value) async {
                       SharedPreferences preferences =
                           await SharedPreferences.getInstance();
                       preferences.setBool("sms_notifications", value);
+                      _writingController.updateUserAlertSettings({
+                        "sms": value,
+                      });
                     },
                   ),
                 ],
@@ -104,10 +142,10 @@ class AlertSettingsSwitch extends StatefulWidget {
 }
 
 class _AlertSettingsSwitchState extends State<AlertSettingsSwitch> {
-  late ValueNotifier<bool> _valueNotifier;
+  late bool value;
   @override
   void initState() {
-    _valueNotifier = ValueNotifier<bool>(widget.value);
+    value = widget.value;
     super.initState();
   }
 
@@ -125,19 +163,17 @@ class _AlertSettingsSwitchState extends State<AlertSettingsSwitch> {
                     const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
               ),
               const Spacer(),
-              AdvancedSwitch(
-                controller: _valueNotifier,
-                height: 25,
-                width: 40,
-                onChanged: (value) {
+              Switch(
+                value: value,
+                activeColor: Colors.white,
+                activeTrackColor: AppColors.buttonColor,
+                inactiveTrackColor: Colors.grey.withOpacity(0.1),
+                onChanged: (value_) {
                   setState(() {
-                    _valueNotifier.value = value;
-                    widget.onChanged(value);
+                    value = value_;
                   });
+                  widget.onChanged(value_);
                 },
-                activeColor: AppColors.buttonColor,
-                disabledOpacity: 0.2,
-                enabled: true,
               )
             ],
           ),

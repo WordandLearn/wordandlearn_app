@@ -34,8 +34,10 @@ class SubscriptionHistoryCard extends StatelessWidget {
                 children: [
                   Text(
                     "Writing Package (Personal)",
-                    style:
-                        TextStyle(fontSize: 14, color: AppColors.greyTextColor),
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: AppColors.greyTextColor,
+                        fontWeight: FontWeight.w500),
                   ),
                   SizedBox(
                     height: defaultPadding / 2,

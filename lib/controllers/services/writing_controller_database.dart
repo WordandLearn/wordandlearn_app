@@ -1,6 +1,7 @@
+import 'package:word_and_learn/controllers/services/writing/writing_interface.dart';
 import 'package:word_and_learn/models/models.dart';
 
-mixin WritingControllerDatabase {
+class WritingControllerDatabase implements WritingInterface {
   Future<Session?> dbGetCurrentLesson() async {
     return null;
   }
@@ -24,5 +25,17 @@ mixin WritingControllerDatabase {
 
   Future<void> dbLogout() async {
     //return null;
+  }
+
+  @override
+  Future<Profile?> getChildProfile() async {
+    return null;
+  }
+
+  Future<void> saveChildProfile(Profile? profile) async {}
+
+  @override
+  Future<ProfilePicture?> getProfilePicture() async {
+    return null;
   }
 }

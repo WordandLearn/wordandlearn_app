@@ -25,7 +25,7 @@ class TopicNotesPage extends StatefulWidget {
 
 class _TopicNotesPageState extends State<TopicNotesPage> {
   final WritingController _writingController = Get.find<WritingController>();
-  late Future<HttpResponse<FlashcardText>> _future;
+  late Future<List<FlashcardText>?> _future;
 
   int activeFlashcard = 0;
 
@@ -50,36 +50,40 @@ class _TopicNotesPageState extends State<TopicNotesPage> {
   @override
   Widget build(BuildContext context) {
     // Size size = MediaQuery.of(context).size;
-    return FutureBuilder<HttpResponse<FlashcardText>>(
+    return FutureBuilder<List<FlashcardText>?>(
         future: _future,
         builder: (context, snapshot) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-            child: snapshot.hasData && snapshot.data!.isSuccess
-                ? FlashcardList(
-                    flashCards: snapshot.data!.models,
-                    onUnderstand: (int index) {
-                      FlashcardText flashcardText =
-                          snapshot.data!.models[index];
-                      if (!flashcardText.completed) {
-                        _writingController
-                            .markFlashcardCompleted(flashcardText);
-                        setState(() {
-                          flashcardText.setCompleted();
-                        });
-                      }
-                      double progress = _notesProgress(snapshot.data!.models);
-                      widget.onProgress(progress);
-                      if (progress == 1) {
-                        widget.onComplete();
-                      }
-                      Navigator.pop(context);
-                    },
-                    onLoad: () {
-                      //update progress
-                      _notesProgress(snapshot.data!.models);
-                    })
-                : const LoadingSpinner(),
+            child: Builder(builder: (context) {
+              return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: snapshot.hasData
+                    ? FlashcardList(
+                        flashCards: snapshot.data!,
+                        onUnderstand: (int index) {
+                          FlashcardText flashcardText = snapshot.data![index];
+                          if (!flashcardText.completed) {
+                            _writingController
+                                .markFlashcardCompleted(flashcardText);
+                            setState(() {
+                              flashcardText.setCompleted();
+                            });
+                          }
+                          double progress = _notesProgress(snapshot.data!);
+                          widget.onProgress(progress);
+                          if (progress == 1) {
+                            widget.onComplete();
+                          }
+                          Navigator.pop(context);
+                        },
+                        onLoad: () {
+                          //update progress
+                          _notesProgress(snapshot.data!);
+                        })
+                    : const LoadingSpinner(),
+              );
+            }),
           );
         });
   }

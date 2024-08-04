@@ -23,7 +23,7 @@ class ExercisePage extends StatefulWidget {
 }
 
 class _ExercisePageState extends State<ExercisePage> {
-  late Future<HttpResponse<Exercise>> _future;
+  late Future<Exercise?> _future;
   final WritingController writingController = WritingController();
 
   @override
@@ -57,12 +57,12 @@ class _ExercisePageState extends State<ExercisePage> {
       isUploading = true;
     });
     List<File> images = submissionImagePaths!.map((e) => File(e!)).toList();
-    HttpResponse<ExerciseSubmission> response =
+    ExerciseSubmission? submission =
         await writingController.uploadExercise(exercise.id, images);
-    if (response.isSuccess) {
+    if (submission != null) {
       setState(() {
         isUploading = false;
-        exerciseSubmission = response.models.first;
+        exerciseSubmission = submission;
       });
       if (mounted) {
         Navigator.push(
@@ -87,7 +87,7 @@ class _ExercisePageState extends State<ExercisePage> {
     return Scaffold(
       backgroundColor: AppColors.secondaryContainer,
       body: SafeArea(
-          child: FutureBuilder<HttpResponse<Exercise>>(
+          child: FutureBuilder<Exercise?>(
               future: _future,
               builder: (context, snapshot) {
                 return Column(
@@ -106,9 +106,9 @@ class _ExercisePageState extends State<ExercisePage> {
                       },
                     ),
                     Expanded(
-                      child: snapshot.hasData && snapshot.data!.isSuccess
+                      child: snapshot.hasData
                           ? Builder(builder: (context) {
-                              Exercise exercise = snapshot.data!.models.first;
+                              Exercise exercise = snapshot.data!;
                               if (exercise.completed) {
                                 return const Center(
                                   child: Text(
@@ -140,9 +140,7 @@ class _ExercisePageState extends State<ExercisePage> {
                       duration: const Duration(milliseconds: 500),
                       curve: Curves.easeOut,
                       child: Container(
-                        height: snapshot.hasData && snapshot.data!.isSuccess
-                            ? 100
-                            : 80,
+                        height: snapshot.hasData ? 100 : 80,
                         width: size.width,
                         decoration: const BoxDecoration(
                             color: Colors.white,
@@ -159,7 +157,7 @@ class _ExercisePageState extends State<ExercisePage> {
                               const SizedBox(
                                 height: defaultPadding,
                               ),
-                              snapshot.hasData && snapshot.data!.isSuccess
+                              snapshot.hasData
                                   ? Builder(builder: (context) {
                                       return ExerciseActionButton(
                                         currentPage: currentPage,
@@ -173,8 +171,7 @@ class _ExercisePageState extends State<ExercisePage> {
                                             });
                                           } else {
                                             // submit exercise
-                                            _submitExercise(
-                                                snapshot.data!.models.first);
+                                            _submitExercise(snapshot.data!);
                                           }
                                         },
                                       );

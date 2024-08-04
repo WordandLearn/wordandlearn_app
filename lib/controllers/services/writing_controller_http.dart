@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/services/writing/writing_interface.dart';
@@ -8,7 +7,7 @@ import 'package:word_and_learn/utils/http_client.dart';
 import '../../models/models.dart';
 import 'package:http/http.dart' as http;
 
-mixin WritingControllerHttp implements WritingInterface {
+class WritingControllerHttp implements WritingInterface {
   HttpClient client = HttpClient();
 
   Future<HttpResponse<Lesson>> getSessionLessons(int sessionID) async {
@@ -134,21 +133,6 @@ mixin WritingControllerHttp implements WritingInterface {
     return response;
   }
 
-  Future<HttpResponse<ExerciseSubmission>> uploadExercise(
-      int exerciseId, List<File> images) async {
-    http.Response res = await client.upload(exerciseUploadUrl(exerciseId),
-        files: images, key: 'image');
-
-    HttpResponse<ExerciseSubmission> response = HttpResponse.fromResponse(res);
-    if (response.isSuccess) {
-      ExerciseSubmission submission =
-          ExerciseSubmission.fromJson(json.decode(res.body));
-      response.models = [submission];
-    }
-
-    return response;
-  }
-
   Future<HttpResponse<Session>> getUserSessions() async {
     http.Response res = await client.get(sessionLessonsUrl);
     HttpResponse<Session> response = HttpResponse<Session>.fromResponse(res);
@@ -182,39 +166,6 @@ mixin WritingControllerHttp implements WritingInterface {
     if (response.isSuccess) {
       ExerciseResult result = ExerciseResult.fromJson(response.data);
       response.models = [result];
-    }
-    return response;
-  }
-
-  Future<HttpResponse> uploadComposition(List<File> images) async {
-    Map<String, File> imageMap = {};
-    File image1 = images[0];
-    imageMap['image1'] = image1;
-    if (images.length > 1) {
-      File? image2 = images[1];
-      imageMap['image2'] = image2;
-    }
-
-    http.Response res = await client
-        .uploadWithKeys(compositionUploadUrl, files: imageMap, body: {});
-    HttpResponse response = HttpResponse.fromResponse(res);
-
-    return response;
-  }
-
-  Future<HttpResponse<TaskProgress>> getTaskState(String taskId) async {
-    // TaskProgress taskProgress = TaskProgress(
-    //     state: TaskState.success,
-    //     progress: 1,
-    //     message: "Generating Session Plan");
-    // HttpResponse<TaskProgress> response =
-    //     HttpResponse(message: "", statusCode: 200, data: {})
-    //       ..models = [taskProgress];
-    http.Response res = await client.get("$writingUrl/task/$taskId/state");
-    HttpResponse<TaskProgress> response = HttpResponse.fromResponse(res);
-    if (response.isSuccess) {
-      TaskProgress taskState = TaskProgress.fromJson(json.decode(res.body));
-      response.models = [taskState];
     }
     return response;
   }
