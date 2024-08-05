@@ -12,7 +12,7 @@ export 'exercise_submission.dart';
 export 'exercise_result.dart';
 export 'session.dart';
 export 'profile.dart';
-export 'class.dart';
+export 'class_.dart';
 export 'color_model.dart';
 export 'task_state.dart';
 export "school.dart";

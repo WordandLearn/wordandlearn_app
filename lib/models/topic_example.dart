@@ -4,13 +4,17 @@
 
 import 'dart:convert';
 
+import 'package:objectbox/objectbox.dart';
+
 List<TopicExample> topicExampleFromJson(String str) => List<TopicExample>.from(
     json.decode(str).map((x) => TopicExample.fromJson(x)));
 
 String topicExampleToJson(List<TopicExample> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+@Entity()
 class TopicExample {
+  @Id(assignable: true)
   final int id;
   final String originalText;
   final String transformedText;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:word_and_learn/components/circle_profile_avatar.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
@@ -21,10 +22,13 @@ class LessonsPage extends StatefulWidget {
 class _LessonsPageState extends State<LessonsPage> {
   WritingController writingController = Get.find<WritingController>();
   final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
-
+  late Future<List<Session>> userSessionsFuture;
+  late Future<Session?> currentSessionFuture;
   @override
   void initState() {
     writingController.getCurrentSession();
+    userSessionsFuture = writingController.fetchUserSessions();
+    currentSessionFuture = writingController.fetchCurrentSession();
     super.initState();
   }
 
@@ -93,60 +97,119 @@ class _LessonsPageState extends State<LessonsPage> {
               padding: const EdgeInsets.symmetric(
                   horizontal: defaultPadding, vertical: defaultPadding),
               child: Column(children: [
-                Obx(() {
-                  if (writingController.userSessions.isEmpty) {
-                    //TODO: Do some error handling when no session is available,guide on creating new session
+                FutureBuilder(
+                    future: userSessionsFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData && snapshot.data!.isEmpty) {
+                        return const Text("No Compositions, Add a new one");
+                      }
 
-                    return const Text("No Compositions, Add a new one");
-                  }
-
-                  if (writingController.currentUserSession.value == null) {
-                    return Padding(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: defaultPadding),
-                      child: SizedBox(
-                          height: size.height * 0.9,
-                          child: const Center(child: LoadingSpinner())),
-                    );
-                  } else {
-                    Session session =
-                        writingController.currentUserSession.value!;
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
+                      if (writingController.currentUserSession.value == null) {
+                        return Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: defaultPadding),
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.only(top: defaultPadding * 2),
-                            child:
-                                CompositionSelectorContainer(session: session),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: defaultPadding * 2),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Your Lessons",
-                                style: Theme.of(context).textTheme.titleLarge,
+                          child: SizedBox(
+                              height: size.height * 0.9,
+                              child: const Center(child: LoadingSpinner())),
+                        );
+                      } else {
+                        Session session =
+                            writingController.currentUserSession.value!;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: defaultPadding),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: defaultPadding * 2),
+                                child: AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 500),
+                                  child: Builder(
+                                      key: ValueKey<ConnectionState>(
+                                          snapshot.connectionState),
+                                      builder: (context) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return Shimmer.fromColors(
+                                              baseColor: Colors.grey[300]!,
+                                              highlightColor: Colors.grey[100]!,
+                                              child: Container(
+                                                height: 110,
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                              ));
+                                        }
+                                        return CompositionSelectorContainer(
+                                          session: session,
+                                          userSessions: snapshot.data!,
+                                          onChanged: (session) async {
+                                            await writingController
+                                                .setCurrentSession(session);
+                                            setState(() {
+                                              currentSessionFuture =
+                                                  writingController
+                                                      .fetchCurrentSession();
+                                            });
+                                          },
+                                        );
+                                      }),
+                                ),
                               ),
-                              const SizedBox(
-                                height: defaultPadding,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: defaultPadding * 2),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Your Lessons",
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                  ),
+                                  const SizedBox(
+                                    height: defaultPadding,
+                                  ),
+                                  FutureBuilder<Session?>(
+                                      future: currentSessionFuture,
+                                      builder: (context, snapshot_) {
+                                        return AnimatedSwitcher(
+                                          duration:
+                                              const Duration(milliseconds: 600),
+                                          child: Builder(
+                                            builder: (context) {
+                                              if (snapshot_.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return const ShimmerSessionLessonsList();
+                                              }
+                                              if (snapshot_.hasError) {
+                                                return const Text(
+                                                    "Error UI Element will come here");
+                                              }
+                                              if (snapshot_.hasData) {
+                                                return SessionLessonsList(
+                                                  currentSession:
+                                                      snapshot_.data!,
+                                                );
+                                              }
+                                              return const ShimmerSessionLessonsList();
+                                            },
+                                          ),
+                                        );
+                                      }),
+                                ],
                               ),
-                              SessionLessonsList(
-                                  writingController: writingController,
-                                  size: size),
-                            ],
-                          ),
-                        )
-                      ],
-                    );
-                  }
-                }),
+                            )
+                          ],
+                        );
+                      }
+                    }),
                 SizedBox(
                   height: size.height * 0.05,
                 ),

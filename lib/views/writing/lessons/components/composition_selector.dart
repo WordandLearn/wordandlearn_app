@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +18,14 @@ class CompositionSelectorContainer extends StatefulWidget {
   const CompositionSelectorContainer({
     super.key,
     required this.session,
+    required this.userSessions,
+    required this.onChanged,
   });
 
   final Session session;
+
+  final List<Session> userSessions;
+  final void Function(Session session) onChanged;
 
   @override
   State<CompositionSelectorContainer> createState() =>
@@ -37,12 +44,10 @@ class _CompositionSelectorContainerState
           builder: (context) {
             return ListModalBottomSheet(
               title: "Your Compositions",
-              items: writingController.userSessions,
+              items: widget.userSessions,
               onTap: (index) {
-                setState(() {
-                  Session session_ = writingController.userSessions[index];
-                  writingController.setCurrentSession(session_);
-                });
+                Session session_ = widget.userSessions[index];
+                widget.onChanged(session_);
                 Navigator.pop(context);
               },
             );

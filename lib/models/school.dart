@@ -4,13 +4,17 @@
 
 import 'dart:convert';
 
+import 'package:objectbox/objectbox.dart';
+
 List<School> schoolFromJson(String str) =>
     List<School>.from(json.decode(str).map((x) => School.fromJson(x)));
 
 String schoolToJson(List<School> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+@Entity()
 class School {
+  @Id(assignable: true)
   int id;
   String name;
   String? address;

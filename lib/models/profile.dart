@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:word_and_learn/models/models.dart';
+import 'package:objectbox/objectbox.dart';
 
 User userFromJson(String str) => User.fromJson(json.decode(str));
 
@@ -68,7 +68,9 @@ List<Profile> profileFromJson(String str) =>
 String profileToJson(List<Profile> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+@Entity()
 class Profile {
+  @Id(assignable: true)
   int id;
   String name;
   String? address;
@@ -76,7 +78,8 @@ class Profile {
   String? email;
   bool? isActive;
   String? slug;
-  School? school;
+
+  int? school;
   int? grade;
   int user;
 
@@ -102,7 +105,7 @@ class Profile {
       slug: json["slug"],
       user: json["user"],
       grade: json["grade"],
-      school: json["school"] != null ? School.fromJson(json["school"]) : null);
+      school: json["school"] != null ? json["school"]["id"] : null);
 
   Map<String, dynamic> toJson() => {
         "id": id,

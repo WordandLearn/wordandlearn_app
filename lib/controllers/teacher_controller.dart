@@ -7,7 +7,7 @@ import 'package:word_and_learn/models/models.dart';
 
 class TeacherController extends GetxController {
   Rx<Profile?> profile = Rx<Profile?>(null);
-  RxList<Class> classes = <Class>[].obs;
+  RxList<Class_> classes = <Class_>[].obs;
   Map<int, List<File>> compositionImages = {};
 
   TeacherControllerDatabase controllerDatabase = TeacherControllerDatabase();
@@ -30,9 +30,9 @@ class TeacherController extends GetxController {
     return profile_;
   }
 
-  Future<List<Class>> getClasses() async {
+  Future<List<Class_>> getClasses() async {
     // Gets the classes of the logged in user.
-    List<Class> classes_ = await controllerDatabase.getTeacherClasses();
+    List<Class_> classes_ = await controllerDatabase.getTeacherClasses();
     if (classes_.isEmpty) {
       classes_ = await controllerHttp.getTeacherClasses();
       await controllerDatabase.saveTeacherClasses(classes);

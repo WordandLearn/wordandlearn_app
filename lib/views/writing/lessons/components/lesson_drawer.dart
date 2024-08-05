@@ -94,21 +94,8 @@ class _LessonDrawerState extends State<LessonDrawer> {
                                     key: ValueKey<bool>(snapshot.hasData),
                                     builder: (context) {
                                       if (snapshot.hasData) {
-                                        return snapshot.data!.school != null
-                                            ? SizedBox(
-                                                width: 150,
-                                                child: Text(
-                                                  snapshot.data!.school!.name,
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: const TextStyle(
-                                                      color: AppColors
-                                                          .inactiveColor,
-                                                      fontSize: 12),
-                                                ),
-                                              )
-                                            : const SizedBox.shrink();
+                                        return Text(
+                                            "Grade ${snapshot.data!.grade}");
                                       } else {
                                         return Shimmer.fromColors(
                                             baseColor: Colors.grey[300]!,

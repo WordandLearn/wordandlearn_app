@@ -1,0 +1,637 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:1655807449241815476",
+      "lastPropertyId": "5:9032537167648046675",
+      "name": "Class_",
+      "properties": [
+        {
+          "id": "1:3425547682979860611",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:4972053453911137538",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:3636024066955735598",
+          "name": "grade",
+          "type": 6
+        },
+        {
+          "id": "4:1747422012443035618",
+          "name": "school",
+          "type": 6
+        },
+        {
+          "id": "5:9032537167648046675",
+          "name": "teacher",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:4835602465176179625",
+      "lastPropertyId": "9:6665269821151921774",
+      "name": "ExerciseResult",
+      "properties": [
+        {
+          "id": "1:5026061041628865394",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:6968930959049915325",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "3:5965312992675162920",
+          "name": "updatedAt",
+          "type": 10
+        },
+        {
+          "id": "4:4311660677450619801",
+          "name": "recommendation",
+          "type": 9
+        },
+        {
+          "id": "5:5884196549155538997",
+          "name": "score",
+          "type": 6
+        },
+        {
+          "id": "6:2128170645936946345",
+          "name": "rubricScore",
+          "type": 9
+        },
+        {
+          "id": "7:3476363674058057789",
+          "name": "feedback",
+          "type": 9
+        },
+        {
+          "id": "8:6667825319147502966",
+          "name": "improvement",
+          "type": 1
+        },
+        {
+          "id": "9:6665269821151921774",
+          "name": "exercise",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:5265677823852700804",
+      "lastPropertyId": "10:5794298898051072543",
+      "name": "Profile",
+      "properties": [
+        {
+          "id": "1:3382996489539614532",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:5860543611076597695",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:9207562451065177266",
+          "name": "address",
+          "type": 9
+        },
+        {
+          "id": "4:9136554154833731044",
+          "name": "phone",
+          "type": 9
+        },
+        {
+          "id": "5:4692608667664582978",
+          "name": "email",
+          "type": 9
+        },
+        {
+          "id": "6:866764015513879697",
+          "name": "isActive",
+          "type": 1
+        },
+        {
+          "id": "7:8691090549894353298",
+          "name": "slug",
+          "type": 9
+        },
+        {
+          "id": "8:6765610700684752159",
+          "name": "school",
+          "type": 6
+        },
+        {
+          "id": "9:7392777173710326368",
+          "name": "grade",
+          "type": 6
+        },
+        {
+          "id": "10:5794298898051072543",
+          "name": "user",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:638368487588172454",
+      "lastPropertyId": "3:3766918823807505312",
+      "name": "ProfilePicture",
+      "properties": [
+        {
+          "id": "1:133778235885113635",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:5575228226252710349",
+          "name": "imageUrl",
+          "type": 9
+        },
+        {
+          "id": "3:3766918823807505312",
+          "name": "thumbnailUrl",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:976995799903111107",
+      "lastPropertyId": "8:5432923996904102573",
+      "name": "School",
+      "properties": [
+        {
+          "id": "1:238771516061634351",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:4026403322257125529",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:6256564644429871783",
+          "name": "address",
+          "type": 9
+        },
+        {
+          "id": "4:3969818543038972140",
+          "name": "phone",
+          "type": 9
+        },
+        {
+          "id": "5:3657531581606077927",
+          "name": "email",
+          "type": 9
+        },
+        {
+          "id": "6:5575184637097597600",
+          "name": "isActive",
+          "type": 1
+        },
+        {
+          "id": "7:3161241062736126261",
+          "name": "slug",
+          "type": 9
+        },
+        {
+          "id": "8:5432923996904102573",
+          "name": "user",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "6:1997997741068520198",
+      "lastPropertyId": "6:2787203857127617518",
+      "name": "Example",
+      "properties": [
+        {
+          "id": "1:7824195631852513275",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:7095781560558507000",
+          "name": "originalText",
+          "type": 9
+        },
+        {
+          "id": "3:2515711400475737625",
+          "name": "transformedText",
+          "type": 9
+        },
+        {
+          "id": "4:8442708252525876153",
+          "name": "guide",
+          "type": 9
+        },
+        {
+          "id": "5:57792633061268467",
+          "name": "completed",
+          "type": 1
+        },
+        {
+          "id": "6:2787203857127617518",
+          "name": "topic",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "7:2780884820480351037",
+      "lastPropertyId": "8:9175611087432947943",
+      "name": "Exercise",
+      "properties": [
+        {
+          "id": "1:7645707283969580586",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:906121449240553218",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "3:8090243446090139626",
+          "name": "test",
+          "type": 9
+        },
+        {
+          "id": "4:6939362502482298963",
+          "name": "aim",
+          "type": 9
+        },
+        {
+          "id": "5:2204198837621673955",
+          "name": "difficulty",
+          "type": 9
+        },
+        {
+          "id": "6:4860048928964231757",
+          "name": "topic",
+          "type": 6
+        },
+        {
+          "id": "7:8467164151066133",
+          "name": "lesson",
+          "type": 6
+        },
+        {
+          "id": "8:9175611087432947943",
+          "name": "completed",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "8:2854717115095891801",
+      "lastPropertyId": "6:2315618323933502267",
+      "name": "ExerciseSubmission",
+      "properties": [
+        {
+          "id": "1:7593864476641127530",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:4912558507830804106",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "3:1143990000985250329",
+          "name": "imageUrl",
+          "type": 9
+        },
+        {
+          "id": "4:2407617517076625389",
+          "name": "text",
+          "type": 9
+        },
+        {
+          "id": "5:5722199330319099108",
+          "name": "processed",
+          "type": 1
+        },
+        {
+          "id": "6:2315618323933502267",
+          "name": "exercise",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "9:3072085955987293172",
+      "lastPropertyId": "5:6531131471388174076",
+      "name": "FlashcardText",
+      "properties": [
+        {
+          "id": "1:1911990284923306169",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:2965831961705650447",
+          "name": "text",
+          "type": 9
+        },
+        {
+          "id": "3:359254694965579836",
+          "name": "topic",
+          "type": 6
+        },
+        {
+          "id": "4:7354246842812664094",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "5:6531131471388174076",
+          "name": "completed",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "10:6611643516699852683",
+      "lastPropertyId": "8:5073747569056126665",
+      "name": "Lesson",
+      "properties": [
+        {
+          "id": "1:8779402318854365421",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:7020351649775946581",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "3:1426351615234945736",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "4:8431600429948781934",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "5:3231191108081157201",
+          "name": "image",
+          "type": 9
+        },
+        {
+          "id": "6:6091633108698706744",
+          "name": "isCompleted",
+          "type": 1
+        },
+        {
+          "id": "7:5638425804969323792",
+          "name": "unlocked",
+          "type": 1
+        },
+        {
+          "id": "8:5073747569056126665",
+          "name": "session",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "11:577444833287895718",
+      "lastPropertyId": "9:7215792343884922199",
+      "name": "Session",
+      "properties": [
+        {
+          "id": "1:1632574633009226536",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:7534102088511027898",
+          "name": "updatedAt",
+          "type": 10
+        },
+        {
+          "id": "3:8301843616682984053",
+          "name": "text",
+          "type": 9
+        },
+        {
+          "id": "4:3156340167002520980",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "5:2136860897931849827",
+          "name": "imageUrl",
+          "type": 9
+        },
+        {
+          "id": "6:5833764262866484313",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "7:7222929087543943193",
+          "name": "reportUrl",
+          "type": 9
+        },
+        {
+          "id": "8:3232842930667287667",
+          "name": "summary",
+          "type": 9
+        },
+        {
+          "id": "9:7215792343884922199",
+          "name": "profile",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "12:3603995096180776034",
+      "lastPropertyId": "12:7879646681871280250",
+      "name": "Topic",
+      "properties": [
+        {
+          "id": "1:6753791667292415947",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:2530750420898880166",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "3:5293467044448193252",
+          "name": "updatedAt",
+          "type": 10
+        },
+        {
+          "id": "4:434627300398087914",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "5:8805237622621549217",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "6:829827078552287149",
+          "name": "completed",
+          "type": 1
+        },
+        {
+          "id": "7:234811593026591083",
+          "name": "tag",
+          "type": 9
+        },
+        {
+          "id": "8:7198431707138172966",
+          "name": "lesson",
+          "type": 6
+        },
+        {
+          "id": "9:2368592408337700086",
+          "name": "isCurrent",
+          "type": 1
+        },
+        {
+          "id": "10:3462491612561182256",
+          "name": "isLocked",
+          "type": 1
+        },
+        {
+          "id": "11:5015939315873942110",
+          "name": "image",
+          "type": 9
+        },
+        {
+          "id": "12:7879646681871280250",
+          "name": "exerciseCompleted",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "13:6725425267065775920",
+      "lastPropertyId": "6:2380869738616383573",
+      "name": "TopicExample",
+      "properties": [
+        {
+          "id": "1:6333180378905106132",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:8116397135626452997",
+          "name": "originalText",
+          "type": 9
+        },
+        {
+          "id": "3:4435931296804507053",
+          "name": "transformedText",
+          "type": 9
+        },
+        {
+          "id": "4:4707625061634699665",
+          "name": "guide",
+          "type": 9
+        },
+        {
+          "id": "5:3571629067236584913",
+          "name": "completed",
+          "type": 1
+        },
+        {
+          "id": "6:2380869738616383573",
+          "name": "topic",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "14:8920517816433268549",
+      "lastPropertyId": "3:8651692646787675265",
+      "name": "CurrentSession",
+      "properties": [
+        {
+          "id": "1:539849635360717752",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8611686588332469419",
+          "name": "dateOpened",
+          "type": 12
+        },
+        {
+          "id": "3:8651692646787675265",
+          "name": "sessionId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "1:5421426556574875790",
+          "relationTarget": "Session"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "14:8920517816433268549",
+  "lastIndexId": "1:5421426556574875790",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

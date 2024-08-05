@@ -15,12 +15,12 @@ class TeacherControllerDatabase implements TeacherDatabaseInterface {
   }
 
   @override
-  Future<List<Class>> getTeacherClasses() async {
-    return <Class>[];
+  Future<List<Class_>> getTeacherClasses() async {
+    return <Class_>[];
   }
 
   @override
-  Future<void> saveTeacherClasses(List<Class> classes) async {
+  Future<void> saveTeacherClasses(List<Class_> classes) async {
     // Save teacher classes to database
   }
 

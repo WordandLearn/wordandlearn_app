@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:objectbox/objectbox.dart';
 import 'package:word_and_learn/utils/sticker_utils.dart';
 
 import 'color_model.dart';
@@ -14,7 +15,9 @@ List<Topic> topicFromJson(String str) =>
 String topicToJson(List<Topic> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+@Entity()
 class Topic extends ColorModel {
+  @Id(assignable: true)
   final int id;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -27,7 +30,6 @@ class Topic extends ColorModel {
   final bool isLocked;
   final String? image;
   bool exerciseCompleted;
-
   Excerise? excerise;
 
   Topic(

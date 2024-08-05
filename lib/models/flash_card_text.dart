@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 import 'package:flutter_gemini/flutter_gemini.dart';
+import 'package:objectbox/objectbox.dart';
 import 'package:word_and_learn/models/models.dart';
 
 List<FlashcardText> flashcardTextFromJson(String str) =>
@@ -14,7 +15,9 @@ List<FlashcardText> flashcardTextFromJson(String str) =>
 String flashcardTextToJson(List<FlashcardText> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+@Entity()
 class FlashcardText extends ColorModel {
+  @Id(assignable: true)
   final int id;
   final String text;
   final int topic;

@@ -35,7 +35,7 @@ class _LessonCardState extends State<LessonCard> {
     Size size = MediaQuery.of(context).size;
     return InkWell(
       highlightColor: Colors.transparent,
-      splashColor: widget.lesson.color!.withOpacity(0.3),
+      splashColor: widget.lesson.colorValue.withOpacity(0.3),
       onLongPress: () {
         _startBounceAnimation(value: 0.95);
       },

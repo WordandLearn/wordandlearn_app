@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  objectbox_flutter_libs
   permission_handler_windows
   smart_auth
   syncfusion_pdfviewer_windows

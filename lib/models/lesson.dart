@@ -3,11 +3,9 @@
 //     final lesson = lessonFromJson(jsonString);
 
 import 'dart:convert';
-import 'dart:ui';
 
-import 'package:tinycolor2/tinycolor2.dart';
+import 'package:objectbox/objectbox.dart';
 import 'package:word_and_learn/models/models.dart';
-import 'package:word_and_learn/utils/color_utils.dart';
 import 'package:word_and_learn/utils/sticker_utils.dart';
 
 List<Lesson> lessonFromJson(String str) =>
@@ -16,17 +14,18 @@ List<Lesson> lessonFromJson(String str) =>
 String lessonToJson(List<Lesson> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class Lesson extends BaseModel {
+@Entity()
+class Lesson extends ColorModel {
+  @Id(assignable: true)
+  final int id;
   final String title;
   final String description;
   final DateTime createdAt;
-  final int id;
   final String? image;
   final bool isCompleted;
   final LessonProgress? progress;
   final bool unlocked;
-
-  Color? color;
+  final int session;
 
   Lesson(
       {required this.title,
@@ -34,8 +33,8 @@ class Lesson extends BaseModel {
       required this.createdAt,
       required this.id,
       this.image,
+      required this.session,
       this.progress,
-      this.color,
       this.unlocked = true,
       this.isCompleted = false});
 
@@ -49,7 +48,7 @@ class Lesson extends BaseModel {
           ? LessonProgress.fromJson(json['progress'])
           : null,
       unlocked: json["unlocked"] ?? true,
-      color: ColorUtils.randomHueFromColor(),
+      session: json["session"],
       image: StickerUtils.getRandomSticker());
 
   Map<String, dynamic> toJson() => {
@@ -58,15 +57,4 @@ class Lesson extends BaseModel {
         "created_at": createdAt.toIso8601String(),
         "id": id,
       };
-
-  Color? get surfaceColor {
-    if (color != null) {
-      return color!.withOpacity(0.4);
-    }
-    return null;
-  }
-
-  Color get darkerColor {
-    return TinyColor.fromColor(color!).darken(10).color;
-  }
 }

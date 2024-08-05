@@ -50,6 +50,9 @@ dependencies:
   google_fonts: 6.0.0
   http: ^1.2.0
   image: ^4.1.4
+  objectbox: ^4.0.1
+  objectbox_flutter_libs: ^4.0.1
+  path_provider: ^2.1.4
   percent_indicator: ^4.2.3
   pinput: ^4.0.0
   qr_code_scanner: ^1.0.1
@@ -60,13 +63,13 @@ dependencies:
   tinycolor2: ^3.0.1
 
 dev_dependencies:
-  build_runner: ^2.4.8
+  build_runner: ^2.4.11
   change_app_package_name: ^1.1.0
-  flutter_launcher_icons: "^0.13.1"
+  flutter_launcher_icons: ^0.13.1
   flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
-  isar_generator: ^3.1.0+1
+  objectbox_generator: ^4.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

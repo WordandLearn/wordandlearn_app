@@ -14,28 +14,14 @@ class AlertSettings extends StatefulWidget {
 
 class _AlertSettingsState extends State<AlertSettings> {
   final WritingController _writingController = Get.find<WritingController>();
-  bool pushPreference = true;
-  bool emailPreference = true;
-  bool smsPreference = true;
+
   @override
   void initState() {
-    getStoredPreferences();
     super.initState();
-  }
-
-  void getStoredPreferences() {
-    SharedPreferences.getInstance().then((preferences) {
-      setState(() {
-        pushPreference = preferences.getBool("push_notifications") ?? true;
-        emailPreference = preferences.getBool("email_notifications") ?? true;
-        smsPreference = preferences.getBool("sms_notifications") ?? true;
-      });
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    print(pushPreference);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: buildSettingsAppBar(context, title: "Notifications"),
@@ -78,44 +64,73 @@ class _AlertSettingsState extends State<AlertSettings> {
                   const EdgeInsets.symmetric(horizontal: defaultPadding * 1.5),
               child: ListView(
                 children: [
-                  AlertSettingsSwitch(
-                    text: "Push Notifications",
-                    value: pushPreference,
-                    onChanged: (value) async {
-                      SharedPreferences preferences =
-                          await SharedPreferences.getInstance();
-                      preferences.setBool("push_notifications", value);
+                  FutureBuilder<bool>(
+                      future: SharedPreferences.getInstance().then(
+                          (preferences) =>
+                              preferences.getBool("push_notifications") ??
+                              true),
+                      builder: (context, snapshot) {
+                        return snapshot.hasData
+                            ? AlertSettingsSwitch(
+                                text: "Push Notifications",
+                                value: snapshot.data!,
+                                onChanged: (value) async {
+                                  SharedPreferences preferences =
+                                      await SharedPreferences.getInstance();
+                                  preferences.setBool(
+                                      "push_notifications", value);
 
-                      _writingController.updateUserAlertSettings({
-                        "push": value,
-                      });
-                    },
-                  ),
-                  AlertSettingsSwitch(
-                    text: "Email Alerts",
-                    value: emailPreference,
-                    onChanged: (value) async {
-                      SharedPreferences preferences =
-                          await SharedPreferences.getInstance();
-                      preferences.setBool("email_notifications", value);
+                                  _writingController.updateUserAlertSettings({
+                                    "push": value,
+                                  });
+                                },
+                              )
+                            : const SizedBox.shrink();
+                      }),
+                  FutureBuilder<bool>(
+                      future: SharedPreferences.getInstance().then(
+                          (preferences) =>
+                              preferences.getBool("email_notifications") ??
+                              true),
+                      builder: (context, snapshot) {
+                        return snapshot.hasData
+                            ? AlertSettingsSwitch(
+                                text: "Email Alerts",
+                                value: snapshot.data!,
+                                onChanged: (value) async {
+                                  SharedPreferences preferences =
+                                      await SharedPreferences.getInstance();
+                                  preferences.setBool(
+                                      "email_notifications", value);
 
-                      _writingController.updateUserAlertSettings({
-                        "email": value,
-                      });
-                    },
-                  ),
-                  AlertSettingsSwitch(
-                    text: "SMS",
-                    value: smsPreference,
-                    onChanged: (value) async {
-                      SharedPreferences preferences =
-                          await SharedPreferences.getInstance();
-                      preferences.setBool("sms_notifications", value);
-                      _writingController.updateUserAlertSettings({
-                        "sms": value,
-                      });
-                    },
-                  ),
+                                  _writingController.updateUserAlertSettings({
+                                    "email": value,
+                                  });
+                                },
+                              )
+                            : const SizedBox.shrink();
+                      }),
+                  FutureBuilder<bool>(
+                      future: SharedPreferences.getInstance().then(
+                          (preferences) =>
+                              preferences.getBool("sms_notifications") ?? true),
+                      builder: (context, snapshot) {
+                        return snapshot.hasData
+                            ? AlertSettingsSwitch(
+                                text: "SMS",
+                                value: snapshot.data ?? false,
+                                onChanged: (value) async {
+                                  SharedPreferences preferences =
+                                      await SharedPreferences.getInstance();
+                                  preferences.setBool(
+                                      "sms_notifications", value);
+                                  _writingController.updateUserAlertSettings({
+                                    "sms": value,
+                                  });
+                                },
+                              )
+                            : const SizedBox.shrink();
+                      }),
                 ],
               ),
             ),
@@ -145,7 +160,9 @@ class _AlertSettingsSwitchState extends State<AlertSettingsSwitch> {
   late bool value;
   @override
   void initState() {
-    value = widget.value;
+    setState(() {
+      value = widget.value;
+    });
     super.initState();
   }
 
@@ -169,10 +186,10 @@ class _AlertSettingsSwitchState extends State<AlertSettingsSwitch> {
                 activeTrackColor: AppColors.buttonColor,
                 inactiveTrackColor: Colors.grey.withOpacity(0.1),
                 onChanged: (value_) {
+                  widget.onChanged(value_);
                   setState(() {
                     value = value_;
                   });
-                  widget.onChanged(value_);
                 },
               )
             ],

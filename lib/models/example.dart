@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 
+import 'package:objectbox/objectbox.dart';
 import 'package:word_and_learn/models/models.dart';
 
 List<Example> exampleFromJson(String str) =>
@@ -12,7 +13,9 @@ List<Example> exampleFromJson(String str) =>
 String exampleToJson(List<Example> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+@Entity()
 class Example extends ColorModel {
+  @Id(assignable: true)
   final int id;
   final String originalText;
   final String transformedText;

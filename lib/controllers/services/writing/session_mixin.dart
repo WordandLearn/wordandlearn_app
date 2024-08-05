@@ -13,20 +13,31 @@ mixin SessionMixin implements SessionInterface {
   final HttpClient client = HttpClient();
   final SessionDatabase sessionDatabase = SessionDatabase();
 
-  Future<HttpResponse<Session>> getUserSessions() async {
+  Future<List<Session>> getUserSessions() async {
     http.Response res = await client.get(sessionLessonsUrl);
     HttpResponse<Session> response = HttpResponse<Session>.fromResponse(res);
     if (response.isSuccess) {
       List<Session> sessions = sessionFromJson(res.body);
-      response.models = sessions;
+      return sessions;
+    } else {
+      throw HttpFetchException("Could not fetch sessions", response.statusCode);
     }
-    return response;
+  }
+
+  @override
+  Future<Session?> getCurrentSession() async {
+    Session? session = await sessionDatabase.getCurrentSession();
+    return session;
+  }
+
+  Future<void> saveCurrentSession(Session session) async {
+    await sessionDatabase.saveCurrentSession(session);
   }
 
   @override
   Future<List<Lesson>?> getSessionLessons(int sessionID) async {
     List<Lesson>? lessons = await sessionDatabase.getSessionLessons(sessionID);
-    if (lessons != null) {
+    if (lessons != null && lessons.isNotEmpty) {
       return lessons;
     }
 
@@ -46,7 +57,7 @@ mixin SessionMixin implements SessionInterface {
   @override
   Future<List<Topic>?> getLessonTopics(int lessonId) async {
     List<Topic>? topics = await sessionDatabase.getLessonTopics(lessonId);
-    if (topics != null) {
+    if (topics != null && topics.isNotEmpty) {
       return topics;
     }
 
@@ -65,7 +76,7 @@ mixin SessionMixin implements SessionInterface {
   @override
   Future<List<Example>?> getTopicExamples(int topicId) async {
     List<Example>? examples = await sessionDatabase.getTopicExamples(topicId);
-    if (examples != null) {
+    if (examples != null && examples.isNotEmpty) {
       return examples;
     }
 
@@ -106,7 +117,7 @@ mixin SessionMixin implements SessionInterface {
     List<FlashcardText>? flashcards =
         await sessionDatabase.getTopicFlashcards(topicId);
 
-    if (flashcards != null) {
+    if (flashcards != null && flashcards.isNotEmpty) {
       return flashcards;
     } else {
       http.Response res = await client.get(topicFlashcardsUrl(topicId));

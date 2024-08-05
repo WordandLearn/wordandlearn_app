@@ -1,6 +1,7 @@
 import 'package:word_and_learn/models/models.dart';
 
 abstract class SessionInterface {
+  Future<Session?> getCurrentSession();
   Future<List<Lesson>?> getSessionLessons(int sessionID);
   Future<List<Topic>?> getLessonTopics(int lessonId);
   Future<Topic?> markTopicCompleted(Topic topic);
@@ -18,4 +19,5 @@ abstract class SessionDatabaseInterface implements SessionInterface {
   Future<void> saveTopicFlashcards(List<FlashcardText> flashcards);
   Future<void> saveTopicExamples(List<Example> examples);
   Future<void> saveTopicExercise(Exercise exercise);
+  Future<void> saveCurrentSession(Session session);
 }

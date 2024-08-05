@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
@@ -10,30 +11,28 @@ import 'lesson_card.dart';
 class SessionLessonsList extends StatefulWidget {
   const SessionLessonsList({
     super.key,
-    required this.writingController,
-    required this.size,
+    required this.currentSession,
   });
 
-  final WritingController writingController;
-  final Size size;
+  final Session currentSession;
 
   @override
   State<SessionLessonsList> createState() => _SessionLessonsListState();
 }
 
 class _SessionLessonsListState extends State<SessionLessonsList> {
-  late Future<List<Lesson>> _future;
-
+  late Future<List<Lesson>?> _future;
+  final WritingController writingController = Get.find<WritingController>();
   @override
   void initState() {
-    _future = widget.writingController.getCurrentSessionLessons();
+    _future = writingController.getSessionLessons(widget.currentSession.id);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     // Size size = MediaQuery.of(context).size;
-    return FutureBuilder<List<Lesson>>(
+    return FutureBuilder<List<Lesson>?>(
         future: _future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

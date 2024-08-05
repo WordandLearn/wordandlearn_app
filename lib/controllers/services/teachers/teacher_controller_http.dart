@@ -24,10 +24,10 @@ class TeacherControllerHttp implements TeacherInterface {
   }
 
   @override
-  Future<List<Class>> getTeacherClasses() async {
+  Future<List<Class_>> getTeacherClasses() async {
     // Fetch teacher classes from http
     http.Response res = await client.get(teacherClassesUrl);
-    HttpResponse<Class> response = HttpResponse.fromResponse(res);
+    HttpResponse<Class_> response = HttpResponse.fromResponse(res);
     if (response.isSuccess) {
       response.models = classFromJson(res.body);
       return response.models;
