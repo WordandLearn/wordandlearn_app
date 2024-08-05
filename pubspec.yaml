@@ -29,6 +29,8 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   animate_gradient: ^0.0.3
+  audio_waveforms: ^1.0.5
+  audioplayers: ^6.0.0
   auto_size_text: ^3.0.0
   blobs: ^2.0.0
   blurrycontainer: ^2.1.0

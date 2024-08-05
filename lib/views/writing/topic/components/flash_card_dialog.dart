@@ -1,8 +1,14 @@
+import 'dart:io';
+
+import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/components/timed_widget.dart';
 import 'package:word_and_learn/constants/constants.dart';
+import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/utils/timer.dart';
 
@@ -73,6 +79,7 @@ class _FlashCardDialogState extends State<FlashCardDialog> {
                       offset: const Offset(0, 10))
                 ]),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Expanded(
                   child: AutoSizeText(
@@ -81,17 +88,11 @@ class _FlashCardDialogState extends State<FlashCardDialog> {
                   ),
                 ),
                 const Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: const BoxDecoration(
-                          color: Colors.white, shape: BoxShape.circle),
-                      child: const Icon(CupertinoIcons.volume_up),
-                    )
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+                  child: _FlashcardAudioWidget(
+                    flashcardText: widget.flashcardText,
+                  ),
                 )
               ],
             ),
@@ -113,6 +114,161 @@ class _FlashCardDialogState extends State<FlashCardDialog> {
                   ),
                 ),
               )
+      ],
+    );
+  }
+}
+
+class _FlashcardAudioWidget extends StatefulWidget {
+  const _FlashcardAudioWidget({
+    super.key,
+    required this.flashcardText,
+  });
+
+  final FlashcardText flashcardText;
+
+  @override
+  State<_FlashcardAudioWidget> createState() => _FlashcardAudioWidgetState();
+}
+
+class _FlashcardAudioWidgetState extends State<_FlashcardAudioWidget> {
+  late Future<File?> audioFuture;
+  final WritingController writingController = Get.find<WritingController>();
+  @override
+  void initState() {
+    audioFuture = writingController.getFlashcardAudio(widget.flashcardText.id);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<File?>(
+        future: audioFuture,
+        builder: (context, snapshot) {
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 500),
+            // width: 200,
+            decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.8),
+                borderRadius: BorderRadius.circular(20)),
+            child: snapshot.hasData
+                ? _FlashcardAudioPlayer(
+                    audioFile: snapshot.data!,
+                    flashcardText: widget.flashcardText,
+                  )
+                : const Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: defaultPadding,
+                        vertical: defaultPadding / 2),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "Audio Loading",
+                          style: TextStyle(
+                              fontSize: 12, color: AppColors.greyTextColor),
+                        ),
+                        SizedBox(
+                          width: defaultPadding,
+                        ),
+                        LoadingSpinner(
+                          size: 15,
+                        ),
+                      ],
+                    ),
+                  ),
+          );
+        });
+  }
+}
+
+class _FlashcardAudioPlayer extends StatefulWidget {
+  const _FlashcardAudioPlayer({
+    super.key,
+    required this.audioFile,
+    required this.flashcardText,
+  });
+
+  final File audioFile;
+  final FlashcardText flashcardText;
+
+  @override
+  State<_FlashcardAudioPlayer> createState() => _FlashcardAudioPlayerState();
+}
+
+class _FlashcardAudioPlayerState extends State<_FlashcardAudioPlayer> {
+  final PlayerController _playerController = PlayerController();
+  PlayerState playerState = PlayerState.initialized;
+  @override
+  void initState() {
+    prepareAudio();
+    super.initState();
+  }
+
+  void prepareAudio() async {
+    await _playerController.preparePlayer(
+      path: widget.audioFile.path,
+      shouldExtractWaveform: true,
+      noOfSamples: 100,
+      volume: 1.0,
+    );
+
+    _playerController.onPlayerStateChanged.listen((state) {
+      setState(() {
+        playerState = state;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        GestureDetector(
+          onTap: () {
+            _playerController.startPlayer(
+                forceRefresh: true, finishMode: FinishMode.pause);
+          },
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+                color: playerState == PlayerState.playing
+                    ? AppColors.buttonColor
+                    : Colors.white,
+                shape: BoxShape.circle),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 150),
+              child: Icon(
+                playerState == PlayerState.playing
+                    ? CupertinoIcons.volume_up
+                    : CupertinoIcons.volume_down,
+                color: playerState == PlayerState.playing
+                    ? Colors.white
+                    : AppColors.buttonColor,
+                key: ValueKey<bool>(playerState == PlayerState.playing),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+          child: AudioFileWaveforms(
+            animationCurve: Curves.bounceInOut,
+            continuousWaveform: false,
+            enableSeekGesture: false,
+            size: const Size(200 * 0.6, 10),
+            playerController: _playerController,
+            waveformType: WaveformType.fitWidth,
+            playerWaveStyle: PlayerWaveStyle(
+                liveWaveColor: widget.flashcardText.darkerColor,
+                fixedWaveColor: widget.flashcardText.colorValue),
+          ),
+        )
       ],
     );
   }

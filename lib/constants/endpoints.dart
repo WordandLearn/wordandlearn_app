@@ -19,9 +19,13 @@ const String exerciseSubmissionUrl = "$writingUrl/exercise/submission";
 String topicFlashcardsUrl(int topicId) => "$topicsUrl/$topicId/flashcards";
 String flashcardCompletedUrl(int flashcardId) =>
     "$writingUrl/flashcard/$flashcardId/complete/";
+String flashcardAudioUrl(int flashcardId) =>
+    "$writingUrl/flashcard/$flashcardId/audio/";
 String topicExamplesUrl(int topicId) => "$topicsUrl/$topicId/examples";
 String exampleCompletedUrl(int exampleId) =>
     "$writingUrl/example/$exampleId/complete/";
+String exampleAudioUrl(int exampleId) =>
+    "$writingUrl/example/$exampleId/audio/";
 String topicExerciseUrl(int topicId) => "$topicsUrl/$topicId/exercise";
 String exerciseCompletedUrl(int exerciseId) =>
     "$writingUrl/exercise/$exerciseId/complete/";

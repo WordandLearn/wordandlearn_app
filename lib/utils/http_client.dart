@@ -94,4 +94,12 @@ class HttpClient {
     var response = await request.send();
     return await http.Response.fromStream(response);
   }
+
+  Future<File> downloadFile(String url) {
+    return http.readBytes(Uri.parse(url)).then((bytes) {
+      String dir = Directory.systemTemp.path;
+      File file = File('$dir/${DateTime.now().millisecondsSinceEpoch}.jpg');
+      return file.writeAsBytes(bytes);
+    });
+  }
 }

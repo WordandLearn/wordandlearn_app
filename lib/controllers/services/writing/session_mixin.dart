@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:path_provider/path_provider.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/services/writing/session_database.dart';
 import 'package:word_and_learn/models/models.dart';
@@ -257,5 +258,40 @@ mixin SessionMixin implements SessionInterface {
       response.models = [taskState];
     }
     return response;
+  }
+
+  Future<File> storeAudioFile(String audioUrl, String path) async {
+    File file = File(path);
+    File tempFile = await client.downloadFile(audioUrl);
+    file.writeAsBytesSync(tempFile.readAsBytesSync());
+
+    return file;
+  }
+
+  Future<void> _createDirectory(String path) async {
+    Directory dir = Directory(path);
+    if (!dir.existsSync()) {
+      dir.createSync(recursive: true);
+    }
+  }
+
+  Future<File?> getFlashcardAudio(int flashcardId) async {
+    final directory = await getApplicationDocumentsDirectory();
+    String dirPath = "${directory.path}/audio/flashcards/";
+    await _createDirectory(dirPath);
+
+    String path = "$dirPath$flashcardId.mp3";
+    if (File(path).existsSync()) {
+      return File(path);
+    } else {
+      http.Response res = await client.get(flashcardAudioUrl(flashcardId));
+      HttpResponse response = HttpResponse.fromResponse(res);
+      if (response.isSuccess) {
+        File audioFile = await storeAudioFile(response.data["audio"], path);
+        return audioFile;
+      }
+    }
+
+    return null;
   }
 }
