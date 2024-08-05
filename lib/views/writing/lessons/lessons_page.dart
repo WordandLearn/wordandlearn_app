@@ -37,6 +37,7 @@ class _LessonsPageState extends State<LessonsPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         key: _key,
+        drawerEnableOpenDragGesture: true,
         drawer: Drawer(
           width: 270,
           backgroundColor: Colors.white,

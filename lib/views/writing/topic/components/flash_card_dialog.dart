@@ -6,11 +6,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:word_and_learn/components/components.dart';
-import 'package:word_and_learn/components/timed_widget.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/models.dart';
-import 'package:word_and_learn/utils/timer.dart';
 
 class FlashCardDialog extends StatefulWidget {
   const FlashCardDialog({
@@ -30,7 +28,7 @@ class FlashCardDialog extends StatefulWidget {
 
 class _FlashCardDialogState extends State<FlashCardDialog> {
   double rotation = 0.001;
-
+  bool listeningComplete = false;
   void _animateRotation() {
     if (mounted) {
       setState(() {
@@ -81,17 +79,24 @@ class _FlashCardDialogState extends State<FlashCardDialog> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Expanded(
-                  child: AutoSizeText(
-                    widget.flashcardText.text,
-                    style: const TextStyle(fontSize: 22, height: 2),
-                  ),
-                ),
-                const Divider(),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: defaultPadding),
                   child: _FlashcardAudioWidget(
                     flashcardText: widget.flashcardText,
+                    onCompleted: () {
+                      setState(() {
+                        listeningComplete = true;
+                      });
+                    },
+                  ),
+                ),
+                Divider(
+                  color: Colors.grey[300],
+                ),
+                Expanded(
+                  child: AutoSizeText(
+                    widget.flashcardText.text,
+                    style: const TextStyle(fontSize: 22, height: 2),
                   ),
                 )
               ],
@@ -107,6 +112,7 @@ class _FlashCardDialogState extends State<FlashCardDialog> {
                 child: Center(
                   child: _FlashCardButton(
                     flashcardText: widget.flashcardText,
+                    completed: listeningComplete,
                     onTap: () {
                       _animateRotation();
                       widget.onUnderstand();
@@ -123,9 +129,11 @@ class _FlashcardAudioWidget extends StatefulWidget {
   const _FlashcardAudioWidget({
     super.key,
     required this.flashcardText,
+    required this.onCompleted,
   });
 
   final FlashcardText flashcardText;
+  final void Function() onCompleted;
 
   @override
   State<_FlashcardAudioWidget> createState() => _FlashcardAudioWidgetState();
@@ -145,39 +153,44 @@ class _FlashcardAudioWidgetState extends State<_FlashcardAudioWidget> {
     return FutureBuilder<File?>(
         future: audioFuture,
         builder: (context, snapshot) {
-          return AnimatedContainer(
+          return AnimatedSize(
             duration: const Duration(milliseconds: 500),
-            // width: 200,
-            decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.8),
-                borderRadius: BorderRadius.circular(20)),
-            child: snapshot.hasData
-                ? _FlashcardAudioPlayer(
-                    audioFile: snapshot.data!,
-                    flashcardText: widget.flashcardText,
-                  )
-                : const Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: defaultPadding,
-                        vertical: defaultPadding / 2),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          "Audio Loading",
-                          style: TextStyle(
-                              fontSize: 12, color: AppColors.greyTextColor),
-                        ),
-                        SizedBox(
-                          width: defaultPadding,
-                        ),
-                        LoadingSpinner(
-                          size: 15,
-                        ),
-                      ],
+            curve: Curves.bounceInOut,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 500),
+              // width: 200,
+              decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.8),
+                  borderRadius: BorderRadius.circular(20)),
+              child: snapshot.hasData
+                  ? _FlashcardAudioPlayer(
+                      audioFile: snapshot.data!,
+                      onCompleted: widget.onCompleted,
+                      flashcardText: widget.flashcardText,
+                    )
+                  : const Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: defaultPadding,
+                          vertical: defaultPadding / 2),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            "Audio Loading",
+                            style: TextStyle(
+                                fontSize: 12, color: AppColors.greyTextColor),
+                          ),
+                          SizedBox(
+                            width: defaultPadding,
+                          ),
+                          LoadingSpinner(
+                            size: 15,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+            ),
           );
         });
   }
@@ -188,10 +201,12 @@ class _FlashcardAudioPlayer extends StatefulWidget {
     super.key,
     required this.audioFile,
     required this.flashcardText,
+    required this.onCompleted,
   });
 
   final File audioFile;
   final FlashcardText flashcardText;
+  final void Function() onCompleted;
 
   @override
   State<_FlashcardAudioPlayer> createState() => _FlashcardAudioPlayerState();
@@ -214,11 +229,24 @@ class _FlashcardAudioPlayerState extends State<_FlashcardAudioPlayer> {
       volume: 1.0,
     );
 
+    _playerController.startPlayer(
+        forceRefresh: true, finishMode: FinishMode.pause);
+
     _playerController.onPlayerStateChanged.listen((state) {
       setState(() {
         playerState = state;
       });
     });
+    _playerController.onCompletion.listen((_) {
+      widget.onCompleted();
+    });
+  }
+
+  @override
+  void dispose() {
+    _playerController.stopPlayer();
+    _playerController.dispose();
+    super.dispose();
   }
 
   @override
@@ -263,7 +291,7 @@ class _FlashcardAudioPlayerState extends State<_FlashcardAudioPlayer> {
             enableSeekGesture: false,
             size: const Size(200 * 0.6, 10),
             playerController: _playerController,
-            waveformType: WaveformType.fitWidth,
+            waveformType: WaveformType.long,
             playerWaveStyle: PlayerWaveStyle(
                 liveWaveColor: widget.flashcardText.darkerColor,
                 fixedWaveColor: widget.flashcardText.colorValue),
@@ -278,16 +306,17 @@ class _FlashCardButton extends StatefulWidget {
   const _FlashCardButton({
     required this.flashcardText,
     required this.onTap,
+    this.completed = false,
   });
 
   final FlashcardText flashcardText;
   final void Function() onTap;
+  final bool completed;
   @override
   State<_FlashCardButton> createState() => _FlashCardButtonState();
 }
 
 class _FlashCardButtonState extends State<_FlashCardButton> {
-  bool timerComplete = false;
   double scale = 1;
 
   void _animateBounce() {
@@ -313,7 +342,7 @@ class _FlashCardButtonState extends State<_FlashCardButton> {
         child: GestureDetector(
           onTap: () {
             _animateBounce();
-            if (timerComplete) {
+            if (widget.completed) {
               Future.delayed(const Duration(milliseconds: 400), () {
                 widget.onTap();
               });
@@ -324,45 +353,57 @@ class _FlashCardButtonState extends State<_FlashCardButton> {
             curve: Curves.bounceInOut,
             padding: const EdgeInsets.all(defaultPadding),
             decoration: BoxDecoration(
-                color: timerComplete
+                color: widget.completed
                     ? widget.flashcardText.darkerColor
-                    : Colors.white,
+                    : Colors.white.withOpacity(0.9),
                 borderRadius: BorderRadius.circular(20)),
-            child: TimedWidget(
-                duration: TimerUtil.timeToRead(widget.flashcardText.text),
-                color: widget.flashcardText.darkerColor,
-                onCompleted: () {
-                  setState(() {
-                    timerComplete = true;
-                  });
-                },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.3),
-                          borderRadius: BorderRadius.circular(20)),
-                      child: const Icon(
-                        Icons.done_rounded,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: defaultPadding / 2,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: defaultPadding),
-                      child: Text(
-                        "I Understand",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, color: Colors.black),
-                      ),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 600),
+              child: !widget.completed
+                  ? const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(CupertinoIcons.info),
+                        SizedBox(
+                          width: defaultPadding / 2,
+                        ),
+                        Text(
+                          "Finish Listening To Continue",
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w600),
+                        ),
+                      ],
                     )
-                  ],
-                )),
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(20)),
+                          child: const Icon(
+                            Icons.done_rounded,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: defaultPadding / 2,
+                        ),
+                        const Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: defaultPadding),
+                          child: Text(
+                            "I Understand",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
+                          ),
+                        )
+                      ],
+                    ),
+            ),
           ),
         ),
       ),
