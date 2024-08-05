@@ -10,6 +10,20 @@ import 'package:word_and_learn/utils/objectbox_utils.dart';
 
 class SessionDatabase implements SessionDatabaseInterface {
   @override
+  Future<Session?> getCurrentSession() async {
+    final ObjectBox objectBox = await ObjectBox.getInstance();
+
+    final box = objectBox.store.box<CurrentSession>();
+    List<CurrentSession> currentSessions = box.getAll();
+    if (currentSessions.isNotEmpty) {
+      Session? session = currentSessions.first.session.target;
+      return session;
+    } else {
+      return null;
+    }
+  }
+
+  @override
   Future<List<Topic>?> getLessonTopics(int lessonId) async {
     final ObjectBox objectBox = await ObjectBox.getInstance();
 
@@ -17,22 +31,6 @@ class SessionDatabase implements SessionDatabaseInterface {
     final query = box.query(Topic_.lesson.equals(lessonId)).build();
     final topics = query.find();
     return topics;
-  }
-
-  @override
-  Future<Session?> getCurrentSession() async {
-    final ObjectBox objectBox = await ObjectBox.getInstance();
-
-    final box = objectBox.store.box<CurrentSession>();
-    CurrentSession? currentSession = box.get(1);
-    if (currentSession != null) {
-      Session? session = currentSession.session.target;
-      print("ABAB");
-      print(session);
-      return session;
-    } else {
-      return null;
-    }
   }
 
   @override
@@ -118,8 +116,9 @@ class SessionDatabase implements SessionDatabaseInterface {
     sessionbox.put(session);
 
     final box = objectBox.store.box<CurrentSession>();
+    box.removeAll();
     CurrentSession currentSession =
-        CurrentSession(dateOpened: DateTime.now(), id: 1);
+        CurrentSession(dateOpened: DateTime.now(), id: 0);
 
     currentSession.session.target = session;
     box.put(currentSession, mode: PutMode.put);
@@ -163,5 +162,20 @@ class SessionDatabase implements SessionDatabaseInterface {
 
     final box = objectBox.store.box<FlashcardText>();
     box.putMany(flashcards);
+  }
+
+  @override
+  Future<List<Session>> getUserSessions() async {
+    final ObjectBox objectBox = await ObjectBox.getInstance();
+    final box = objectBox.store.box<Session>();
+    final sessions = box.getAll();
+    return sessions;
+  }
+
+  @override
+  Future<void> saveUserSessions(List<Session> sessions) async {
+    final ObjectBox objectBox = await ObjectBox.getInstance();
+    final box = objectBox.store.box<Session>();
+    box.putMany(sessions);
   }
 }

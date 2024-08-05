@@ -8,7 +8,7 @@ class ExerciseDetailsPage extends StatelessWidget {
   const ExerciseDetailsPage(
       {super.key, required this.topic, required this.snapshot});
   final Topic topic;
-  final AsyncSnapshot snapshot;
+  final AsyncSnapshot<Exercise?> snapshot;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -60,24 +60,25 @@ class ExerciseDetailsPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30)),
                       child: AnimatedSwitcher(
                         duration: const Duration(milliseconds: 300),
-                        child: snapshot.connectionState ==
-                                ConnectionState.waiting
-                            ? const LoadingSpinner()
-                            : Builder(builder: (context) {
-                                Exercise exercise = snapshot.data!.models.first;
+                        child:
+                            snapshot.connectionState == ConnectionState.waiting
+                                ? const LoadingSpinner()
+                                : Builder(builder: (context) {
+                                    Exercise exercise = snapshot.data!;
 
-                                return exercise.test != null
-                                    ? Text(
-                                        exercise.test!,
-                                        style: const TextStyle(height: 2),
-                                      )
-                                    : const Text(
-                                        "Exercise does not have example text",
-                                        style: TextStyle(
-                                            color: Colors.grey, fontSize: 12),
-                                        textAlign: TextAlign.center,
-                                      );
-                              }),
+                                    return exercise.test != null
+                                        ? Text(
+                                            exercise.test!,
+                                            style: const TextStyle(height: 2),
+                                          )
+                                        : const Text(
+                                            "Exercise does not have example text",
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 12),
+                                            textAlign: TextAlign.center,
+                                          );
+                                  }),
                       ),
                     ),
                   ],
@@ -105,8 +106,8 @@ class ExerciseDetailsPage extends StatelessWidget {
                       child: Builder(
                           key: ValueKey<bool>(snapshot.hasData),
                           builder: (context) {
-                            if (snapshot.hasData && snapshot.data!.isSuccess) {
-                              Exercise exercise = snapshot.data!.models.first;
+                            if (snapshot.hasData) {
+                              Exercise exercise = snapshot.data!;
 
                               return AutoSizeText(
                                 exercise.description,

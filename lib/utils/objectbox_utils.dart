@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:word_and_learn/objectbox.g.dart';
 
 class ObjectBox {
@@ -14,5 +16,16 @@ class ObjectBox {
       _instance = ObjectBox._init(store);
     }
     return _instance!;
+  }
+
+  static deleteInstance() async {
+    if (_instance != null) {
+      _instance!.store.close();
+    }
+
+    Directory(_instance!.store.directoryPath).deleteSync(recursive: true);
+    _instance = null;
+    //delete from path
+    //delete from memory
   }
 }

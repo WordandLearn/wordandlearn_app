@@ -14,7 +14,7 @@ class SessionLessonsList extends StatefulWidget {
     required this.currentSession,
   });
 
-  final Session currentSession;
+  final Session? currentSession;
 
   @override
   State<SessionLessonsList> createState() => _SessionLessonsListState();
@@ -25,7 +25,7 @@ class _SessionLessonsListState extends State<SessionLessonsList> {
   final WritingController writingController = Get.find<WritingController>();
   @override
   void initState() {
-    _future = writingController.getSessionLessons(widget.currentSession.id);
+    _future = writingController.getSessionLessons(widget.currentSession!.id);
     super.initState();
   }
 

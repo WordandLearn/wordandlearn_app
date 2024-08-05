@@ -13,14 +13,26 @@ mixin SessionMixin implements SessionInterface {
   final HttpClient client = HttpClient();
   final SessionDatabase sessionDatabase = SessionDatabase();
 
+  @override
   Future<List<Session>> getUserSessions() async {
-    http.Response res = await client.get(sessionLessonsUrl);
-    HttpResponse<Session> response = HttpResponse<Session>.fromResponse(res);
-    if (response.isSuccess) {
-      List<Session> sessions = sessionFromJson(res.body);
-      return sessions;
-    } else {
-      throw HttpFetchException("Could not fetch sessions", response.statusCode);
+    try {
+      http.Response res = await client.get(sessionLessonsUrl);
+      HttpResponse<Session> response = HttpResponse<Session>.fromResponse(res);
+      if (response.isSuccess) {
+        List<Session> sessions = sessionFromJson(res.body);
+        sessionDatabase.saveUserSessions(sessions);
+        return sessions;
+      } else {
+        throw HttpFetchException(
+            "Could not fetch sessions", response.statusCode);
+      }
+    } on SocketException {
+      List<Session> sessions = await sessionDatabase.getUserSessions();
+      if (sessions.isEmpty) {
+        throw HttpFetchException("No internet connection", 0);
+      } else {
+        return sessions;
+      }
     }
   }
 

@@ -6,6 +6,7 @@ import 'package:word_and_learn/models/models.dart';
 import 'package:http/http.dart' as http;
 import 'package:word_and_learn/utils/exceptions.dart';
 import 'package:word_and_learn/utils/http_client.dart';
+import 'package:word_and_learn/utils/objectbox_utils.dart';
 
 mixin UserProfileMixin implements UserInterface {
   final UserDatabase userDatabase = UserDatabase();
@@ -31,8 +32,7 @@ mixin UserProfileMixin implements UserInterface {
   }
 
   Future<void> logout() async {
-    //TODO: Clear Database
-
+    ObjectBox.deleteInstance();
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.clear();
   }

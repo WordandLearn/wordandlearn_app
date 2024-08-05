@@ -29,9 +29,8 @@ class WritingController extends GetxController
     if (isRefreshing == false) {
       isRefreshing = true;
       retry(
-        () {
-          fetchUserSessions();
-          fetchCurrentSession();
+        () async {
+          await fetchUserSessions();
         },
         retryIf: (e) => e is HttpFetchException,
       );
@@ -57,28 +56,43 @@ class WritingController extends GetxController
   // }
 
   Future<List<Session>> fetchUserSessions() async {
-    List<Session> sessions = await getUserSessions();
+    List<Session> sessions = await retry<List<Session>>(
+      () {
+        return getUserSessions();
+      },
+      retryIf: (p0) => p0 is HttpFetchException,
+    );
     if (sessions.isEmpty) {
       Get.snackbar(
           "Add a New Composition", "Add a new composition to start off");
       Get.to(() => const UploadOnboardingPage());
       return sessions;
+    } else {
+      await fetchCurrentSession();
     }
     userSessions.value = sessions;
     return sessions;
   }
 
   Future<Session?> fetchCurrentSession() async {
-    Session? session = await getCurrentSession();
-    if (session == null && userSessions.isNotEmpty) {
-      saveCurrentSession(userSessions.first);
+    try {
+      Session? session = await getCurrentSession();
+      if (session == null && userSessions.isNotEmpty) {
+        saveCurrentSession(userSessions.first);
 
-      session = userSessions.first;
+        session = userSessions.first;
+      }
+
+      currentUserSession.value = session;
+      return session;
+    } on UnsupportedError {
+      if (userSessions.isNotEmpty) {
+        saveCurrentSession(userSessions.first);
+        currentUserSession.value = userSessions.first;
+        return userSessions.first;
+      }
     }
-
-    currentUserSession.value = session;
-
-    return session;
+    return null;
   }
 
   Future<void> setCurrentSession(Session session) async {
