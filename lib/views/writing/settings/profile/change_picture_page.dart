@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -54,25 +55,26 @@ class _ChangePicturePageState extends State<ChangePicturePage> {
                   Divider(
                     color: Colors.grey.withOpacity(0.4),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: defaultPadding * 5),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: AppColors.buttonColor, width: 2),
-                          shape: BoxShape.circle),
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 300),
-                        child: CircleAvatar(
-                            key: ValueKey<bool>(selectedFile != null),
-                            radius: 50,
-                            backgroundImage: selectedFile != null
-                                ? Image.file(selectedFile!).image
-                                : Image.network(snapshot.hasData
-                                        ? snapshot.data!.thumbnailUrl
-                                        : defaultImageUrl)
-                                    .image),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: defaultPadding * 5),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: AppColors.buttonColor, width: 2),
+                            shape: BoxShape.circle),
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          child: CircleAvatar(
+                              key: ValueKey<bool>(selectedFile != null),
+                              radius: 100,
+                              backgroundImage: selectedFile != null
+                                  ? Image.file(selectedFile!).image
+                                  : CachedNetworkImageProvider(snapshot.hasData
+                                      ? snapshot.data!.imageUrl
+                                      : defaultImageUrl)),
+                        ),
                       ),
                     ),
                   ),

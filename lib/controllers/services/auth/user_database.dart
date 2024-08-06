@@ -38,7 +38,7 @@ class UserDatabase implements UserDatabaseInterface {
     final box = objectBox.store.box<Profile>();
     Profile? profile = box.get(profileDetails.id);
     if (profile != null) {
-      profile.name = profileDetails.firstName;
+      profile.name = profileDetails.name;
       profile.grade = profileDetails.grade;
       box.put(profile);
     }

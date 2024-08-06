@@ -101,7 +101,7 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
                       child: Center(
                         child: AutoSizeText(
                           widget.topic.title,
-                          maxLines: 1,
+                          maxLines: 2,
                           textAlign: TextAlign.center,
                           style: Theme.of(context)
                               .textTheme

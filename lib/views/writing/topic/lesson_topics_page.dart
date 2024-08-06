@@ -87,17 +87,15 @@ class _LessonTopicsPageState extends State<LessonTopicsPage> {
                           child: snapshot.hasData && snapshot.data!.isNotEmpty
                               ? Builder(builder: (context) {
                                   Topic topic = snapshot.data![activeIndex];
-                                  return Column(
-                                    key: ValueKey<int>(activeIndex),
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      AnimatedSwitcher(
-                                        duration:
-                                            const Duration(milliseconds: 200),
-                                        switchInCurve: Curves.easeIn,
-                                        switchOutCurve: Curves.easeOut,
-                                        child: Text(
+                                  return AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 300),
+                                    switchInCurve: Curves.easeOut,
+                                    child: Column(
+                                      key: ValueKey<int>(activeIndex),
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
                                           topic.tag,
                                           key: ValueKey<int>(activeIndex),
                                           style: Theme.of(context)
@@ -106,25 +104,19 @@ class _LessonTopicsPageState extends State<LessonTopicsPage> {
                                               .copyWith(
                                                   fontWeight: FontWeight.w500),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        height: defaultPadding / 4,
-                                      ),
-                                      AnimatedSwitcher(
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        switchInCurve: Curves.easeIn,
-                                        switchOutCurve: Curves.easeOut,
-                                        child: AutoSizeText(
+                                        const SizedBox(
+                                          height: defaultPadding / 4,
+                                        ),
+                                        AutoSizeText(
                                           topic.title,
                                           key: ValueKey<String>(topic.title),
                                           maxLines: 1,
                                           style: const TextStyle(
                                               fontSize: 26,
                                               fontWeight: FontWeight.bold),
-                                        ),
-                                      )
-                                    ],
+                                        )
+                                      ],
+                                    ),
                                   );
                                 })
                               : null,

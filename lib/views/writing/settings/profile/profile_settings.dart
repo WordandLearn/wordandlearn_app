@@ -9,6 +9,8 @@ import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/writing_controller.dart';
 import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/views/writing/settings/components/build_settings_app_bar.dart';
+import 'package:word_and_learn/views/writing/settings/components/danger_modal.dart';
+import 'package:word_and_learn/views/writing/settings/profile/change_grade_page.dart';
 import 'package:word_and_learn/views/writing/settings/profile/change_picture_page.dart';
 import 'package:word_and_learn/views/writing/settings/profile/edit_profile_page.dart';
 
@@ -169,19 +171,9 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                             isScrollControlled: true,
                                             builder: (context) {
                                               return const SizedBox(
-                                                  height: 350,
+                                                  height: 500,
                                                   child: ChangePicturePage());
                                             });
-                                      }),
-                                  SettingsListItem(
-                                      text: "Link To Your School",
-                                      icon: const Icon(
-                                        CupertinoIcons.link,
-                                        color: Colors.grey,
-                                        size: 20,
-                                      ),
-                                      onPressed: () {
-                                        //TODO: Show that this is coming school
                                       }),
                                   SettingsListItem(
                                       text: "Change Your Grade",
@@ -196,7 +188,75 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                           color: Colors.red,
                                           fontWeight: FontWeight.w600),
                                       onPressed: () {
-                                        //TODO: Implement change your grade option
+                                        showModalBottomSheet(
+                                            context: context,
+                                            builder: (context) {
+                                              return SizedBox(
+                                                height: 400,
+                                                child: DangerModal(
+                                                  warning:
+                                                      "Your learning experience will change when you change your grade. Do it only when necessary",
+                                                  onProceed: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
+                                                              return const ChangeGradePage();
+                                                            },
+                                                            settings:
+                                                                const RouteSettings(
+                                                                    name:
+                                                                        "ChangeGradePage")));
+                                                  },
+                                                ),
+                                              );
+                                            });
+                                      }),
+                                  SettingsListItem(
+                                      text: "Link To Your School",
+                                      icon: const Icon(
+                                        CupertinoIcons.link,
+                                        color: Colors.grey,
+                                        size: 20,
+                                      ),
+                                      onPressed: () {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                                content: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.info,
+                                              color: Colors.white,
+                                            ),
+                                            SizedBox(
+                                              width: defaultPadding / 2,
+                                            ),
+                                            Text("This feature is coming soon")
+                                          ],
+                                        )));
+                                      }),
+                                  SettingsListItem(
+                                      text: "Connect to Parent",
+                                      icon: const Icon(
+                                        CupertinoIcons.person_2,
+                                        color: Colors.grey,
+                                        size: 20,
+                                      ),
+                                      onPressed: () {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                                content: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.info,
+                                              color: Colors.white,
+                                            ),
+                                            SizedBox(
+                                              width: defaultPadding / 2,
+                                            ),
+                                            Text("This feature is coming soon")
+                                          ],
+                                        )));
                                       }),
                                 ],
                               )
@@ -228,16 +288,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                     ),
                                   ),
                                   SettingsListItem(
-                                      text: "Change Password",
-                                      icon: const Icon(
-                                        CupertinoIcons.padlock,
-                                        size: 20,
-                                        color: Colors.grey,
-                                      ),
-                                      onPressed: () {
-                                        //TODO: Implement Password Change
-                                      }),
-                                  SettingsListItem(
                                       text: "Request Your Data",
                                       icon: const Icon(
                                         CupertinoIcons.archivebox,
@@ -260,7 +310,18 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                         color: Colors.red,
                                       ),
                                       onPressed: () {
-                                        //TODO: Implement Account Deletion
+                                        showModalBottomSheet(
+                                            context: context,
+                                            builder: (context) {
+                                              return SizedBox(
+                                                height: 400,
+                                                child: DangerModal(
+                                                  warning:
+                                                      "Your will lose your account and all related data lessons,progress, photos etc",
+                                                  onProceed: () {},
+                                                ),
+                                              );
+                                            });
                                       }),
                                 ],
                               )

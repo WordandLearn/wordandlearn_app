@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:word_and_learn/constants/constants.dart';
 
 class AuthTextField extends StatefulWidget {
@@ -17,6 +18,11 @@ class AuthTextField extends StatefulWidget {
     this.onEditingComplete,
     this.fillColor,
     this.focusedBorderColor,
+    this.textStyle,
+    this.maxLength,
+    this.paddiing,
+    this.textAlign,
+    this.autovalidateMode,
   });
   final String hintText;
   final String? Function(String?)? validator;
@@ -31,7 +37,11 @@ class AuthTextField extends StatefulWidget {
   final Function()? onEditingComplete;
   final Color? fillColor;
   final Color? focusedBorderColor;
-
+  final TextStyle? textStyle;
+  final int? maxLength;
+  final EdgeInsets? paddiing;
+  final TextAlign? textAlign;
+  final AutovalidateMode? autovalidateMode;
   @override
   State<AuthTextField> createState() => _AuthTextFieldState();
 }
@@ -57,11 +67,17 @@ class _AuthTextFieldState extends State<AuthTextField> {
       onFieldSubmitted: widget.onFieldSubmitted,
       onChanged: widget.onChanged,
       onTap: widget.onTap,
+      style: widget.textStyle,
+      maxLength: widget.maxLength,
+      autovalidateMode: widget.autovalidateMode,
+      maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
       onEditingComplete: widget.onEditingComplete,
+      textAlign: widget.textAlign ?? TextAlign.start,
       decoration: InputDecoration(
           hintText: widget.hintText,
-          contentPadding: const EdgeInsets.symmetric(
-              horizontal: defaultPadding * 3, vertical: defaultPadding * 2),
+          contentPadding: widget.paddiing ??
+              const EdgeInsets.symmetric(
+                  horizontal: defaultPadding * 3, vertical: defaultPadding * 2),
           hintStyle: const TextStyle(fontWeight: FontWeight.w600),
           filled: true,
           fillColor: widget.fillColor ?? Colors.white,
