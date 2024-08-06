@@ -58,6 +58,11 @@ class HttpClient {
     return await http.get(Uri.parse(url), headers: headers);
   }
 
+  Future<http.Response> delete(String url, {Map? body}) async {
+    return await http.delete(Uri.parse(url),
+        body: body, headers: getAuthHeaders());
+  }
+
   Future<http.Response> upload(String url,
       {required List<File> files, String key = 'file'}) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));

@@ -127,7 +127,6 @@ class _FlashCardDialogState extends State<FlashCardDialog> {
 
 class _FlashcardAudioWidget extends StatefulWidget {
   const _FlashcardAudioWidget({
-    super.key,
     required this.flashcardText,
     required this.onCompleted,
   });
@@ -198,7 +197,6 @@ class _FlashcardAudioWidgetState extends State<_FlashcardAudioWidget> {
 
 class _FlashcardAudioPlayer extends StatefulWidget {
   const _FlashcardAudioPlayer({
-    super.key,
     required this.audioFile,
     required this.flashcardText,
     required this.onCompleted,

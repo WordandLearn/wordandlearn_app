@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:word_and_learn/constants/theme.dart';
 import 'package:word_and_learn/utils/objectbox_utils.dart';
 import 'package:word_and_learn/views/splash_screen.dart';
+import 'package:intl/intl_standalone.dart' if (dart.library.html) 'package:intl/intl_browser.dart';
 
 void main() async {
   Gemini.init(apiKey: "AIzaSyDkAOTIsp59llikprmsliWHwFDSeTMdTyA");
@@ -11,6 +12,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await ObjectBox.getInstance();
+  await findSystemLocale();
 
   runApp(const MyApp());
 }

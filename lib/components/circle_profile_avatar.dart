@@ -19,18 +19,16 @@ class CircleProfileAvatar extends StatefulWidget {
 }
 
 class _CircleProfileAvatarState extends State<CircleProfileAvatar> {
-  late Future<ProfilePicture?> _future;
   final WritingController writingController = Get.find<WritingController>();
   @override
   void initState() {
-    _future = writingController.getProfilePicture();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<ProfilePicture?>(
-        future: _future,
+        future: writingController.getProfilePicture(),
         builder: (context, snapshot_) {
           return AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),

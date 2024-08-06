@@ -17,3 +17,4 @@ export 'color_model.dart';
 export 'task_state.dart';
 export "school.dart";
 export 'profile_picture.dart';
+export 'child_profile_details.dart';

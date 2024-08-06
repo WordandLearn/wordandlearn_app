@@ -33,11 +33,29 @@ class UserDatabase implements UserDatabaseInterface {
     box.put(profile);
   }
 
+  Future<void> updateChildProfile(ChildProfileDetails profileDetails) async {
+    final ObjectBox objectBox = await ObjectBox.getInstance();
+    final box = objectBox.store.box<Profile>();
+    Profile? profile = box.get(profileDetails.id);
+    if (profile != null) {
+      profile.name = profileDetails.firstName;
+      profile.grade = profileDetails.grade;
+      box.put(profile);
+    }
+  }
+
   @override
   Future<void> saveProfilePicture(ProfilePicture profilePicture) async {
     final ObjectBox objectBox = await ObjectBox.getInstance();
     final box = objectBox.store.box<ProfilePicture>();
     box.removeAll();
     box.put(profilePicture);
+  }
+
+  @override
+  Future<void> removeProfilePicture() async {
+    final ObjectBox objectBox = await ObjectBox.getInstance();
+    final box = objectBox.store.box<ProfilePicture>();
+    box.removeAll();
   }
 }

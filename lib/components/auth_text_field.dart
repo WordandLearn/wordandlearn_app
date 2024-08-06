@@ -15,6 +15,8 @@ class AuthTextField extends StatefulWidget {
     this.onChanged,
     this.onTap,
     this.onEditingComplete,
+    this.fillColor,
+    this.focusedBorderColor,
   });
   final String hintText;
   final String? Function(String?)? validator;
@@ -27,6 +29,8 @@ class AuthTextField extends StatefulWidget {
   final Function(String)? onChanged;
   final Function()? onTap;
   final Function()? onEditingComplete;
+  final Color? fillColor;
+  final Color? focusedBorderColor;
 
   @override
   State<AuthTextField> createState() => _AuthTextFieldState();
@@ -60,7 +64,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
               horizontal: defaultPadding * 3, vertical: defaultPadding * 2),
           hintStyle: const TextStyle(fontWeight: FontWeight.w600),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: widget.fillColor ?? Colors.white,
           suffixIcon: widget.obscureText
               ? GestureDetector(
                   onTap: () {
@@ -80,8 +84,9 @@ class _AuthTextFieldState extends State<AuthTextField> {
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(10)),
           focusedBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: Theme.of(context).primaryColor, width: 1.5),
+              borderSide: BorderSide(
+                  color: widget.focusedBorderColor ?? AppColors.buttonColor,
+                  width: 1.5),
               borderRadius: BorderRadius.circular(10))),
     );
   }

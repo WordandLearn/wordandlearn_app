@@ -8,4 +8,5 @@ abstract class UserInterface {
 abstract class UserDatabaseInterface implements UserInterface {
   Future<void> saveChildProfile(Profile profile);
   Future<void> saveProfilePicture(ProfilePicture profilePicture);
+  Future<void> removeProfilePicture();
 }

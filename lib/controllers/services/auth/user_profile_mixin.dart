@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/services/auth/user_database.dart';
@@ -31,6 +33,33 @@ mixin UserProfileMixin implements UserInterface {
     }
   }
 
+  Future<ChildProfileDetails?> getChildProfileDetails() async {
+    http.Response res = await client.get("$profileUrl/details/");
+    HttpResponse response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      return ChildProfileDetails.fromJson(response.data);
+    } else {
+      throw HttpFetchException(
+          "Could not Fetch Profile Details", response.statusCode);
+    }
+  }
+
+  Future<ChildProfileDetails?> updateChildProfileDetails(
+      Map<String, dynamic> body) async {
+    http.Response res = await client.put("$profileUrl/details/", body);
+    HttpResponse response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      ChildProfileDetails profileDetails =
+          ChildProfileDetails.fromJson(response.data);
+
+      userDatabase.updateChildProfile(profileDetails);
+      return profileDetails;
+    } else {
+      throw HttpFetchException(
+          "Could not Update Profile Details", response.statusCode);
+    }
+  }
+
   Future<void> logout() async {
     ObjectBox.deleteInstance();
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -53,6 +82,32 @@ mixin UserProfileMixin implements UserInterface {
         throw HttpFetchException(
             "Could not fetch profile picture", response.statusCode);
       }
+    }
+  }
+
+  Future<ProfilePicture?> addProfilePicture(File image) async {
+    http.Response res = await client
+        .uploadWithKeys(profilePictureUrl, files: {"image": image}, body: {});
+
+    HttpResponse response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      ProfilePicture profilePicture = ProfilePicture.fromJson(response.data);
+      userDatabase.saveProfilePicture(profilePicture);
+      return profilePicture;
+    } else {
+      throw HttpFetchException(
+          "Could not upload profile picture", response.statusCode);
+    }
+  }
+
+  Future<void> removeProfilePicture() async {
+    http.Response res = await client.delete(profilePictureUrl);
+    HttpResponse response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      userDatabase.removeProfilePicture();
+    } else {
+      throw HttpFetchException(
+          "Could not remove profile picture", response.statusCode);
     }
   }
 }

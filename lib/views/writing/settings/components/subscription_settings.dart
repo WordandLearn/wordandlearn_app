@@ -124,7 +124,6 @@ class SubscriptionSettings extends StatelessWidget {
 
 class _SubscriptionDetail extends StatelessWidget {
   const _SubscriptionDetail({
-    super.key,
     required this.title,
     required this.detail,
   });

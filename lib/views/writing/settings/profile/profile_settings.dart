@@ -9,6 +9,8 @@ import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/writing_controller.dart';
 import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/views/writing/settings/components/build_settings_app_bar.dart';
+import 'package:word_and_learn/views/writing/settings/profile/change_picture_page.dart';
+import 'package:word_and_learn/views/writing/settings/profile/edit_profile_page.dart';
 
 class ProfileSettings extends StatefulWidget {
   const ProfileSettings({super.key});
@@ -111,7 +113,13 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         width: 150,
                         child: TapBounce(
                           onTap: () {
-                            //TODO: GO To Profile Page
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const EditProfilePage(),
+                                    settings: const RouteSettings(
+                                        name: "EditProfilePage")));
                           },
                           child: const PrimaryButton(
                             color: AppColors.buttonColor,
@@ -156,7 +164,14 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                         size: 20,
                                       ),
                                       onPressed: () {
-                                        //TODO: Implement Update Profile Picture
+                                        showModalBottomSheet(
+                                            context: context,
+                                            isScrollControlled: true,
+                                            builder: (context) {
+                                              return const SizedBox(
+                                                  height: 350,
+                                                  child: ChangePicturePage());
+                                            });
                                       }),
                                   SettingsListItem(
                                       text: "Link To Your School",
@@ -286,7 +301,7 @@ class SettingsListItem extends StatelessWidget {
       child: TapBounce(
         scale: 0.99,
         duration: const Duration(milliseconds: 150),
-        onTap: () {},
+        onTap: onPressed,
         child: Container(
           padding: const EdgeInsets.symmetric(
               vertical: defaultPadding * 2, horizontal: defaultPadding),
