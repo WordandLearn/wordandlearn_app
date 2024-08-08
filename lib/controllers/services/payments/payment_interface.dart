@@ -9,4 +9,7 @@ abstract class PaymentInterface {
   Future<List<PaymentHistory>?> getPaymentHistory();
 
   Future<bool?> cancelSubscription(int packageId);
+
+  Future<PesaPalRequest?> subscribeToPackage(
+      int packageId, Map<String, dynamic> body);
 }

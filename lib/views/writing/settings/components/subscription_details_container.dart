@@ -123,27 +123,49 @@ class SubscriptionDetailsContainer extends StatelessWidget {
                               subscriptionDetails != null
                                   ? Row(
                                       children: [
-                                        subscriptionDetails!.isPaid
+                                        subscriptionDetails!.cancelled
                                             ? const Icon(
-                                                Icons.done,
-                                                color: Colors.green,
-                                              )
-                                            : const Icon(
                                                 Icons.close,
                                                 color: Colors.red,
-                                              ),
+                                              )
+                                            : subscriptionDetails!.isPaid
+                                                ? const Icon(
+                                                    Icons.done,
+                                                    color: Colors.green,
+                                                  )
+                                                : const Icon(
+                                                    Icons.close,
+                                                    color: Colors.red,
+                                                  ),
                                         const SizedBox(
                                           width: defaultPadding / 4,
                                         ),
-                                        Text(
-                                          subscriptionDetails!.isPaid
-                                              ? "Paid"
-                                              : "Not Paid",
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.green,
-                                              fontWeight: FontWeight.w500),
-                                        ),
+                                        subscriptionDetails!.cancelled
+                                            ? const Text(
+                                                "Cancelled",
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.red,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              )
+                                            : subscriptionDetails!.isPaid
+                                                ? const Text(
+                                                    "Paid",
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.green,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  )
+                                                : const Text(
+                                                    "Not Paid",
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.red,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
                                       ],
                                     )
                                   : const SizedBox.shrink()

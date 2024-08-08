@@ -4,10 +4,9 @@ import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
-import 'package:word_and_learn/models/payments/package_subscription_details.dart';
 import 'package:word_and_learn/models/payments/payment_models.dart';
+import 'package:word_and_learn/views/payments/payment_page.dart';
 import 'package:word_and_learn/views/writing/settings/components/questionarre_widget.dart';
-import 'package:word_and_learn/views/writing/settings/components/radio_input.dart';
 import 'package:word_and_learn/views/writing/settings/components/subscription_details_container.dart';
 
 class SubscriptionManageBottomSheet extends StatefulWidget {
@@ -52,31 +51,62 @@ class _SubscriptionManageBottomSheetState
             const Spacer(
               flex: 1,
             ),
-            SubscriptionDetailsContainer(
-              subscriptionDetails:
-                  widget.packageSubscriptionDetails.subscriptionDetails,
-              trialDetails: widget.packageSubscriptionDetails.trialDetails,
-              subscriptionPackage: subscriptionPackage,
+            Hero(
+              tag: "subscription_details_container",
+              child: SubscriptionDetailsContainer(
+                subscriptionDetails:
+                    widget.packageSubscriptionDetails.subscriptionDetails,
+                trialDetails: widget.packageSubscriptionDetails.trialDetails,
+                subscriptionPackage: subscriptionPackage,
+              ),
             ),
             const Spacer(
               flex: 2,
             ),
             TapBounce(
               onTap: () {
-                showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) {
-                      return CancelAlertDialog(
-                        subscriptionPackage: subscriptionPackage,
-                      );
-                    });
+                if (widget.packageSubscriptionDetails.subscriptionDetails !=
+                        null &&
+                    widget.packageSubscriptionDetails.subscriptionDetails!
+                        .cancelled) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PaymentPage(
+                              subscriptionPackage: subscriptionPackage),
+                          settings: const RouteSettings(name: "PaymentPage")));
+                } else {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) {
+                        return CancelAlertDialog(
+                          subscriptionPackage: subscriptionPackage,
+                        );
+                      });
+                }
               },
               child: PrimaryIconButton(
-                  color: Colors.red.withOpacity(0.8),
-                  text: "Cancel Subscription",
-                  icon: const Icon(
-                    Icons.close,
+                  color:
+                      widget.packageSubscriptionDetails.subscriptionDetails !=
+                                  null &&
+                              widget.packageSubscriptionDetails
+                                  .subscriptionDetails!.cancelled
+                          ? AppColors.buttonColor
+                          : Colors.red.withOpacity(0.8),
+                  text: widget.packageSubscriptionDetails.subscriptionDetails !=
+                              null &&
+                          widget.packageSubscriptionDetails.subscriptionDetails!
+                              .cancelled
+                      ? "Renew Subscription"
+                      : "Cancel Subscription",
+                  icon: Icon(
+                    widget.packageSubscriptionDetails.subscriptionDetails !=
+                                null &&
+                            widget.packageSubscriptionDetails
+                                .subscriptionDetails!.cancelled
+                        ? Icons.refresh
+                        : Icons.close,
                     color: Colors.white,
                     size: 17,
                   )),

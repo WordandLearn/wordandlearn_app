@@ -116,7 +116,12 @@ class _SubscriptionPackagesWidgetState
                                         decoration: BoxDecoration(
                                             color: snapshot.data!.isTrial
                                                 ? Colors.green
-                                                : Colors.blue,
+                                                : snapshot
+                                                        .data!
+                                                        .subscriptionDetails!
+                                                        .cancelled
+                                                    ? Colors.red
+                                                    : Colors.blue,
                                             shape: BoxShape.circle),
                                       ),
                                       const SizedBox(
@@ -125,13 +130,23 @@ class _SubscriptionPackagesWidgetState
                                       Text(
                                         snapshot.data!.isTrial
                                             ? "Trial in Progress"
-                                            : "Subscription Active",
+                                            : snapshot
+                                                    .data!
+                                                    .subscriptionDetails!
+                                                    .cancelled
+                                                ? "Subscription Cancelled"
+                                                : "Subscription Active",
                                         style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
                                             color: snapshot.data!.isTrial
                                                 ? Colors.green
-                                                : Colors.blue),
+                                                : snapshot
+                                                        .data!
+                                                        .subscriptionDetails!
+                                                        .cancelled
+                                                    ? Colors.red
+                                                    : Colors.blue),
                                       )
                                     ],
                                   ),
@@ -191,11 +206,15 @@ class _SubscriptionPackagesWidgetState
                                               packageSubscriptionDetails.isTrial
                                                   ? "Trial Ends Date"
                                                   : "Next Payment Date",
-                                          detail:
-                                              packageSubscriptionDetails.isTrial
-                                                  ? packageSubscriptionDetails
-                                                      .trialDetails!
-                                                      .endDateFormatted
+                                          detail: packageSubscriptionDetails
+                                                  .isTrial
+                                              ? packageSubscriptionDetails
+                                                  .trialDetails!
+                                                  .endDateFormatted
+                                              : packageSubscriptionDetails
+                                                      .subscriptionDetails!
+                                                      .cancelled
+                                                  ? "N/A"
                                                   : packageSubscriptionDetails
                                                       .subscriptionDetails!
                                                       .endDateFormatted,

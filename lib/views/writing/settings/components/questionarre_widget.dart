@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/components/auth_text_field.dart';
-import 'package:word_and_learn/constants/colors.dart';
 import 'package:word_and_learn/constants/constants.dart';
 
 import 'radio_input.dart';
