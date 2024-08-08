@@ -23,6 +23,7 @@ class AuthTextField extends StatefulWidget {
     this.paddiing,
     this.textAlign,
     this.autovalidateMode,
+    this.maxLines,
   });
   final String hintText;
   final String? Function(String?)? validator;
@@ -42,6 +43,7 @@ class AuthTextField extends StatefulWidget {
   final EdgeInsets? paddiing;
   final TextAlign? textAlign;
   final AutovalidateMode? autovalidateMode;
+  final int? maxLines;
   @override
   State<AuthTextField> createState() => _AuthTextFieldState();
 }
@@ -69,6 +71,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
       onTap: widget.onTap,
       style: widget.textStyle,
       maxLength: widget.maxLength,
+      maxLines: widget.maxLines,
       autovalidateMode: widget.autovalidateMode,
       maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
       onEditingComplete: widget.onEditingComplete,

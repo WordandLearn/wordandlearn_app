@@ -2,11 +2,21 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/constants/constants.dart';
+import 'package:word_and_learn/models/payments/payment_models.dart';
 
 class SubscriptionDetailsContainer extends StatelessWidget {
   const SubscriptionDetailsContainer({
     super.key,
+    this.subscriptionDetails,
+    this.trialDetails,
+    required this.subscriptionPackage,
   });
+
+  final SubscriptionDetails? subscriptionDetails;
+  final TrialDetails? trialDetails;
+  final SubscriptionPackage subscriptionPackage;
+
+  // final String? dueDate;
 
   @override
   Widget build(BuildContext context) {
@@ -75,12 +85,12 @@ class SubscriptionDetailsContainer extends StatelessWidget {
                         height: 40,
                       ),
                     ),
-                    const Column(
+                    Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(),
+                            const SizedBox(),
                             // Text(
                             //   "",
                             //   style: TextStyle(
@@ -89,8 +99,10 @@ class SubscriptionDetailsContainer extends StatelessWidget {
                             //       fontWeight: FontWeight.w500),
                             // ),
                             Text(
-                              "April 15th 2024",
-                              style: TextStyle(
+                              subscriptionDetails != null
+                                  ? subscriptionDetails!.paidAtFormatted
+                                  : "",
+                              style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                   color: AppColors.greyTextColor),
@@ -98,34 +110,43 @@ class SubscriptionDetailsContainer extends StatelessWidget {
                           ],
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               vertical: defaultPadding / 4),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "\$12.00",
-                                style: TextStyle(
+                                "KES ${subscriptionPackage.price}",
+                                style: const TextStyle(
                                     fontSize: 32, fontWeight: FontWeight.bold),
                               ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.done,
-                                    color: Colors.green,
-                                  ),
-                                  SizedBox(
-                                    width: defaultPadding / 4,
-                                  ),
-                                  Text(
-                                    "Paid",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              )
+                              subscriptionDetails != null
+                                  ? Row(
+                                      children: [
+                                        subscriptionDetails!.isPaid
+                                            ? const Icon(
+                                                Icons.done,
+                                                color: Colors.green,
+                                              )
+                                            : const Icon(
+                                                Icons.close,
+                                                color: Colors.red,
+                                              ),
+                                        const SizedBox(
+                                          width: defaultPadding / 4,
+                                        ),
+                                        Text(
+                                          subscriptionDetails!.isPaid
+                                              ? "Paid"
+                                              : "Not Paid",
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.green,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ],
+                                    )
+                                  : const SizedBox.shrink()
                             ],
                           ),
                         ),
@@ -133,13 +154,15 @@ class SubscriptionDetailsContainer extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Writing Package",
-                              style: TextStyle(
+                              subscriptionPackage.name,
+                              style: const TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w500),
                             ),
                             Text(
-                              "Monthly",
-                              style: TextStyle(
+                              subscriptionPackage.isYearly
+                                  ? "Yearly"
+                                  : "Monthly",
+                              style: const TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w500),
                             )
                           ],

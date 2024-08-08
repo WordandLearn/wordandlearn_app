@@ -46,3 +46,7 @@ const String uploadCompositionsUrl = "$teachersUrl/upload/";
 //Settings endpoints
 const String settingsUrl = "$baseUrl/settings";
 const String alertSettingsUrl = "$settingsUrl/alert-settings/";
+
+//Payment Endpoints
+const String paymentUrl = "$baseUrl/payments";
+const String packagesUrl = "$paymentUrl/package";

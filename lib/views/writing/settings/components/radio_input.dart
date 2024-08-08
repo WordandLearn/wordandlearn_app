@@ -53,12 +53,14 @@ class RadioInput extends StatelessWidget {
             const SizedBox(
               width: defaultPadding,
             ),
-            Text(
-              label,
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-                  color: isActive ? Colors.black : Colors.black),
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+                    color: isActive ? Colors.black : Colors.black),
+              ),
             )
           ],
         ),

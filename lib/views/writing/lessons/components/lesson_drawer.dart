@@ -11,7 +11,7 @@ import 'package:word_and_learn/models/models.dart';
 import 'package:word_and_learn/views/auth/login.dart';
 import 'package:word_and_learn/views/writing/settings/alert_settings_page.dart';
 import 'package:word_and_learn/views/writing/settings/profile/profile_settings.dart';
-import 'package:word_and_learn/views/writing/settings/components/subscription_settings.dart';
+import 'package:word_and_learn/views/writing/settings/subscription_settings.dart';
 
 class LessonDrawer extends StatefulWidget {
   const LessonDrawer({super.key, required this.onClose});
