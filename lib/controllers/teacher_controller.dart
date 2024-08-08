@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:word_and_learn/controllers/services/teachers/teacher_controller_database.dart';
 import 'package:word_and_learn/controllers/services/teachers/teacher_controller_http.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 
 class TeacherController extends GetxController {
   Rx<Profile?> profile = Rx<Profile?>(null);

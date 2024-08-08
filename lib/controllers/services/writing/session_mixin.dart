@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/services/writing/session_database.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 import "package:http/http.dart" as http;
 import 'package:word_and_learn/utils/exceptions.dart';
 import 'package:word_and_learn/utils/http_client.dart';
@@ -28,8 +28,8 @@ mixin SessionMixin implements SessionInterface {
             "Could not fetch sessions", response.statusCode);
       }
     } on SocketException {
-      List<Session> sessions = await sessionDatabase.getUserSessions();
-      if (sessions.isEmpty) {
+      List<Session>? sessions = await sessionDatabase.getUserSessions();
+      if (sessions == null || sessions.isEmpty) {
         throw HttpFetchException("No internet connection", 0);
       } else {
         return sessions;

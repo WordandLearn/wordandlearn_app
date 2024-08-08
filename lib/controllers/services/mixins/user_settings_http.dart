@@ -1,6 +1,6 @@
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/services/interfaces/user_settings_interface.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/models/settings/alert_settings.dart';
 import 'package:http/http.dart' as http;
 import 'package:word_and_learn/utils/http_client.dart';

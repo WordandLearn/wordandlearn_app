@@ -14,19 +14,19 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
-import 'models/class_.dart';
-import 'models/example.dart';
-import 'models/exercise.dart';
-import 'models/exercise_result.dart';
-import 'models/exercise_submission.dart';
-import 'models/flash_card_text.dart';
-import 'models/lesson.dart';
-import 'models/profile.dart';
-import 'models/profile_picture.dart';
-import 'models/school.dart';
-import 'models/session.dart';
-import 'models/topic.dart';
-import 'models/topic_example.dart';
+import 'models/writing/class_.dart';
+import 'models/writing/example.dart';
+import 'models/writing/exercise.dart';
+import 'models/writing/exercise_result.dart';
+import 'models/writing/exercise_submission.dart';
+import 'models/writing/flash_card_text.dart';
+import 'models/writing/lesson.dart';
+import 'models/writing/profile.dart';
+import 'models/writing/profile_picture.dart';
+import 'models/writing/school.dart';
+import 'models/writing/session.dart';
+import 'models/writing/topic.dart';
+import 'models/writing/topic_example.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 

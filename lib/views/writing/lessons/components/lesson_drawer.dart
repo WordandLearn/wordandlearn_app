@@ -7,7 +7,7 @@ import 'package:word_and_learn/components/circle_profile_avatar.dart';
 import 'package:word_and_learn/components/primary_icon_button.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/views/auth/login.dart';
 import 'package:word_and_learn/views/writing/settings/alert_settings_page.dart';
 import 'package:word_and_learn/views/writing/settings/profile/profile_settings.dart';

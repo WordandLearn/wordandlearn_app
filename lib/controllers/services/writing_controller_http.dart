@@ -4,7 +4,7 @@ import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/services/writing/writing_interface.dart';
 import 'package:word_and_learn/utils/http_client.dart';
 
-import '../../models/models.dart';
+import '../../models/writing/models.dart';
 import 'package:http/http.dart' as http;
 
 class WritingControllerHttp implements WritingInterface {

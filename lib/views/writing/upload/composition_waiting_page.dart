@@ -6,7 +6,7 @@ import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 
 class CompositionWaitingPage extends StatefulWidget {
   const CompositionWaitingPage({super.key, required this.taskId});

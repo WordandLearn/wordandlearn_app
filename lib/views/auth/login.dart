@@ -6,7 +6,7 @@ import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/authentication_controller.dart';
 import 'package:word_and_learn/controllers/teacher_controller.dart';
 import 'package:word_and_learn/controllers/writing_controller.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/views/teachers/home.dart';
 import 'package:word_and_learn/views/writing/lessons/lessons_page.dart';
 

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:word_and_learn/constants/constants.dart';
-import 'package:word_and_learn/models/flash_card_text.dart';
+import 'package:word_and_learn/models/writing/flash_card_text.dart';
 import 'package:word_and_learn/utils/timer.dart';
 
 class TopicNoteCard extends StatefulWidget {

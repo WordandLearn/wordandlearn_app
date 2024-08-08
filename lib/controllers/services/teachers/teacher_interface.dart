@@ -1,4 +1,4 @@
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 
 abstract class TeacherInterface {
   Future<Profile?> getTeacherProfile();

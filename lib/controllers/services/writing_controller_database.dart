@@ -1,5 +1,5 @@
 import 'package:word_and_learn/controllers/services/writing/writing_interface.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 
 class WritingControllerDatabase implements WritingInterface {
   Future<Session?> dbGetCurrentLesson() async {

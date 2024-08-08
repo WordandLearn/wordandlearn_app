@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:word_and_learn/components/teachers/teacher_upload_pending_modal.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/utils/file_utils.dart';
 import 'package:word_and_learn/views/teachers/composition_edit_page.dart';
 import 'package:word_and_learn/views/writing/lessons/components/add_composition_button.dart';

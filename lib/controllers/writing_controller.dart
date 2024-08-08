@@ -6,7 +6,7 @@ import 'package:word_and_learn/controllers/services/payments/payment_mixin.dart'
 import 'package:word_and_learn/controllers/services/writing/session_mixin.dart';
 import 'package:word_and_learn/controllers/services/writing_controller_database.dart';
 import 'package:word_and_learn/controllers/services/writing_controller_http.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/objectbox.g.dart';
 import 'package:word_and_learn/utils/exceptions.dart';
 import 'package:word_and_learn/views/writing/upload/onboarding.dart';

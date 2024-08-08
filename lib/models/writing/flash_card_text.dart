@@ -6,7 +6,7 @@ import 'dart:convert';
 
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:objectbox/objectbox.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 
 List<FlashcardText> flashcardTextFromJson(String str) =>
     List<FlashcardText>.from(

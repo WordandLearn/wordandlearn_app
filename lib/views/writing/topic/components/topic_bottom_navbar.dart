@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/constants/constants.dart';
-import 'package:word_and_learn/models/topic.dart';
+import 'package:word_and_learn/models/writing/topic.dart';
 
 class TopicBottomNavBar extends StatefulWidget {
   const TopicBottomNavBar({

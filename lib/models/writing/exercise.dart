@@ -5,7 +5,7 @@
 import 'dart:convert';
 
 import 'package:objectbox/objectbox.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 
 List<Exercise> exerciseFromJson(String str) =>
     List<Exercise>.from(json.decode(str).map((x) => Exercise.fromJson(x)));

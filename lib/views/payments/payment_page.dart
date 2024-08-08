@@ -193,7 +193,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   ),
                 ),
                 const Text(
-                  "* You will be redirected to our payment gateway to complete your payment",
+                  "* You will be redirected to our payment gateway, pesapal , to complete your payment",
                   style: TextStyle(color: AppColors.greyTextColor),
                 ),
                 const SizedBox(
@@ -253,7 +253,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                 SizedBox(
                                   width: defaultPadding,
                                 ),
-                                Text("Could not contact payment gatewat")
+                                Text("Could not contact payment gateway")
                               ],
                             )));
                           },

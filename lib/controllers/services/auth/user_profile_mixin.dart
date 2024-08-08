@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/services/auth/user_database.dart';
 import 'package:word_and_learn/controllers/services/interfaces/user_interface.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 import 'package:http/http.dart' as http;
 import 'package:word_and_learn/utils/exceptions.dart';
 import 'package:word_and_learn/utils/http_client.dart';

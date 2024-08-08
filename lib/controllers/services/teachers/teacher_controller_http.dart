@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:word_and_learn/constants/constants.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 import 'package:http/http.dart' as http;
 import 'package:word_and_learn/utils/http_client.dart';
 

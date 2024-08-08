@@ -10,7 +10,7 @@ import 'package:word_and_learn/components/teachers/teacher_student_card.dart';
 import 'package:word_and_learn/components/teachers/teacher_upload_pending_modal.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/utils/file_utils.dart';
 import 'package:word_and_learn/views/teachers/composition_edit_page.dart';
 

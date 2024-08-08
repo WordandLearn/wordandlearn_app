@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:word_and_learn/models/topic.dart';
+import 'package:word_and_learn/models/writing/topic.dart';
 import 'package:word_and_learn/views/writing/topic/components/topic_progress_item.dart';
 
 class TopicProgress extends StatefulWidget {

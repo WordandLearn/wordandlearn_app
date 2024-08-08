@@ -1,6 +1,6 @@
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/services/payments/payment_interface.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/models/payments/payment_models.dart';
 import 'package:word_and_learn/utils/exceptions.dart';
 import 'package:word_and_learn/utils/http_client.dart';

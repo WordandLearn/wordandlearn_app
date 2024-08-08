@@ -6,7 +6,7 @@ import 'package:word_and_learn/components/circle_profile_avatar.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/views/writing/lessons/components/lesson_drawer.dart';
 import 'components/composition_selector.dart';
 import 'components/session_lessons_list.dart';

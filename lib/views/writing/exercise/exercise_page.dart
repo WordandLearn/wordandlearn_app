@@ -6,7 +6,7 @@ import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/components/fade_indexed_stack.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/writing_controller.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/views/writing/exercise/components/exercise_action_button.dart';
 
 import 'components/exercise_appbar.dart';

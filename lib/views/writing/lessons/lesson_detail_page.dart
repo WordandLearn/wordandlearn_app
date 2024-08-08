@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/utils/timer.dart';
 import 'package:word_and_learn/views/writing/lessons/components/lesson_header_container.dart';
 import 'package:word_and_learn/views/writing/topic/lesson_topics_page.dart';

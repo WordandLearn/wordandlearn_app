@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:word_and_learn/components/fade_indexed_stack.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/views/writing/topic/topic_example_page.dart';
 
 import 'components/topic_bottom_navbar.dart';

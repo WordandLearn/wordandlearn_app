@@ -8,7 +8,7 @@ import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/components/small_button.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/views/writing/upload/composition_upload_page.dart';
 import 'package:word_and_learn/views/writing/upload/onboarding.dart';
 

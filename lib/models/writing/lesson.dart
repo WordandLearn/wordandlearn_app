@@ -5,7 +5,7 @@
 import 'dart:convert';
 
 import 'package:objectbox/objectbox.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/utils/sticker_utils.dart';
 
 List<Lesson> lessonFromJson(String str) =>

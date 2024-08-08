@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/constants/constants.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 import 'dart:math' as math;
 
 class CompositionCard extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
-import 'package:word_and_learn/models/models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 
 Widget buildtopicSuccessDialog(BuildContext context, Topic topic) {
   return Dialog(
