@@ -59,6 +59,8 @@ class _SessionLessonsListState extends State<SessionLessonsList> {
               childrenDelegate: SliverChildBuilderDelegate((context, index) {
                 return LessonCard(
                   lesson: snapshot.data![index],
+                  isAvaliable:
+                      index == 0 ? true : snapshot.data![index - 1].isCompleted,
                 );
               }, childCount: snapshot.data!.length),
             );

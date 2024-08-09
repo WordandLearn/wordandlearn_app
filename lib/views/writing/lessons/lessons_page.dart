@@ -35,7 +35,6 @@ class _LessonsPageState extends State<LessonsPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    //TODO: Make lessons and topics progressive
     return Scaffold(
         key: _key,
         drawerEnableOpenDragGesture: true,

@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:word_and_learn/constants/constants.dart';
@@ -11,10 +12,12 @@ class LessonTopicCard extends StatefulWidget {
     super.key,
     required this.topic,
     required this.lesson,
+    this.isAvailable = true,
   });
 
   final Topic topic;
   final Lesson lesson;
+  final bool isAvailable;
 
   @override
   State<LessonTopicCard> createState() => _LessonTopicCardState();
@@ -45,79 +48,120 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
           InkWell(
             onTap: () {
               _animateBounce();
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => TopicLearnPage(
-                            topic: widget.topic,
-                            lesson: widget.lesson,
-                          ),
-                      settings: const RouteSettings(name: "TopicLearnPage")));
+              if (widget.isAvailable) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TopicLearnPage(
+                              topic: widget.topic,
+                              lesson: widget.lesson,
+                            ),
+                        settings: const RouteSettings(name: "TopicLearnPage")));
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Complete Previous Topic To Unlock"),
+                  ),
+                );
+              }
             },
             child: AnimatedScale(
               scale: scale,
               duration: const Duration(milliseconds: 200),
               curve: Curves.bounceInOut,
-              child: Container(
-                height: size.height * 0.6,
-                width: size.width,
-                padding: const EdgeInsets.symmetric(
-                    horizontal: defaultPadding * 2,
-                    vertical: defaultPadding * 2),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: Image.asset(
-                        widget.topic.image!,
-                        height: 120,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: defaultPadding,
-                    ),
-                    Center(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: defaultPadding * 2,
-                            vertical: defaultPadding / 1.5),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: AppColors.secondaryColor),
-                        child: Text(
-                          widget.topic.tag,
-                          style: const TextStyle(fontWeight: FontWeight.w600),
+              child: Stack(
+                children: [
+                  Container(
+                    height: size.height * 0.6,
+                    width: size.width,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: defaultPadding * 2,
+                        vertical: defaultPadding * 2),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Image.asset(
+                            widget.topic.image!,
+                            height: 120,
+                          ),
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: defaultPadding),
-                      child: Center(
-                        child: AutoSizeText(
-                          widget.topic.title,
-                          maxLines: 2,
+                        const SizedBox(
+                          height: defaultPadding,
+                        ),
+                        Center(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: defaultPadding * 2,
+                                vertical: defaultPadding / 1.5),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: AppColors.secondaryColor),
+                            child: Text(
+                              widget.topic.tag,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: defaultPadding),
+                          child: Center(
+                            child: AutoSizeText(
+                              widget.topic.title,
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall!
+                                  .copyWith(fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          widget.topic.description,
                           textAlign: TextAlign.center,
                           style: Theme.of(context)
                               .textTheme
-                              .headlineSmall!
-                              .copyWith(fontWeight: FontWeight.w600),
-                        ),
+                              .bodyMedium!
+                              .copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey),
+                        )
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                    visible: !widget.isAvailable,
+                    child: Container(
+                      width: double.infinity,
+                      height: size.height * 0.6,
+                      decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.9),
+                          borderRadius: BorderRadius.circular(20)),
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            CupertinoIcons.lock_circle_fill,
+                            size: 50,
+                          ),
+                          Text(
+                            "Complete Previous Topic To Unlock",
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w600),
+                          )
+                        ],
                       ),
                     ),
-                    Text(
-                      widget.topic.description,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.w600, color: Colors.grey),
-                    )
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -147,7 +191,7 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text("Complete topic to access exercise"),
+                        content: Text("Complete Topic To Access Exercise"),
                       ),
                     );
                   }

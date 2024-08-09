@@ -12,6 +12,8 @@ const String registerEndpoint = "$authUrl/register/";
 
 const String sessionLessonsUrl = "$writingUrl/session";
 const String lessonTopicsUrl = "$writingUrl/lesson";
+String lessonCompletedUrl(int lessonId) => "$lessonTopicsUrl/completed/";
+
 const String topicsUrl = "$writingUrl/topic";
 String topicCompleteUrl(int topicId) => "$topicsUrl/$topicId/complete/";
 const String exerciseUrl = "$writingUrl/exercise";

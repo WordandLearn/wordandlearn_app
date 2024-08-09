@@ -9,6 +9,7 @@ abstract class SessionInterface {
   Future<List<FlashcardText>?> getTopicFlashcards(int topicId);
   Future<FlashcardText?> markFlashcardCompleted(FlashcardText flashcard);
   Future<List<Example>?> getTopicExamples(int topicId);
+  Future<Lesson?> markLessonCompleted(Lesson lesson);
   Future<Example?> markExampleCompleted(Example example);
   Future<Exercise?> getTopicExercise(int topicId);
   Future<Exercise?> markExerciseCompleted(Exercise exercise);

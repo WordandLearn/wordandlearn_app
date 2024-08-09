@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/writing/models.dart';
@@ -8,9 +9,11 @@ class LessonCard extends StatefulWidget {
   const LessonCard({
     super.key,
     required this.lesson,
+    this.isAvaliable = false,
   });
 
   final Lesson lesson;
+  final bool isAvaliable; // Set to true when the previous lesson is complete
 
   @override
   State<LessonCard> createState() => _LessonCardState();
@@ -52,7 +55,10 @@ class _LessonCardState extends State<LessonCard> {
                       width: size.width,
                       child: Padding(
                         padding: allPadding,
-                        child: LessonDetailPage(lesson: widget.lesson),
+                        child: LessonDetailPage(
+                          lesson: widget.lesson,
+                          isAvailable: widget.isAvaliable,
+                        ),
                       ));
                 });
           }
@@ -62,41 +68,74 @@ class _LessonCardState extends State<LessonCard> {
         scale: scale,
         duration: const Duration(milliseconds: 200),
         curve: Curves.bounceInOut,
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-              vertical: defaultPadding * 2, horizontal: defaultPadding * 2),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: widget.lesson.color),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: defaultPadding),
-                child: Center(
-                  child: AutoSizeText(
-                    widget.lesson.title,
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Center(
-                  child: FractionallySizedBox(
-                    heightFactor: 0.7,
-                    child: Image.asset(
-                      widget.lesson.image!,
-                      // height: 90,
+        child: Stack(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(
+                  vertical: defaultPadding * 2, horizontal: defaultPadding * 2),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: widget.isAvaliable
+                      ? widget.lesson.color
+                      : widget.lesson.color?.withOpacity(0.7)),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: defaultPadding),
+                    child: Center(
+                      child: AutoSizeText(
+                        widget.lesson.title,
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
+                  Expanded(
+                    child: Center(
+                      child: FractionallySizedBox(
+                        heightFactor: 0.7,
+                        child: Image.asset(
+                          widget.lesson.image!,
+                          // height: 90,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Visibility(
+              visible: !widget.isAvaliable,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.6),
+                    borderRadius: BorderRadius.circular(20)),
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      CupertinoIcons.lock_circle_fill,
+                      color: AppColors.greyTextColor,
+                      size: 50,
+                    ),
+                    Text(
+                      "Lesson Locked",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.greyTextColor),
+                    )
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

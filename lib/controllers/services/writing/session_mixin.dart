@@ -147,6 +147,21 @@ mixin SessionMixin implements SessionInterface {
   }
 
   @override
+  Future<Lesson?> markLessonCompleted(Lesson lesson) async {
+    http.Response res = await client.put(lessonCompletedUrl(lesson.id), {});
+
+    HttpResponse<Lesson> response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      sessionDatabase.markLessonCompleted(lesson);
+      lesson.isCompleted = true;
+      return lesson;
+    } else {
+      throw HttpFetchException(
+          "Could not mark lesson as completed", response.statusCode);
+    }
+  }
+
+  @override
   Future<Example?> markExampleCompleted(Example example) async {
     http.Response res = await client.put(exampleCompletedUrl(example.id), {});
 
@@ -161,6 +176,30 @@ mixin SessionMixin implements SessionInterface {
     }
   }
 
+  Future<bool?> isLessonComplete(Exercise exercise) async {
+    Topic? topic = await sessionDatabase.getTopicFromExercise(exercise);
+    if (topic != null) {
+      List<Topic>? otherTopics = await sessionDatabase.getPartnerTopics(topic);
+      if (otherTopics != null) {
+        for (Topic otherTopic in otherTopics) {
+          if (!otherTopic.completed) {
+            return false;
+          }
+        }
+        return true;
+      }
+    }
+    return null;
+  }
+
+  Future<Lesson?> getLessonFromExercise(Exercise exercise) async {
+    Topic? topic = await sessionDatabase.getTopicFromExercise(exercise);
+    if (topic != null) {
+      return sessionDatabase.getLessonById(topic.lesson);
+    }
+    return null;
+  }
+
   @override
   Future<Exercise> markExerciseCompleted(Exercise exercise) async {
     http.Response res = await client.put(exerciseCompletedUrl(exercise.id), {});
@@ -168,6 +207,7 @@ mixin SessionMixin implements SessionInterface {
     if (response.isSuccess) {
       sessionDatabase.markExerciseCompleted(exercise);
       exercise.completed = true;
+
       return exercise;
     } else {
       throw HttpFetchException(
@@ -285,6 +325,26 @@ mixin SessionMixin implements SessionInterface {
       return File(path);
     } else {
       http.Response res = await client.get(flashcardAudioUrl(flashcardId));
+      HttpResponse response = HttpResponse.fromResponse(res);
+      if (response.isSuccess) {
+        File audioFile = await storeAudioFile(response.data["audio"], path);
+        return audioFile;
+      }
+    }
+
+    return null;
+  }
+
+  Future<File?> getExampleAudio(int exampleId) async {
+    final directory = await getApplicationDocumentsDirectory();
+    String dirPath = "${directory.path}/audio/examples/";
+    await _createDirectory(dirPath);
+
+    String path = "$dirPath$exampleId.mp3";
+    if (File(path).existsSync()) {
+      return File(path);
+    } else {
+      http.Response res = await client.get(exampleAudioUrl(exampleId));
       HttpResponse response = HttpResponse.fromResponse(res);
       if (response.isSuccess) {
         File audioFile = await storeAudioFile(response.data["audio"], path);

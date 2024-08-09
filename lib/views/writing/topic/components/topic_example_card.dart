@@ -23,56 +23,15 @@ class TopicExampleCard extends StatefulWidget {
 
 class _TopicExampleCardState extends State<TopicExampleCard> {
   void _showAlertDialog(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     showDialog(
       context: context,
       barrierDismissible: widget.example.completed,
       builder: (context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          insetPadding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Positioned(
-                top: -50,
-                right: 0,
-                child: Image.asset(
-                  "assets/stickers/cat_angel.png",
-                  width: 90,
-                ),
-              ),
-              Container(
-                height: 300,
-                width: size.width,
-                // width: size.width,
-                margin: const EdgeInsets.symmetric(
-                    horizontal: defaultPadding, vertical: defaultPadding),
-                padding: const EdgeInsetsDirectional.all(defaultPadding * 2),
-                decoration: BoxDecoration(
-                    color: AppColors.secondaryColor,
-                    borderRadius: BorderRadius.circular(20)),
-                child: Text(
-                  widget.example.guide,
-                  style: const TextStyle(fontSize: 18, height: 2),
-                ),
-              ),
-              !widget.example.completed
-                  ? Positioned(
-                      bottom: -20,
-                      left: 0,
-                      right: 0,
-                      child: Center(
-                          child: TapBounce(
-                              child: ExampleDialogButton(
-                        example: widget.example,
-                        onUnderstand: () {
-                          widget.onUnderstand(widget.index);
-                        },
-                      ))))
-                  : const SizedBox.shrink()
-            ],
-          ),
+        return ExampleDialog(
+          example: widget.example,
+          onUnderstand: () {
+            widget.onUnderstand(widget.index);
+          },
         );
       },
     );

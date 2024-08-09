@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
@@ -10,8 +11,10 @@ const String sampleText =
     "Every story is like a painting, and words are your colours. Today, we will add more colours to your palette by learning new words that you can use to describe your experiences in a more vivid and interesting way.";
 
 class LessonDetailPage extends StatelessWidget {
-  const LessonDetailPage({super.key, required this.lesson});
+  const LessonDetailPage(
+      {super.key, required this.lesson, required this.isAvailable});
   final Lesson lesson;
+  final bool isAvailable;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,22 +39,49 @@ class LessonDetailPage extends StatelessWidget {
           duration: TimerUtil.timeToRead(lesson.description) * 0.9,
           child: SizedBox(
             width: 300,
-            child: PrimaryButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LessonTopicsPage(lesson: lesson),
-                        settings:
-                            const RouteSettings(name: "LessonTopicsPage")));
-              },
-              // color: Theme.of(context).colorScheme.secondary,
-              child: const Text(
-                "Go To Lesson",
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
-              ),
-            ),
+            child: isAvailable
+                ? PrimaryButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  LessonTopicsPage(lesson: lesson),
+                              settings: const RouteSettings(
+                                  name: "LessonTopicsPage")));
+                    },
+                    // color: Theme.of(context).colorScheme.secondary,
+                    child: const Text(
+                      "Go To Lesson",
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.w600),
+                    ),
+                  )
+                : const Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(CupertinoIcons.lock_circle_fill),
+                          SizedBox(
+                            width: defaultPadding,
+                          ),
+                          Text("Lesson Locked",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: AppColors.greyTextColor)),
+                        ],
+                      ),
+                      SizedBox(
+                        height: defaultPadding / 2,
+                      ),
+                      Text(
+                        "Complete Previous Lesson",
+                        style: TextStyle(
+                            fontSize: 12, color: AppColors.greyTextColor),
+                      )
+                    ],
+                  ),
           ),
         )
       ],

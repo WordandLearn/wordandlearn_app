@@ -40,6 +40,42 @@ class SessionDatabase implements SessionDatabaseInterface {
     return null;
   }
 
+  Future<Lesson?> getLessonById(int lessonId) async {
+    if (!kIsWeb) {
+      final ObjectBox objectBox = await ObjectBox.getInstance();
+
+      final box = objectBox.store.box<Lesson>();
+      final query = box.query(Lesson_.id.equals(lessonId)).build();
+      final lesson = query.findFirst();
+      return lesson;
+    }
+    return null;
+  }
+
+  Future<Topic?> getTopicFromExercise(Exercise exercise) async {
+    if (!kIsWeb) {
+      final ObjectBox objectBox = await ObjectBox.getInstance();
+
+      final box = objectBox.store.box<Topic>();
+      final query = box.query(Topic_.id.equals(exercise.topic)).build();
+      final topic = query.findFirst();
+      return topic;
+    }
+    return null;
+  }
+
+  Future<List<Topic>?> getPartnerTopics(Topic topic) async {
+    if (!kIsWeb) {
+      final ObjectBox objectBox = await ObjectBox.getInstance();
+
+      final box = objectBox.store.box<Topic>();
+      final query = box.query(Topic_.lesson.equals(topic.lesson)).build();
+      final topics = query.find();
+      return topics;
+    }
+    return null;
+  }
+
   @override
   Future<List<Lesson>?> getSessionLessons(int sessionID) async {
     if (!kIsWeb) {
@@ -225,5 +261,17 @@ class SessionDatabase implements SessionDatabaseInterface {
       final box = objectBox.store.box<Session>();
       box.putMany(sessions);
     }
+  }
+
+  @override
+  Future<Lesson?> markLessonCompleted(Lesson lesson) async {
+    if (!kIsWeb) {
+      lesson.isCompleted = true;
+      final ObjectBox objectBox = await ObjectBox.getInstance();
+      final box = objectBox.store.box<Lesson>();
+      box.put(lesson, mode: PutMode.update);
+      return lesson;
+    }
+    return null;
   }
 }

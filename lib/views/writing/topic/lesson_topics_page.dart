@@ -151,6 +151,8 @@ class _LessonTopicsPageState extends State<LessonTopicsPage> {
                                     child: LessonTopicCard(
                                       topic: topic,
                                       lesson: widget.lesson,
+                                      isAvailable: index == 0 ||
+                                          topics[index - 1].completed,
                                     ),
                                   );
                                 });

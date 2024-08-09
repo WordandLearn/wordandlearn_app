@@ -22,7 +22,7 @@ class Lesson extends ColorModel {
   final String description;
   final DateTime createdAt;
   final String? image;
-  final bool isCompleted;
+  bool isCompleted;
   final LessonProgress? progress;
   final bool unlocked;
   final int session;

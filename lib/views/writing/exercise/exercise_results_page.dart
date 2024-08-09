@@ -214,6 +214,26 @@ class _ExerciseResultsPageState extends State<ExerciseResultsPage> {
                                     setState(() {
                                       widget.exercise.completed = true;
                                     });
+
+                                    writingController
+                                        .isLessonComplete(widget.exercise)
+                                        .then(
+                                      (value) {
+                                        if (value != null && value == true) {
+                                          writingController
+                                              .getLessonFromExercise(
+                                                  widget.exercise)
+                                              .then(
+                                            (value) {
+                                              if (value != null) {
+                                                writingController
+                                                    .markLessonCompleted(value);
+                                              }
+                                            },
+                                          );
+                                        }
+                                      },
+                                    );
                                     //Navigate to topic page using push and remove until
                                     Navigator.popUntil(
                                         context,
