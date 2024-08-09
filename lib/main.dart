@@ -8,6 +8,8 @@ import 'package:word_and_learn/utils/objectbox_utils.dart';
 import 'package:word_and_learn/views/splash_screen.dart';
 import 'package:intl/intl_standalone.dart'
     if (dart.library.html) 'package:intl/intl_browser.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   Gemini.init(apiKey: "AIzaSyDkAOTIsp59llikprmsliWHwFDSeTMdTyA");
@@ -17,6 +19,10 @@ void main() async {
     await ObjectBox.getInstance();
   }
   await findSystemLocale();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(const MyApp());
 }

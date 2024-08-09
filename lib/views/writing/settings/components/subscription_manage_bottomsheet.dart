@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:word_and_learn/components/animation/tap_bounce.dart';
@@ -5,6 +6,7 @@ import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/payments/payment_models.dart';
+import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/views/payments/payment_page.dart';
 import 'package:word_and_learn/views/writing/settings/components/questionarre_widget.dart';
 import 'package:word_and_learn/views/writing/settings/components/subscription_details_container.dart';
@@ -183,33 +185,49 @@ class _CancelAlertDialogState extends State<CancelAlertDialog> {
               TextButton(
                   onPressed: () {
                     if (cancelReason != null && cancelReason!.isNotEmpty) {
-                      //TODO: Push Cancel Reasons To Firebae
                       setState(() {
                         loading = true;
                       });
                       _writingController
                           .cancelSubscription(widget.subscriptionPackage.id)
                           .then(
-                        (value) {
+                        (value) async {
                           if (value != null) {
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                                    content: Row(
-                              children: [
-                                Icon(
-                                  Icons.info,
-                                  color: Colors.green,
-                                ),
-                                SizedBox(
-                                  width: defaultPadding,
-                                ),
-                                Text(
-                                  "Subscription cancelled",
-                                  style: TextStyle(color: Colors.green),
-                                )
-                              ],
-                            )));
+                            Profile? childProfile =
+                                await _writingController.getChildProfile();
+                            Map<String, dynamic> firestoreCancelBody = {
+                              "profile": childProfile?.toJson(),
+                              "package": widget.subscriptionPackage.toJson(),
+                              "reason": cancelReason,
+                            };
+
+                            FirebaseFirestore firestore =
+                                FirebaseFirestore.instance;
+                            firestore
+                                .collection("subscription_cancellations")
+                                .doc()
+                                .set(firestoreCancelBody);
+
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                      content: Row(
+                                children: [
+                                  Icon(
+                                    Icons.info,
+                                    color: Colors.green,
+                                  ),
+                                  SizedBox(
+                                    width: defaultPadding,
+                                  ),
+                                  Text(
+                                    "Subscription cancelled",
+                                    style: TextStyle(color: Colors.green),
+                                  )
+                                ],
+                              )));
+                            }
                           }
                         },
                       ).onError(

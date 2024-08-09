@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "374967467307",
+    "project_id": "word-and-learn",
+    "storage_bucket": "word-and-learn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:374967467307:android:26c51bdc1afabad3ea996e",
+        "android_client_info": {
+          "package_name": "com.wordandlearn.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4o13zTqPKPyU27WEZ9wsGwxPz-4_lk44"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

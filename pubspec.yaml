@@ -37,9 +37,11 @@ dependencies:
   bubble: ^1.2.1
   cached_network_image: ^3.3.1
   circular_countdown_timer: ^0.2.3
+  cloud_firestore: ^5.2.1
   cunning_document_scanner: ^1.1.4
   cupertino_icons: ^1.0.2
   date_field: ^5.2.1
+  firebase_core: ^3.3.0
   flutter:
     sdk: flutter
   flutter_advanced_switch: ^3.1.0

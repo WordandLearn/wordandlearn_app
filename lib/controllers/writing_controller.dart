@@ -38,24 +38,6 @@ class WritingController extends GetxController
     }
   }
 
-  // Future<void> _userSessions() async {
-  //   HttpResponse<Session> response = await getUserSessions();
-
-  //   if (response.isSuccess) {
-  //     userSessions.value = response.models;
-  //     if (response.models.isEmpty) {
-  //       Get.snackbar(
-  //           "Add a New Composition", "Add a new composition to start off");
-  //       return Get.to(() => const UploadOnboardingPage(),
-  //           routeName: "UploadOnboardingPage");
-  //     }
-  //     controllerDatabase.dbSetUserSessions(response.models);
-  //   } else {
-  //     throw HttpFetchException(
-  //         "Could not get your lessons.", response.statusCode);
-  //   }
-  // }
-
   Future<List<Session>> fetchUserSessions() async {
     List<Session> sessions = await retry<List<Session>>(
       () {
