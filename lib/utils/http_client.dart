@@ -2,11 +2,12 @@ import 'dart:io';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:word_and_learn/utils/response_handler.dart';
 
 class HttpClient {
   static final HttpClient _instance = HttpClient._internal();
   factory HttpClient() => _instance;
-
+  final ResponseHandler _responseHandler = ResponseHandler();
   HttpClient._internal() {
     onInit();
   }
@@ -55,7 +56,10 @@ class HttpClient {
     Map<String, String> headers =
         authRequired ? getAuthHeaders() : getHeaders();
 
-    return await http.get(Uri.parse(url), headers: headers);
+    final response = await http.get(Uri.parse(url), headers: headers);
+    _responseHandler.checkResponse(response);
+
+    return response;
   }
 
   Future<http.Response> delete(String url, {Map? body}) async {

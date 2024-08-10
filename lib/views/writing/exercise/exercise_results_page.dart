@@ -209,11 +209,21 @@ class _ExerciseResultsPageState extends State<ExerciseResultsPage> {
                                   if (!result.success) {
                                     Navigator.pop(context);
                                   } else {
-                                    writingController
-                                        .markExerciseCompleted(widget.exercise);
                                     setState(() {
                                       widget.exercise.completed = true;
+                                      widget.topic.exerciseCompleted = true;
                                     });
+                                    writingController
+                                        .markExerciseCompleted(widget.exercise)
+                                        .then(
+                                      (value) {
+                                        Navigator.popUntil(
+                                            context,
+                                            (route) =>
+                                                route.settings.name ==
+                                                "LessonTopicsPage");
+                                      },
+                                    );
 
                                     writingController
                                         .isLessonComplete(widget.exercise)
@@ -235,11 +245,6 @@ class _ExerciseResultsPageState extends State<ExerciseResultsPage> {
                                       },
                                     );
                                     //Navigate to topic page using push and remove until
-                                    Navigator.popUntil(
-                                        context,
-                                        (route) =>
-                                            route.settings.name ==
-                                            "LessonTopicsPage");
                                   }
                                 },
                                 child: PrimaryButton(

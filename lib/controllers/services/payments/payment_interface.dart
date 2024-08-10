@@ -8,6 +8,8 @@ abstract class PaymentInterface {
 
   Future<List<PaymentHistory>?> getPaymentHistory();
 
+  Future<TrialDetails?> startTrial(int packageId);
+
   Future<bool?> cancelSubscription(int packageId);
 
   Future<PesaPalRequest?> subscribeToPackage(

@@ -99,10 +99,10 @@ class _LessonsPageState extends State<LessonsPage> {
                   horizontal: defaultPadding, vertical: defaultPadding),
               child: Column(children: [
                 FutureBuilder<List<Session>>(
-                    future: userSessionsFuture,
+                    future: writingController.getUserSessions(),
                     builder: (context, snapshot) {
                       // if (snapshot.hasData && snapshot.data!.isEmpty) {
-                      //   return const Text("No Compositions, Add a new one");
+                      //   return const Text("No Colempositions, Add a new one");
                       // }
 
                       if (snapshot.connectionState == ConnectionState.waiting) {

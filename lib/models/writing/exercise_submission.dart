@@ -19,7 +19,7 @@ class ExerciseSubmission {
   final int id;
   final DateTime createdAt;
   final String imageUrl;
-  final String text;
+  final String? text;
   final bool processed;
   final int exercise;
 

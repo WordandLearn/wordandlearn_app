@@ -96,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                   AuthTextField(
                     controller: passwordController,
                     hintText: "Password",
+                    maxLines: 1,
                     obscureText: true,
                     validator: (p0) {
                       if (p0!.isEmpty) {

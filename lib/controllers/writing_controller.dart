@@ -22,7 +22,9 @@ class WritingController extends GetxController
 
   @override
   void onInit() {
-    refetch();
+    Future.delayed(const Duration(seconds: 1), () {
+      refetch();
+    });
     super.onInit();
   }
 

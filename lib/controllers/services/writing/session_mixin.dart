@@ -149,7 +149,6 @@ mixin SessionMixin implements SessionInterface {
   @override
   Future<Lesson?> markLessonCompleted(Lesson lesson) async {
     http.Response res = await client.put(lessonCompletedUrl(lesson.id), {});
-
     HttpResponse<Lesson> response = HttpResponse.fromResponse(res);
     if (response.isSuccess) {
       sessionDatabase.markLessonCompleted(lesson);

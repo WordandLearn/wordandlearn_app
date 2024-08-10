@@ -633,7 +633,7 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(1, 539849635360717752),
             name: 'id',
             type: 6,
-            flags: 1),
+            flags: 129),
         obx_int.ModelProperty(
             id: const obx_int.IdUid(2, 8611686588332469419),
             name: 'dateOpened',
@@ -1103,7 +1103,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (ExerciseSubmission object, fb.Builder fbb) {
           final imageUrlOffset = fbb.writeString(object.imageUrl);
-          final textOffset = fbb.writeString(object.text);
+          final textOffset =
+              object.text == null ? null : fbb.writeString(object.text!);
           fbb.startTable(7);
           fbb.addInt64(0, object.id);
           fbb.addInt64(1, object.createdAt.millisecondsSinceEpoch);
@@ -1124,7 +1125,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final imageUrlParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 8, '');
           final textParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 10, '');
+              .vTableGetNullable(buffer, rootOffset, 10);
           final processedParam =
               const fb.BoolReader().vTableGet(buffer, rootOffset, 12, false);
           final exerciseParam =

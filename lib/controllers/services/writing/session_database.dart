@@ -52,6 +52,18 @@ class SessionDatabase implements SessionDatabaseInterface {
     return null;
   }
 
+  Future<Topic?> getTopicById(int topicId) async {
+    if (!kIsWeb) {
+      final ObjectBox objectBox = await ObjectBox.getInstance();
+
+      final box = objectBox.store.box<Topic>();
+      final query = box.query(Topic_.id.equals(topicId)).build();
+      final topic = query.findFirst();
+      return topic;
+    }
+    return null;
+  }
+
   Future<Topic?> getTopicFromExercise(Exercise exercise) async {
     if (!kIsWeb) {
       final ObjectBox objectBox = await ObjectBox.getInstance();
@@ -147,6 +159,12 @@ class SessionDatabase implements SessionDatabaseInterface {
       final ObjectBox objectBox = await ObjectBox.getInstance();
       final box = objectBox.store.box<Exercise>();
       box.put(exercise, mode: PutMode.update);
+      Topic? topic = await getTopicById(exercise.topic);
+      if (topic != null) {
+        topic.exerciseCompleted = true;
+        final topicBox = objectBox.store.box<Topic>();
+        topicBox.put(topic, mode: PutMode.update);
+      }
       return exercise;
     }
     return null;

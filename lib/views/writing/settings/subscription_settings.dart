@@ -90,6 +90,8 @@ class _SubscriptionPackagesWidgetState
     return FutureBuilder<PackageSubscriptionDetails?>(
         future: _future,
         builder: (context, snapshot) {
+          // print(snapshot.error);
+          // print(snapshot.stackTrace);
           return Column(
             children: [
               //Fetch Subscription from API
@@ -159,12 +161,28 @@ class _SubscriptionPackagesWidgetState
                             if (!packageSubscriptionDetails.active) {
                               // Handle not active, either start a trial or initiate subscription
                               if (packageSubscriptionDetails.trialEligible) {
-                                return const SubscriptionInactiveWidget(
+                                return SubscriptionInactiveWidget(
+                                  subscriptionPackage: widget.package,
+                                  onStarted: () {
+                                    setState(() {
+                                      _future = _writingController
+                                          .getPackageSubscriptionDetails(
+                                              widget.package.id);
+                                    });
+                                  },
                                   isTrial: true,
                                 );
                               } else {
-                                return const SubscriptionInactiveWidget(
+                                return SubscriptionInactiveWidget(
                                   isTrial: false,
+                                  subscriptionPackage: widget.package,
+                                  onStarted: () {
+                                    setState(() {
+                                      _future = _writingController
+                                          .getPackageSubscriptionDetails(
+                                              widget.package.id);
+                                    });
+                                  },
                                 );
                               }
                             } else {
