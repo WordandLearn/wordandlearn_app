@@ -23,12 +23,14 @@ class FlashcardText extends ColorModel {
   final int topic;
   String? title;
   bool completed;
+  MiniActivity? miniActivity;
 
   FlashcardText(
       {required this.id,
       required this.text,
       required this.topic,
       this.title,
+      this.miniActivity,
       this.completed = false});
 
   factory FlashcardText.fromJson(Map<String, dynamic> json) => FlashcardText(
@@ -36,6 +38,11 @@ class FlashcardText extends ColorModel {
       text: json["text"],
       topic: json["topic"],
       title: json["title"],
+      miniActivity: json["data"] != null
+          ? json["data"]["mini_activity"] != null
+              ? MiniActivity.fromJson(json["data"]["mini_activity"])
+              : null
+          : null,
       completed: json["completed"] ?? false);
 
   Map<String, dynamic> toJson() => {

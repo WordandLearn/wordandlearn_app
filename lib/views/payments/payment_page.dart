@@ -193,12 +193,13 @@ class _PaymentPageState extends State<PaymentPage> {
                   ),
                 ),
                 const Text(
-                  "* You will be redirected to our payment gateway, pesapal , to complete your payment",
+                  "* You will be redirected to our payment gateway, Pesapal , to complete your payment",
                   style: TextStyle(color: AppColors.greyTextColor),
                 ),
                 const SizedBox(
                   height: defaultPadding * 4,
                 ),
+                //TODO: Paymenf Success Page
                 TapBounce(
                   onTap: () {
                     if (!loading) {

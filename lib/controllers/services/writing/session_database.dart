@@ -12,13 +12,14 @@ import 'package:word_and_learn/utils/objectbox_utils.dart';
 class SessionDatabase implements SessionDatabaseInterface {
   @override
   Future<Session?> getCurrentSession() async {
-    if (!kIsWeb) {
+    if (!kIsWeb && !await ObjectBox.isTtlExpired("current_session")) {
       final ObjectBox objectBox = await ObjectBox.getInstance();
 
       final box = objectBox.store.box<CurrentSession>();
       List<CurrentSession> currentSessions = box.getAll();
       if (currentSessions.isNotEmpty) {
         Session? session = currentSessions.first.session.target;
+        await ObjectBox.updateDatabaseAccess("current_session");
         return session;
       } else {
         return null;
@@ -29,12 +30,14 @@ class SessionDatabase implements SessionDatabaseInterface {
 
   @override
   Future<List<Topic>?> getLessonTopics(int lessonId) async {
-    if (!kIsWeb) {
+    if (!kIsWeb && !await ObjectBox.isTtlExpired("lesson_topics")) {
       final ObjectBox objectBox = await ObjectBox.getInstance();
 
       final box = objectBox.store.box<Topic>();
       final query = box.query(Topic_.lesson.equals(lessonId)).build();
       final topics = query.find();
+      await ObjectBox.updateDatabaseAccess("lesson_topics");
+
       return topics;
     }
     return null;
@@ -47,6 +50,7 @@ class SessionDatabase implements SessionDatabaseInterface {
       final box = objectBox.store.box<Lesson>();
       final query = box.query(Lesson_.id.equals(lessonId)).build();
       final lesson = query.findFirst();
+
       return lesson;
     }
     return null;
@@ -59,6 +63,7 @@ class SessionDatabase implements SessionDatabaseInterface {
       final box = objectBox.store.box<Topic>();
       final query = box.query(Topic_.id.equals(topicId)).build();
       final topic = query.findFirst();
+
       return topic;
     }
     return null;
@@ -71,6 +76,7 @@ class SessionDatabase implements SessionDatabaseInterface {
       final box = objectBox.store.box<Topic>();
       final query = box.query(Topic_.id.equals(exercise.topic)).build();
       final topic = query.findFirst();
+
       return topic;
     }
     return null;
@@ -83,6 +89,7 @@ class SessionDatabase implements SessionDatabaseInterface {
       final box = objectBox.store.box<Topic>();
       final query = box.query(Topic_.lesson.equals(topic.lesson)).build();
       final topics = query.find();
+
       return topics;
     }
     return null;
@@ -90,12 +97,17 @@ class SessionDatabase implements SessionDatabaseInterface {
 
   @override
   Future<List<Lesson>?> getSessionLessons(int sessionID) async {
-    if (!kIsWeb) {
+    if (!kIsWeb &&
+        !await ObjectBox.isTtlExpired("session${sessionID}_lessons")) {
       final ObjectBox objectBox = await ObjectBox.getInstance();
 
       final box = objectBox.store.box<Lesson>();
-      final query = box.query(Lesson_.session.equals(sessionID)).build();
+      final query = (box.query(Lesson_.session.equals(sessionID))
+            ..order(Lesson_.id))
+          .build();
       final lessons = query.find();
+      await ObjectBox.updateDatabaseAccess("session${sessionID}_lessons");
+
       return lessons;
     }
     return null;
@@ -103,12 +115,16 @@ class SessionDatabase implements SessionDatabaseInterface {
 
   @override
   Future<List<Example>?> getTopicExamples(int topicId) async {
-    if (!kIsWeb) {
+    if (!kIsWeb && !await ObjectBox.isTtlExpired("topic${topicId}_examples")) {
       final ObjectBox objectBox = await ObjectBox.getInstance();
 
       final box = objectBox.store.box<Example>();
-      final query = box.query(Example_.topic.equals(topicId)).build();
+      final query = (box.query(Example_.topic.equals(topicId))
+            ..order(Example_.id))
+          .build();
       final examples = query.find();
+      await ObjectBox.updateDatabaseAccess("topic${topicId}_examples");
+
       return examples;
     }
     return null;
@@ -116,12 +132,14 @@ class SessionDatabase implements SessionDatabaseInterface {
 
   @override
   Future<Exercise?> getTopicExercise(int topicId) async {
-    if (!kIsWeb) {
+    if (!kIsWeb && !await ObjectBox.isTtlExpired("topic${topicId}_exercise")) {
       final ObjectBox objectBox = await ObjectBox.getInstance();
 
       final box = objectBox.store.box<Exercise>();
       final query = box.query(Exercise_.topic.equals(topicId)).build();
       final exercise = query.findFirst();
+      await ObjectBox.updateDatabaseAccess("topic${topicId}_exercise");
+
       return exercise;
     }
     return null;
@@ -129,12 +147,17 @@ class SessionDatabase implements SessionDatabaseInterface {
 
   @override
   Future<List<FlashcardText>?> getTopicFlashcards(int topicId) async {
-    if (!kIsWeb) {
+    if (!kIsWeb &&
+        !await ObjectBox.isTtlExpired("topic${topicId}_flashcards")) {
       final ObjectBox objectBox = await ObjectBox.getInstance();
 
       final box = objectBox.store.box<FlashcardText>();
-      final query = box.query(FlashcardText_.topic.equals(topicId)).build();
+      final query = (box.query(FlashcardText_.topic.equals(topicId))
+            ..order(FlashcardText_.id))
+          .build();
       final flashcards = query.find();
+      await ObjectBox.updateDatabaseAccess("topic${topicId}_flashcards");
+
       return flashcards;
     }
     return null;
@@ -147,6 +170,7 @@ class SessionDatabase implements SessionDatabaseInterface {
       final ObjectBox objectBox = await ObjectBox.getInstance();
       final box = objectBox.store.box<Example>();
       box.put(example, mode: PutMode.update);
+
       return example;
     }
     return null;
@@ -165,6 +189,7 @@ class SessionDatabase implements SessionDatabaseInterface {
         final topicBox = objectBox.store.box<Topic>();
         topicBox.put(topic, mode: PutMode.update);
       }
+
       return exercise;
     }
     return null;
@@ -179,6 +204,7 @@ class SessionDatabase implements SessionDatabaseInterface {
       box.put(flashcard, mode: PutMode.update);
       return flashcard;
     }
+
     return null;
   }
 
@@ -191,6 +217,7 @@ class SessionDatabase implements SessionDatabaseInterface {
       box.put(topic, mode: PutMode.update);
       return topic;
     }
+
     return null;
   }
 
@@ -208,6 +235,7 @@ class SessionDatabase implements SessionDatabaseInterface {
 
       currentSession.session.target = session;
       box.put(currentSession, mode: PutMode.put);
+      await ObjectBox.updateDatabaseAccess("current_session");
     }
   }
 
@@ -218,6 +246,7 @@ class SessionDatabase implements SessionDatabaseInterface {
 
       final box = objectBox.store.box<Topic>();
       box.putMany(topics);
+      await ObjectBox.updateDatabaseAccess("lesson_topics");
     }
   }
 
@@ -228,6 +257,7 @@ class SessionDatabase implements SessionDatabaseInterface {
 
       final box = objectBox.store.box<Lesson>();
       box.putMany(lessons);
+      await ObjectBox.updateDatabaseAccess("session_lessons");
     }
   }
 
@@ -238,6 +268,7 @@ class SessionDatabase implements SessionDatabaseInterface {
 
       final box = objectBox.store.box<Example>();
       box.putMany(examples);
+      await ObjectBox.updateDatabaseAccess("session_examples");
     }
   }
 
@@ -248,6 +279,7 @@ class SessionDatabase implements SessionDatabaseInterface {
 
       final box = objectBox.store.box<Exercise>();
       box.put(exercise);
+      await ObjectBox.updateDatabaseAccess("topic_exercise");
     }
   }
 
@@ -258,15 +290,18 @@ class SessionDatabase implements SessionDatabaseInterface {
 
       final box = objectBox.store.box<FlashcardText>();
       box.putMany(flashcards);
+      await ObjectBox.updateDatabaseAccess("topic_flashcards");
     }
   }
 
   @override
   Future<List<Session>?> getUserSessions() async {
-    if (!kIsWeb) {
+    if (!kIsWeb && !await ObjectBox.isTtlExpired("user_sessions")) {
       final ObjectBox objectBox = await ObjectBox.getInstance();
       final box = objectBox.store.box<Session>();
       final sessions = box.getAll();
+      await ObjectBox.updateDatabaseAccess("user_sessions");
+
       return sessions;
     }
     return null;
@@ -278,6 +313,7 @@ class SessionDatabase implements SessionDatabaseInterface {
       final ObjectBox objectBox = await ObjectBox.getInstance();
       final box = objectBox.store.box<Session>();
       box.putMany(sessions);
+      await ObjectBox.updateDatabaseAccess("user_sessions");
     }
   }
 
@@ -288,6 +324,7 @@ class SessionDatabase implements SessionDatabaseInterface {
       final ObjectBox objectBox = await ObjectBox.getInstance();
       final box = objectBox.store.box<Lesson>();
       box.put(lesson, mode: PutMode.update);
+
       return lesson;
     }
     return null;

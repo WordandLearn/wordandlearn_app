@@ -18,3 +18,4 @@ export 'task_state.dart';
 export "school.dart";
 export 'profile_picture.dart';
 export 'child_profile_details.dart';
+export 'mini_activity.dart';

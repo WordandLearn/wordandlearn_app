@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/writing/models.dart';
+import 'package:word_and_learn/views/writing/topic/mini_activity_page.dart';
 
 import 'dialog_audio_player.dart';
 
@@ -176,9 +177,26 @@ class _FlashCardButtonState extends State<_FlashCardButton> {
           onTap: () {
             _animateBounce();
             if (widget.completed) {
-              Future.delayed(const Duration(milliseconds: 400), () {
-                widget.onTap();
-              });
+              if (widget.flashcardText.miniActivity != null) {
+                showModalBottomSheet(
+                  context: context,
+                  isDismissible: false,
+                  builder: (context) {
+                    return MiniActivityPage(
+                      miniActivity: widget.flashcardText.miniActivity!,
+                      colorModel: widget.flashcardText,
+                      onUnderstand: () {
+                        Navigator.pop(context);
+                        widget.onTap();
+                      },
+                    );
+                  },
+                );
+              } else {
+                Future.delayed(const Duration(milliseconds: 400), () {
+                  widget.onTap();
+                });
+              }
             }
           },
           child: AnimatedContainer(
@@ -207,35 +225,62 @@ class _FlashCardButtonState extends State<_FlashCardButton> {
                         ),
                       ],
                     )
-                  : Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 30,
-                          height: 30,
-                          decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(20)),
-                          child: const Icon(
-                            Icons.done_rounded,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: defaultPadding / 2,
-                        ),
-                        const Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: defaultPadding),
-                          child: Text(
-                            "I Understand",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black),
-                          ),
+                  : widget.flashcardText.miniActivity != null
+                      ? Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: defaultPadding),
+                              child: Text(
+                                "Do Activity",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black),
+                              ),
+                            ),
+                            Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: const Icon(
+                                Icons.chevron_right_rounded,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
                         )
-                      ],
-                    ),
+                      : Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: const Icon(
+                                Icons.done_rounded,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: defaultPadding / 2,
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: defaultPadding),
+                              child: Text(
+                                "I Understand",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black),
+                              ),
+                            )
+                          ],
+                        ),
             ),
           ),
         ),

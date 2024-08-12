@@ -105,8 +105,9 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                                 color: AppColors.secondaryColor),
-                            child: Text(
+                            child: AutoSizeText(
                               widget.topic.tag,
+                              maxLines: 1,
                               style:
                                   const TextStyle(fontWeight: FontWeight.w600),
                             ),
