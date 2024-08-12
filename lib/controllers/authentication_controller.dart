@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/utils/http_client.dart';
@@ -19,8 +20,14 @@ class AuthenticationController extends GetxController {
     HttpResponse<User> response = HttpResponse.fromResponse(res);
     if (response.isSuccess) {
       await client.saveAuthToken(response.data["token"]);
-      response.models = [User.fromJson(response.data)];
+      final user = User.fromJson(response.data);
+      response.models = [user];
       await client.saveUserType(response.models.first.user.role.name);
+
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      if (user.user.profile != null) {
+        preferences.setInt("profile_id", user.user.profile!.id);
+      }
     }
     return response;
   }
@@ -68,5 +75,20 @@ class AuthenticationController extends GetxController {
         authRequired: false);
     HttpResponse<User> response = HttpResponse.fromResponse(res);
     return response;
+  }
+
+  Future<HttpResponse<ChildProfileDetails>> createProfile(
+      Map<String, dynamic> body) async {
+    http.Response res = await client.post("$authUrl/profile/create/", body);
+    HttpResponse<ChildProfileDetails> response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      response.models = [ChildProfileDetails.fromJson(response.data)];
+    }
+    return response;
+  }
+
+  Future<void> logout() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
   }
 }

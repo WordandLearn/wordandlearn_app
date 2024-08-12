@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:word_and_learn/constants/theme.dart';
 import 'package:word_and_learn/utils/navigation_observer.dart';
 import 'package:word_and_learn/utils/objectbox_utils.dart';
-import 'package:word_and_learn/views/auth/login.dart';
 
 import 'package:word_and_learn/views/splash_screen.dart';
 import 'package:intl/intl_standalone.dart';
@@ -50,7 +49,7 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: navigatorKey,
       title: 'Word & Learn',
       theme: AppTheme.getTheme(),
-      home: const LoginPage(),
+      home: const SplashScreen(),
     );
   }
 }

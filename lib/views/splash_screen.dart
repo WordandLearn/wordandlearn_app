@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/views/auth/login.dart';
+import 'package:word_and_learn/views/auth/profile_onboarding.dart';
 import 'package:word_and_learn/views/teachers/home.dart';
 import 'package:word_and_learn/views/writing/lessons/lessons_page.dart';
 
@@ -21,21 +22,32 @@ class _SplashScreenState extends State<SplashScreen> {
       if (preferences.containsKey("authToken")) {
         if (preferences.containsKey("userType")) {
           if (preferences.getString("userType") == "child") {
-            Get.put(WritingController());
-            if (mounted) {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const LessonsPage(),
-                      settings: const RouteSettings(name: "LessonsPage")));
-            } else if (preferences.getString("userType") == "teacher") {
-              Get.put(TeacherController());
+            if (!preferences.containsKey("profile_id")) {
               if (mounted) {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const TeachersHome(),
-                        settings: const RouteSettings(name: "TeachersHome")));
+                        builder: (context) => const ProfileOnboardingPage(),
+                        settings: const RouteSettings(
+                            name: "ProfileOnboardingPage")));
+              }
+            } else {
+              Get.put(WritingController());
+              if (mounted) {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LessonsPage(),
+                        settings: const RouteSettings(name: "LessonsPage")));
+              } else if (preferences.getString("userType") == "teacher") {
+                Get.put(TeacherController());
+                if (mounted) {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const TeachersHome(),
+                          settings: const RouteSettings(name: "TeachersHome")));
+                }
               }
             }
           }

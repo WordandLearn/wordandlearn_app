@@ -24,6 +24,7 @@ class AuthTextField extends StatefulWidget {
     this.textAlign,
     this.autovalidateMode,
     this.maxLines,
+    this.hintTextStyle,
   });
   final String hintText;
   final String? Function(String?)? validator;
@@ -39,6 +40,7 @@ class AuthTextField extends StatefulWidget {
   final Color? fillColor;
   final Color? focusedBorderColor;
   final TextStyle? textStyle;
+  final TextStyle? hintTextStyle;
   final int? maxLength;
   final EdgeInsets? paddiing;
   final TextAlign? textAlign;
@@ -81,7 +83,8 @@ class _AuthTextFieldState extends State<AuthTextField> {
           contentPadding: widget.paddiing ??
               const EdgeInsets.symmetric(
                   horizontal: defaultPadding * 3, vertical: defaultPadding * 2),
-          hintStyle: const TextStyle(fontWeight: FontWeight.w600),
+          hintStyle: widget.hintTextStyle ??
+              const TextStyle(fontWeight: FontWeight.w500),
           filled: true,
           fillColor: widget.fillColor ?? Colors.white,
           suffixIcon: widget.obscureText

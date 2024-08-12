@@ -8,6 +8,7 @@ import 'package:word_and_learn/controllers/teacher_controller.dart';
 import 'package:word_and_learn/controllers/writing_controller.dart';
 import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/views/auth/forgot_password_email.dart';
+import 'package:word_and_learn/views/auth/profile_onboarding.dart';
 import 'package:word_and_learn/views/auth/signup.dart';
 import 'package:word_and_learn/views/teachers/home.dart';
 import 'package:word_and_learn/views/writing/lessons/lessons_page.dart';
@@ -147,40 +148,48 @@ class _LoginPageState extends State<LoginPage> {
                       .login(usernameController.text, passwordController.text)
                       .then((HttpResponse response) {
                     if (response.isSuccess) {
-                      if (response.data['user']['role'] == 'C') {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                                content: Text(
-                          "That was a success :)",
-                          style: TextStyle(color: Colors.green),
-                        )));
-                        Get.put(WritingController());
-
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LessonsPage(),
-                            ));
-                      } else if (response.data['user']['role'] == 'T') {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                                content: Text(
-                          "That was a success :)",
-                          style: TextStyle(color: Colors.green),
-                        )));
-                        Get.put(TeacherController());
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const TeachersHome(),
-                            ));
+                      if (response.data["user"]["profile"] == null) {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return const ProfileOnboardingPage();
+                          },
+                        ));
                       } else {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                                content: Text(
-                          "An error has occured :()",
-                          style: TextStyle(color: Colors.red),
-                        )));
+                        if (response.data['user']['role'] == 'C') {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                                  content: Text(
+                            "That was a success :)",
+                            style: TextStyle(color: Colors.green),
+                          )));
+                          Get.put(WritingController());
+
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LessonsPage(),
+                              ));
+                        } else if (response.data['user']['role'] == 'T') {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                                  content: Text(
+                            "That was a success :)",
+                            style: TextStyle(color: Colors.green),
+                          )));
+                          Get.put(TeacherController());
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const TeachersHome(),
+                              ));
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                                  content: Text(
+                            "An error has occured :()",
+                            style: TextStyle(color: Colors.red),
+                          )));
+                        }
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
