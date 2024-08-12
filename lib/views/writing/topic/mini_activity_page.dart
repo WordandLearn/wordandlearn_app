@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
@@ -81,7 +79,7 @@ class MiniActivityPage extends StatelessWidget {
           top: -40,
           left: 0,
           child: Image.asset(
-            "assets/stickers/cat_happy.png",
+            "assets/stickers/brain.png",
             height: 80,
           ),
         )

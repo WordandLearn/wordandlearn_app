@@ -53,11 +53,16 @@ class _TopicNotesPageState extends State<TopicNotesPage> {
     return FutureBuilder<List<FlashcardText>?>(
         future: _future,
         builder: (context, snapshot) {
-          print(snapshot.error);
-          print(snapshot.stackTrace);
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
             child: Builder(builder: (context) {
+              if (snapshot.hasError) {
+                return const Center(
+                  child:
+                      Text("Oops:( An error occurred while loading the notes"),
+                );
+              }
+
               return AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
                 child: snapshot.hasData

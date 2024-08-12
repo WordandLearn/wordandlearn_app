@@ -199,7 +199,6 @@ class _PaymentPageState extends State<PaymentPage> {
                 const SizedBox(
                   height: defaultPadding * 4,
                 ),
-                //TODO: Paymenf Success Page
                 TapBounce(
                   onTap: () {
                     if (!loading) {

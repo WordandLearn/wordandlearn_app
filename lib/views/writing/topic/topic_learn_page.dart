@@ -91,6 +91,24 @@ class _TopicLearnPageState extends State<TopicLearnPage> {
                           completedStatus[1] = true;
                           widget.topic.completed = true;
                         });
+
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                                content: Row(
+                          children: [
+                            Icon(
+                              Icons.done_rounded,
+                              color: Colors.white,
+                            ),
+                            SizedBox(
+                              width: defaultPadding,
+                            ),
+                            Expanded(
+                              child: Text(
+                                  "You have completed the learning activity on this Topic. You can now try out the exercise"),
+                            )
+                          ],
+                        )));
                       },
                     ),
                   ],

@@ -91,8 +91,7 @@ class _ExampleDialogState extends State<ExampleDialog> {
 }
 
 class _ExampleAudioWidget extends StatefulWidget {
-  const _ExampleAudioWidget(
-      {super.key, required this.example, required this.onCompleted});
+  const _ExampleAudioWidget({required this.example, required this.onCompleted});
   final Example example;
   final void Function() onCompleted;
 
