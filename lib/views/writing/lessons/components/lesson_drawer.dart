@@ -203,23 +203,6 @@ class _LessonDrawerState extends State<LessonDrawer> {
                                     name: "SubscriptionSettings")));
                       },
                     ),
-                    const SizedBox(
-                      height: defaultPadding * 2,
-                    ),
-                    _DrawerTile(
-                      icon: const Icon(Icons.wallet_outlined),
-                      title: "Payment Methods",
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) {
-                                  return const SubscriptionSettings();
-                                },
-                                settings: const RouteSettings(
-                                    name: "SubscriptionSettings")));
-                      },
-                    ),
                   ],
                 ),
                 Padding(

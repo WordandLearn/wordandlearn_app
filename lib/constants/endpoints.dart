@@ -7,6 +7,8 @@ const String profileUrl = "$authUrl/me";
 const String profilePictureUrl = "$profileUrl/profile_photo/";
 const String writingUrl = "$baseUrl/writing";
 const String teachersUrl = "$baseUrl/teachers";
+
+//Auth endpoints
 const String loginEndpoint = "$authUrl/login/";
 const String registerEndpoint = "$authUrl/register/";
 

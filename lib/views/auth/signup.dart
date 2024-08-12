@@ -4,24 +4,21 @@ import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/authentication_controller.dart';
-import 'package:word_and_learn/controllers/teacher_controller.dart';
-import 'package:word_and_learn/controllers/writing_controller.dart';
-import 'package:word_and_learn/models/writing/models.dart';
-import 'package:word_and_learn/views/auth/forgot_password_email.dart';
-import 'package:word_and_learn/views/auth/signup.dart';
-import 'package:word_and_learn/views/teachers/home.dart';
-import 'package:word_and_learn/views/writing/lessons/lessons_page.dart';
+import 'package:word_and_learn/views/auth/login.dart';
+import 'package:word_and_learn/views/auth/otp_validation.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  final TextEditingController usernameController = TextEditingController();
+class _SignUpPageState extends State<SignUpPage> {
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController passwordConfirmController =
+      TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final AuthenticationController authenticationController =
       AuthenticationController();
@@ -83,17 +80,21 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   AuthTextField(
-                    controller: usernameController,
-                    hintText: "Username",
+                    controller: emailController,
+                    hintText: "Email Address",
+                    keyboardType: TextInputType.emailAddress,
                     validator: (p0) {
                       if (p0!.isEmpty) {
-                        return "Username cannot be empty";
+                        return "Email cannot be empty";
+                      }
+                      if (!p0.isEmail) {
+                        return "Invalid Email Address";
                       }
                       return null;
                     },
                   ),
                   const SizedBox(
-                    height: defaultPadding * 3,
+                    height: defaultPadding * 2,
                   ),
                   AuthTextField(
                     controller: passwordController,
@@ -107,6 +108,24 @@ class _LoginPageState extends State<LoginPage> {
                       return null;
                     },
                   ),
+                  const SizedBox(
+                    height: defaultPadding * 2,
+                  ),
+                  AuthTextField(
+                    controller: passwordConfirmController,
+                    hintText: "Confirm Password",
+                    maxLines: 1,
+                    obscureText: true,
+                    validator: (p0) {
+                      if (p0!.isEmpty) {
+                        return "Password cannot be empty";
+                      }
+                      if (p0 != passwordController.text) {
+                        return "Passwords do not match";
+                      }
+                      return null;
+                    },
+                  ),
                 ],
               ),
             ),
@@ -116,20 +135,12 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: Alignment.centerRight,
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const ForgotPasswordEmailPage(),
-                            settings: const RouteSettings(
-                                name: "ForgotPasswordEmailPage")));
+                    //TODO: Go To Terms of Service
                   },
-                  child: Text(
-                    "Forgot Password?",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(fontWeight: FontWeight.bold),
+                  child: const Text(
+                    "By signing up you agree to our terms of service",
+                    style:
+                        TextStyle(fontSize: 12, color: AppColors.greyTextColor),
                   ),
                 ),
               ),
@@ -142,61 +153,53 @@ class _LoginPageState extends State<LoginPage> {
               duration: const Duration(milliseconds: 150),
               onTap: () {
                 if (_formKey.currentState!.validate()) {
+                  setState(() {
+                    error = null;
+                  });
                   toggleLoading();
-                  authenticationController
-                      .login(usernameController.text, passwordController.text)
-                      .then((HttpResponse response) {
-                    if (response.isSuccess) {
-                      if (response.data['user']['role'] == 'C') {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                                content: Text(
-                          "That was a success :)",
-                          style: TextStyle(color: Colors.green),
-                        )));
-                        Get.put(WritingController());
-
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LessonsPage(),
-                            ));
-                      } else if (response.data['user']['role'] == 'T') {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                                content: Text(
-                          "That was a success :)",
-                          style: TextStyle(color: Colors.green),
-                        )));
-                        Get.put(TeacherController());
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const TeachersHome(),
-                            ));
+                  Map<String, String> body = {
+                    "email": emailController.text,
+                    "password1": passwordController.text,
+                    "password2": passwordConfirmController.text
+                  };
+                  authenticationController.signUp(body).then(
+                    (response) {
+                      if (response.isSuccess) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      "Verify your email address to continue")));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const OtpValidationPage(),
+                                  settings: const RouteSettings(
+                                      name: "OtpValidationPage")));
+                        }
                       } else {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                                content: Text(
-                          "An error has occured :()",
-                          style: TextStyle(color: Colors.red),
-                        )));
+                        setState(() {
+                          error = response.data.entries
+                              .map(
+                                (e) {
+                                  return "${e.key} - ${e.value.join(". ")}";
+                                },
+                              )
+                              .toList()
+                              .join("\n");
+                        });
                       }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text(
-                        "An error has occured :()",
-                        style: TextStyle(color: Colors.red),
-                      )));
-                      setState(() {
-                        error = response.data['error'];
-                      });
-                    }
-                  }).whenComplete(() => toggleLoading());
+                    },
+                  ).whenComplete(
+                    () {
+                      toggleLoading();
+                    },
+                  );
                 }
               },
               child: PrimaryIconButton(
-                  text: "Login",
+                  text: "Sign Up",
                   icon: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
                     child: !isLoading
@@ -215,7 +218,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Don't Have An Account?",
+                  const Text("Have An Account?",
                       style: TextStyle(
                           fontSize: 14, color: AppColors.greyTextColor)),
                   const SizedBox(
@@ -227,13 +230,13 @@ class _LoginPageState extends State<LoginPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) {
-                                return const SignUpPage();
+                                return const LoginPage();
                               },
                               settings:
-                                  const RouteSettings(name: "SignUpPage")));
+                                  const RouteSettings(name: "LoginPage")));
                     },
                     child: const Text(
-                      "Sign Up",
+                      "Log In",
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),

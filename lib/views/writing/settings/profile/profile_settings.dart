@@ -263,71 +263,69 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: defaultPadding),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Account",
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w600),
-                              ),
-                              Column(
-                                children: [
-                                  SettingsListItem(
-                                    text: "Update Email Address",
-                                    onPressed: () {
-                                      //TODO: Implement Email Address Update
-                                    },
-                                    icon: const Icon(
-                                      CupertinoIcons.mail,
-                                      size: 20,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                  SettingsListItem(
-                                      text: "Request Your Data",
-                                      icon: const Icon(
-                                        CupertinoIcons.archivebox,
-                                        size: 20,
-                                        color: Colors.grey,
-                                      ),
-                                      onPressed: () {
-                                        //TODO: Implement Request Data
-                                      }),
-                                  SettingsListItem(
-                                      text: "Disable or Delete Your Account",
-                                      iconBackgroundColor:
-                                          Colors.red.withOpacity(0.2),
-                                      textStyle: const TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.w600),
-                                      icon: const Icon(
-                                        CupertinoIcons.delete,
-                                        size: 20,
-                                        color: Colors.red,
-                                      ),
-                                      onPressed: () {
-                                        showModalBottomSheet(
-                                            context: context,
-                                            builder: (context) {
-                                              return SizedBox(
-                                                height: 400,
-                                                child: DangerModal(
-                                                  warning:
-                                                      "Your will lose your account and all related data lessons,progress, photos etc",
-                                                  onProceed: () {},
-                                                ),
-                                              );
-                                            });
-                                      }),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(
+                        //       vertical: defaultPadding),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     children: [
+                        //       const Text(
+                        //         "Account",
+                        //         style: TextStyle(
+                        //             fontSize: 20, fontWeight: FontWeight.w600),
+                        //       ),
+                        //       Column(
+                        //         children: [
+                        //           SettingsListItem(
+                        //             text: "Update Email Address",
+                        //             onPressed: () {
+                        //             },
+                        //             icon: const Icon(
+                        //               CupertinoIcons.mail,
+                        //               size: 20,
+                        //               color: Colors.grey,
+                        //             ),
+                        //           ),
+                        //           SettingsListItem(
+                        //               text: "Request Your Data",
+                        //               icon: const Icon(
+                        //                 CupertinoIcons.archivebox,
+                        //                 size: 20,
+                        //                 color: Colors.grey,
+                        //               ),
+                        //               onPressed: () {
+                        //               }),
+                        //           SettingsListItem(
+                        //               text: "Disable or Delete Your Account",
+                        //               iconBackgroundColor:
+                        //                   Colors.red.withOpacity(0.2),
+                        //               textStyle: const TextStyle(
+                        //                   color: Colors.red,
+                        //                   fontWeight: FontWeight.w600),
+                        //               icon: const Icon(
+                        //                 CupertinoIcons.delete,
+                        //                 size: 20,
+                        //                 color: Colors.red,
+                        //               ),
+                        //               onPressed: () {
+                        //                 showModalBottomSheet(
+                        //                     context: context,
+                        //                     builder: (context) {
+                        //                       return SizedBox(
+                        //                         height: 400,
+                        //                         child: DangerModal(
+                        //                           warning:
+                        //                               "Your will lose your account and all related data lessons,progress, photos etc",
+                        //                           onProceed: () {},
+                        //                         ),
+                        //                       );
+                        //                     });
+                        //               }),
+                        //         ],
+                        //       )
+                        //     ],
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

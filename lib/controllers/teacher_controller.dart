@@ -24,7 +24,7 @@ class TeacherController extends GetxController {
     Profile? profile_ = await controllerDatabase.getTeacherProfile();
     if (profile_ == null) {
       profile_ = await controllerHttp.getTeacherProfile();
-      await controllerDatabase.saveTeacherProfile(profile_);
+      await controllerDatabase.saveTeacherProfile(profile_!);
     }
     profile.value = profile_;
     return profile_;

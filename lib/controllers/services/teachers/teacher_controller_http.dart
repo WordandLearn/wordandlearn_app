@@ -11,7 +11,7 @@ class TeacherControllerHttp implements TeacherInterface {
   HttpClient client = HttpClient();
 
   @override
-  Future<Profile> getTeacherProfile() async {
+  Future<Profile?> getTeacherProfile() async {
     // Fetch teacher profile from http
     http.Response res = await client.get(profileUrl);
     HttpResponse response = HttpResponse.fromResponse(res);

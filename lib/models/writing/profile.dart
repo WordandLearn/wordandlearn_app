@@ -29,7 +29,7 @@ class User {
 class UserClass {
   String username;
   Role role;
-  Profile profile;
+  Profile? profile;
 
   UserClass({
     required this.username,
@@ -50,13 +50,14 @@ class UserClass {
   factory UserClass.fromJson(Map<String, dynamic> json) => UserClass(
         username: json["username"],
         role: roleToEnum(json["role"]),
-        profile: Profile.fromJson(json["profile"]),
+        profile:
+            json["profile"] != null ? Profile.fromJson(json["profile"]) : null,
       );
 
   Map<String, dynamic> toJson() => {
         "username": username,
         "role": role,
-        "profile": profile.toJson(),
+        "profile": profile?.toJson(),
       };
 }
 
