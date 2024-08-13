@@ -41,12 +41,8 @@ class ResponseHandler {
           final newRoute = MaterialPageRoute(
               builder: (context) => const SubscriptionSettings(),
               settings: const RouteSettings(name: "SubscriptionSettings"));
-          predicate(Route<dynamic> route) {
-            return route.isFirst;
-          }
 
-          Navigator.pushAndRemoveUntil(
-              navigatorKey.currentContext!, newRoute, predicate);
+          Navigator.push(navigatorKey.currentContext!, newRoute);
         }
       }
     }
@@ -61,7 +57,7 @@ class ResponseHandler {
   }
 
   void handleNotFound() {
-    _showSnackBar("We could not find what you are looking for");
+    // _showSnackBar("?We could not find what you are looking for");
   }
 
   void handleSuccess() {

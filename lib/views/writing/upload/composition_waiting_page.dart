@@ -24,22 +24,33 @@ class _CompositionWaitingPageState extends State<CompositionWaitingPage> {
     HttpResponse<TaskProgress> response =
         await _writingController.getTaskState(widget.taskId);
     if (response.isSuccess) {
-      if (mounted) {
+      if (context.mounted) {
         setState(() {
           progress = response.models.first;
         });
       }
+      if (response.models.first.state == TaskState.success) {
+        await _writingController.fetchUserSessions(navigate: false);
+      }
     }
   }
+
+  late Timer timer;
 
   @override
   void initState() {
     //call _getTaskState after every 2 seconds
-    Timer.periodic(const Duration(seconds: 2), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       _getTaskState();
     });
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -93,12 +104,24 @@ class _CompositionWaitingPageState extends State<CompositionWaitingPage> {
                               fontSize: 18, fontWeight: FontWeight.w600),
                         );
                       } else if (progress.state == TaskState.success) {
-                        return const Text(
-                          "Upload Successful",
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.green),
+                        return const Column(
+                          children: [
+                            Text(
+                              "Upload Successful",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.green),
+                            ),
+                            SizedBox(
+                              height: defaultPadding,
+                            ),
+                            Text(
+                              "Switch to this composition to take its fun lessons",
+                              style: TextStyle(
+                                  fontSize: 14, color: AppColors.greyTextColor),
+                            )
+                          ],
                         );
                       } else if (progress.state == TaskState.failure) {
                         return const Text(
@@ -116,22 +139,25 @@ class _CompositionWaitingPageState extends State<CompositionWaitingPage> {
               ),
             ),
             const Spacer(),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: defaultPadding),
-              child: TapBounce(
-                onTap: () {
-                  Navigator.popUntil(
-                      context, (route) => route.settings.name == "LessonsPage");
-                },
-                child: PrimaryButton(
-                  color: Colors.grey.withOpacity(0.2),
-                  child: const Text(
-                    "Go To Home",
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                ),
-              ),
-            )
+            progress.state == TaskState.success
+                ? Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: defaultPadding),
+                    child: TapBounce(
+                      onTap: () {
+                        Navigator.popUntil(context,
+                            (route) => route.settings.name == "LessonsPage");
+                      },
+                      child: PrimaryButton(
+                        color: Colors.grey.withOpacity(0.2),
+                        child: const Text(
+                          "Go To Home",
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink()
           ],
         ),
       ),

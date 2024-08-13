@@ -40,7 +40,7 @@ class WritingController extends GetxController
     }
   }
 
-  Future<List<Session>> fetchUserSessions() async {
+  Future<List<Session>> fetchUserSessions({bool navigate = true}) async {
     List<Session> sessions = await retry<List<Session>>(
       () {
         return getUserSessions();
@@ -48,9 +48,11 @@ class WritingController extends GetxController
       retryIf: (p0) => p0 is HttpFetchException,
     );
     if (sessions.isEmpty) {
-      Get.snackbar(
-          "Add a New Composition", "Add a new composition to start off");
-      Get.to(() => const UploadOnboardingPage());
+      if (navigate) {
+        Get.snackbar(
+            "Add a New Composition", "Add a new composition to start off");
+        Get.to(() => const UploadOnboardingPage());
+      }
       return sessions;
     } else {
       await fetchCurrentSession();

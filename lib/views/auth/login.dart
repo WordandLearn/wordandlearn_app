@@ -149,11 +149,14 @@ class _LoginPageState extends State<LoginPage> {
                       .then((HttpResponse response) {
                     if (response.isSuccess) {
                       if (response.data["user"]["profile"] == null) {
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) {
-                            return const ProfileOnboardingPage();
-                          },
-                        ));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) {
+                                  return const ProfileOnboardingPage();
+                                },
+                                settings: const RouteSettings(
+                                    name: "ProfileOnboardingPage")));
                       } else {
                         if (response.data['user']['role'] == 'C') {
                           ScaffoldMessenger.of(context)
@@ -167,8 +170,9 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const LessonsPage(),
-                              ));
+                                  builder: (context) => const LessonsPage(),
+                                  settings: const RouteSettings(
+                                      name: "LessonsPage")));
                         } else if (response.data['user']['role'] == 'T') {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(

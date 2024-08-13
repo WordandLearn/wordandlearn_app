@@ -43,9 +43,24 @@ class MiniActivityPage extends StatelessWidget {
                           const EdgeInsets.symmetric(vertical: defaultPadding),
                       child: Column(
                         children: [
-                          Text(
-                            miniActivity.activityDescription,
-                            style: const TextStyle(fontSize: 20, height: 2),
+                          Column(
+                            children: [
+                              Text(
+                                miniActivity.activityDescription,
+                                style: const TextStyle(fontSize: 20, height: 2),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: defaultPadding),
+                                child: miniActivity.activityText != null
+                                    ? Text(
+                                        miniActivity.activityText!,
+                                        style: const TextStyle(
+                                            fontSize: 18, height: 2),
+                                      )
+                                    : const SizedBox.shrink(),
+                              )
+                            ],
                           ),
                           const Spacer(),
                           Text(

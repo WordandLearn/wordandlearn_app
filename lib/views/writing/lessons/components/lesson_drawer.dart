@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/circle_profile_avatar.dart';
 import 'package:word_and_learn/components/primary_icon_button.dart';
@@ -249,7 +250,9 @@ class _LessonDrawerState extends State<LessonDrawer> {
                     _DrawerTile(
                       icon: const Icon(CupertinoIcons.doc_plaintext),
                       title: "Terms of Use",
-                      onTap: () {},
+                      onTap: () async {
+                        await launchUrl(Uri.parse(tosUrl));
+                      },
                     ),
                     const SizedBox(
                       height: defaultPadding * 2,
@@ -257,7 +260,9 @@ class _LessonDrawerState extends State<LessonDrawer> {
                     _DrawerTile(
                       icon: const Icon(CupertinoIcons.doc_text),
                       title: "Privacy Policy",
-                      onTap: () {},
+                      onTap: () async {
+                        await launchUrl(Uri.parse(privacyPolicyUrl));
+                      },
                     )
                   ],
                 ),
@@ -278,7 +283,9 @@ class _LessonDrawerState extends State<LessonDrawer> {
                       _DrawerTile(
                         icon: const Icon(CupertinoIcons.mail),
                         title: "Contact Us",
-                        onTap: () {},
+                        onTap: () async {
+                          await launchUrl(Uri.parse(contactUsUrl));
+                        },
                       ),
                     ],
                   ),

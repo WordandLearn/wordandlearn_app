@@ -4,10 +4,13 @@ import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:word_and_learn/components/circle_profile_avatar.dart';
 import 'package:word_and_learn/components/components.dart';
+import 'package:word_and_learn/components/small_button.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/views/writing/lessons/components/lesson_drawer.dart';
+import 'package:word_and_learn/views/writing/settings/profile/change_picture_page.dart';
+import 'package:word_and_learn/views/writing/upload/onboarding.dart';
 import 'components/composition_selector.dart';
 import 'components/session_lessons_list.dart';
 import 'components/session_report_card.dart';
@@ -77,8 +80,16 @@ class _LessonsPageState extends State<LessonsPage> {
               );
             }),
             actions: [
-              InkWell(
-                onTap: () {},
+              GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (context) {
+                        return const SizedBox(
+                            height: 500, child: ChangePicturePage());
+                      });
+                },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: defaultPadding),
                   child: CircleProfileAvatar(
@@ -99,12 +110,37 @@ class _LessonsPageState extends State<LessonsPage> {
                   horizontal: defaultPadding, vertical: defaultPadding),
               child: Column(children: [
                 FutureBuilder<List<Session>>(
-                    future: writingController.getUserSessions(),
+                    future:
+                        writingController.fetchUserSessions(navigate: false),
                     builder: (context, snapshot) {
-                      // if (snapshot.hasData && snapshot.data!.isEmpty) {
-                      //   return const Text("No Colempositions, Add a new one");
-                      // }
-
+                      if (snapshot.hasData && snapshot.data!.isEmpty) {
+                        return Center(
+                          child: Column(
+                            children: [
+                              const Text(
+                                "No Compositions Added, Scan a new one to continue",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColors.greyTextColor),
+                              ),
+                              SmallButton(
+                                text: "Scan New Composition",
+                                icon: const Icon(Icons.scanner_rounded),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const UploadOnboardingPage(),
+                                          settings: const RouteSettings(
+                                              name: "UploadOnboardingPage")));
+                                },
+                              )
+                            ],
+                          ),
+                        );
+                      }
+                      //
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(

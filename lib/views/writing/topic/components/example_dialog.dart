@@ -33,58 +33,61 @@ class _ExampleDialogState extends State<ExampleDialog> {
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Positioned(
-            top: -50,
-            right: 0,
-            child: Image.asset(
-              "assets/stickers/cat_angel.png",
-              width: 90,
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 300),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Positioned(
+              top: -50,
+              right: 0,
+              child: Image.asset(
+                "assets/stickers/cat_angel.png",
+                width: 90,
+              ),
             ),
-          ),
-          Container(
-            height: 350,
-            width: size.width,
-            // width: size.width,
-            margin: const EdgeInsets.symmetric(
-                horizontal: defaultPadding, vertical: defaultPadding),
-            padding: const EdgeInsetsDirectional.all(defaultPadding * 2),
-            decoration: BoxDecoration(
-                color: widget.example.darkerColor,
-                borderRadius: BorderRadius.circular(20)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                _ExampleAudioWidget(
-                    example: widget.example,
-                    onCompleted: () {
-                      setState(() {
-                        understood = true;
-                      });
-                    }),
-                AutoSizeText(
-                  widget.example.guide,
-                  style: const TextStyle(fontSize: 18, height: 2),
-                ),
-              ],
+            Container(
+              height: 350,
+              width: size.width,
+              // width: size.width,
+              margin: const EdgeInsets.symmetric(
+                  horizontal: defaultPadding, vertical: defaultPadding),
+              padding: const EdgeInsetsDirectional.all(defaultPadding * 2),
+              decoration: BoxDecoration(
+                  color: widget.example.darkerColor,
+                  borderRadius: BorderRadius.circular(20)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  _ExampleAudioWidget(
+                      example: widget.example,
+                      onCompleted: () {
+                        setState(() {
+                          understood = true;
+                        });
+                      }),
+                  AutoSizeText(
+                    widget.example.guide,
+                    style: const TextStyle(fontSize: 18, height: 2),
+                  ),
+                ],
+              ),
             ),
-          ),
-          !widget.example.completed
-              ? Positioned(
-                  bottom: -20,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                      child: TapBounce(
-                          child: ExampleDialogButton(
-                    example: widget.example,
-                    onUnderstood: widget.onUnderstand,
-                    understood: understood,
-                  ))))
-              : const SizedBox.shrink()
-        ],
+            !widget.example.completed
+                ? Positioned(
+                    bottom: -20,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                        child: TapBounce(
+                            child: ExampleDialogButton(
+                      example: widget.example,
+                      onUnderstood: widget.onUnderstand,
+                      understood: understood,
+                    ))))
+                : const SizedBox.shrink()
+          ],
+        ),
       ),
     );
   }

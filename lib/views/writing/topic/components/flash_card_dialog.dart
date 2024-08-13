@@ -57,81 +57,87 @@ class _FlashCardDialogState extends State<FlashCardDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Positioned(
-          top: -60,
-          right: 0,
-          child: Image.asset(
-            "assets/stickers/cat_analyst.png",
-            width: 100,
-          ),
-        ),
-        AnimatedRotation(
-          turns: rotation,
-          duration: const Duration(milliseconds: 1),
-          child: Container(
-            height: widget.size.height * 0.7,
-            margin: const EdgeInsets.symmetric(horizontal: defaultPadding * 2),
-            padding: const EdgeInsets.symmetric(
-                horizontal: defaultPadding * 2, vertical: defaultPadding * 2),
-            width: 350,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: widget.flashcardText.colorValue,
-                boxShadow: [
-                  BoxShadow(
-                      color: widget.flashcardText.darkerColor.withOpacity(0.3),
-                      blurRadius: 10,
-                      offset: const Offset(0, 10))
-                ]),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: defaultPadding),
-                  child: DialogAudioWidget(
-                    future: _audioFuture,
-                    color: widget.flashcardText,
-                    onCompleted: () {
-                      setState(() {
-                        listeningComplete = true;
-                      });
-                    },
-                  ),
-                ),
-                Divider(
-                  color: Colors.grey[300],
-                ),
-                Expanded(
-                  child: AutoSizeText(
-                    widget.flashcardText.text,
-                    style: const TextStyle(fontSize: 22, height: 2),
-                  ),
-                )
-              ],
+    return Container(
+      constraints: const BoxConstraints(minHeight: 300),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            top: -60,
+            right: 0,
+            child: Image.asset(
+              "assets/stickers/cat_analyst.png",
+              width: 100,
             ),
           ),
-        ),
-        widget.flashcardText.completed
-            ? const SizedBox.shrink()
-            : Positioned(
-                bottom: -30,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: _FlashCardButton(
-                    flashcardText: widget.flashcardText,
-                    completed: listeningComplete,
-                    onTap: () {
-                      _animateRotation();
-                      widget.onUnderstand();
-                    },
+          AnimatedRotation(
+            turns: rotation,
+            duration: const Duration(milliseconds: 1),
+            child: Container(
+              height: widget.size.height * 0.7,
+              margin:
+                  const EdgeInsets.symmetric(horizontal: defaultPadding * 2),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: defaultPadding * 2, vertical: defaultPadding * 2),
+              width: 350,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: widget.flashcardText.colorValue,
+                  boxShadow: [
+                    BoxShadow(
+                        color:
+                            widget.flashcardText.darkerColor.withOpacity(0.3),
+                        blurRadius: 10,
+                        offset: const Offset(0, 10))
+                  ]),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: defaultPadding),
+                    child: DialogAudioWidget(
+                      future: _audioFuture,
+                      color: widget.flashcardText,
+                      onCompleted: () {
+                        setState(() {
+                          listeningComplete = true;
+                        });
+                      },
+                    ),
                   ),
-                ),
-              )
-      ],
+                  Divider(
+                    color: Colors.grey[300],
+                  ),
+                  Expanded(
+                    child: AutoSizeText(
+                      widget.flashcardText.text,
+                      style: const TextStyle(fontSize: 22, height: 2),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          widget.flashcardText.completed
+              ? const SizedBox.shrink()
+              : Positioned(
+                  bottom: -30,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: _FlashCardButton(
+                      flashcardText: widget.flashcardText,
+                      completed: listeningComplete,
+                      onTap: () {
+                        _animateRotation();
+                        widget.onUnderstand();
+                      },
+                    ),
+                  ),
+                )
+        ],
+      ),
     );
   }
 }

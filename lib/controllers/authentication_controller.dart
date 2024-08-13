@@ -82,7 +82,10 @@ class AuthenticationController extends GetxController {
     http.Response res = await client.post("$authUrl/profile/create/", body);
     HttpResponse<ChildProfileDetails> response = HttpResponse.fromResponse(res);
     if (response.isSuccess) {
-      response.models = [ChildProfileDetails.fromJson(response.data)];
+      final profile = ChildProfileDetails.fromJson(response.data);
+      response.models = [profile];
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setInt("profile_id", profile.id);
     }
     return response;
   }

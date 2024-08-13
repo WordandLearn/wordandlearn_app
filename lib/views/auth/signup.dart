@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
@@ -134,8 +135,8 @@ class _SignUpPageState extends State<SignUpPage> {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: InkWell(
-                  onTap: () {
-                    //TODO: Go To Terms of Service
+                  onTap: () async {
+                    await launchUrl(Uri.parse(tosUrl));
                   },
                   child: const Text(
                     "By signing up you agree to our terms of service",

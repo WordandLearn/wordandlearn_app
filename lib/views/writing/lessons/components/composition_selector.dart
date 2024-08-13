@@ -52,104 +52,108 @@ class _CompositionSelectorContainerState
           },
         );
       },
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-                color: AppColors.secondaryColor,
-                borderRadius: BorderRadius.circular(10)),
-            padding: const EdgeInsets.symmetric(
-                vertical: defaultPadding, horizontal: defaultPadding * 2),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Your current composition",
+      child: Container(
+        constraints: const BoxConstraints(minWidth: 150),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  color: AppColors.secondaryColor,
+                  borderRadius: BorderRadius.circular(10)),
+              padding: const EdgeInsets.symmetric(
+                  vertical: defaultPadding, horizontal: defaultPadding * 2),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Your current composition",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(
+                                        color: const Color.fromARGB(
+                                            255, 96, 96, 96))),
+                            const SizedBox(
+                              height: defaultPadding / 2,
+                            ),
+                            AutoSizeText(
+                              widget.session.titleOrDefault,
+                              maxLines: 1,
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodySmall!
-                                  .copyWith(
-                                      color: const Color.fromARGB(
-                                          255, 96, 96, 96))),
-                          const SizedBox(
-                            height: defaultPadding / 2,
-                          ),
-                          AutoSizeText(
-                            widget.session.titleOrDefault,
-                            maxLines: 1,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(),
-                          )
-                        ],
+                                  .titleLarge!
+                                  .copyWith(),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    SvgPicture.asset(
-                      "assets/icons/exchange.svg",
-                      theme: const SvgTheme(currentColor: Colors.black),
-                      // color: Colors.black,
-                      width: 25,
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: defaultPadding,
-                ),
-                Divider(
-                  color: Colors.black.withOpacity(0.1),
-                ),
-              ],
+                      SvgPicture.asset(
+                        "assets/icons/exchange.svg",
+                        theme: const SvgTheme(currentColor: Colors.black),
+                        // color: Colors.black,
+                        width: 25,
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: defaultPadding,
+                  ),
+                  Divider(
+                    color: Colors.black.withOpacity(0.1),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Positioned(
-            right: 0,
-            bottom: -17,
-            child: SmallButton(
-              onPressed: () async {
-                SharedPreferences preferences =
-                    await SharedPreferences.getInstance();
-                if (!preferences.containsKey("uploadOnboarded")) {
-                  if (context.mounted) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const UploadOnboardingPage(),
-                            settings: const RouteSettings(
-                                name: "UploadOnboardingPage")));
-                  }
-                } else {
-                  if (context.mounted) {
-                    List<String?>? pictures =
-                        await CunningDocumentScanner.getPictures(
-                            noOfPages: 2, isGalleryImportAllowed: true);
-                    if (pictures != null) {
-                      if (context.mounted) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CompositionUploadPage(
-                                      imagePaths: pictures,
-                                    )));
+            Positioned(
+              right: 0,
+              bottom: -17,
+              child: SmallButton(
+                onPressed: () async {
+                  SharedPreferences preferences =
+                      await SharedPreferences.getInstance();
+                  if (!preferences.containsKey("uploadOnboarded")) {
+                    if (context.mounted) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const UploadOnboardingPage(),
+                              settings: const RouteSettings(
+                                  name: "UploadOnboardingPage")));
+                    }
+                  } else {
+                    if (context.mounted) {
+                      List<String?>? pictures =
+                          await CunningDocumentScanner.getPictures(
+                              noOfPages: 2, isGalleryImportAllowed: true);
+                      if (pictures != null) {
+                        if (context.mounted) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CompositionUploadPage(
+                                        imagePaths: pictures,
+                                      )));
+                        }
                       }
                     }
                   }
-                }
-              },
-              text: "Scan New Composition",
-              icon: const Icon(
-                Icons.document_scanner,
-                color: Colors.black,
-                size: 15,
+                },
+                text: "Scan New Composition",
+                icon: const Icon(
+                  Icons.document_scanner,
+                  color: Colors.black,
+                  size: 15,
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

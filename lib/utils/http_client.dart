@@ -14,7 +14,7 @@ class HttpClient {
 
   String? _authToken;
 
-  void onInit() async {
+  Future<void> onInit() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     _authToken = preferences.getString("authToken");
   }
