@@ -58,6 +58,11 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
                         builder: (context) => TopicLearnPage(
                               topic: widget.topic,
                               lesson: widget.lesson,
+                              onCompleted: () {
+                                setState(() {
+                                  widget.topic.completed = true;
+                                });
+                              },
                             ),
                         settings: const RouteSettings(name: "TopicLearnPage")));
               } else {

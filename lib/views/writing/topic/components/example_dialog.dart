@@ -33,10 +33,11 @@ class _ExampleDialogState extends State<ExampleDialog> {
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-      child: Container(
-        constraints: const BoxConstraints(minHeight: 300),
+      child: SizedBox(
+        height: 400,
         child: Stack(
           clipBehavior: Clip.none,
+          fit: StackFit.loose,
           children: [
             Positioned(
               top: -50,
@@ -75,7 +76,7 @@ class _ExampleDialogState extends State<ExampleDialog> {
             ),
             !widget.example.completed
                 ? Positioned(
-                    bottom: -20,
+                    bottom: 0,
                     left: 0,
                     right: 0,
                     child: Center(

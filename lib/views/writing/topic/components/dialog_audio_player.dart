@@ -118,9 +118,11 @@ class _DialogAudioPlayerState extends State<DialogAudioPlayer> {
         forceRefresh: true, finishMode: FinishMode.pause);
 
     _playerController.onPlayerStateChanged.listen((state) {
-      setState(() {
-        playerState = state;
-      });
+      if (mounted) {
+        setState(() {
+          playerState = state;
+        });
+      }
     });
     _playerController.onCompletion.listen((_) {
       widget.onCompleted();
@@ -142,8 +144,12 @@ class _DialogAudioPlayerState extends State<DialogAudioPlayer> {
       children: [
         GestureDetector(
           onTap: () {
-            _playerController.startPlayer(
-                forceRefresh: true, finishMode: FinishMode.pause);
+            if (_playerController.playerState == PlayerState.playing) {
+              _playerController.pausePlayer();
+            } else {
+              _playerController.startPlayer(
+                  forceRefresh: true, finishMode: FinishMode.pause);
+            }
           },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
@@ -158,7 +164,7 @@ class _DialogAudioPlayerState extends State<DialogAudioPlayer> {
               duration: const Duration(milliseconds: 150),
               child: Icon(
                 playerState == PlayerState.playing
-                    ? CupertinoIcons.volume_up
+                    ? CupertinoIcons.pause
                     : CupertinoIcons.volume_down,
                 color: playerState == PlayerState.playing
                     ? Colors.white

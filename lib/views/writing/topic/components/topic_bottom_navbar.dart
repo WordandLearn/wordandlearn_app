@@ -85,7 +85,7 @@ class _TopicBottomNavBarState extends State<TopicBottomNavBar> {
                           horizontal: defaultPadding),
                       height: 3,
                       decoration: BoxDecoration(
-                          color: widget.topic.darkerColor,
+                          color: AppColors.greenColor,
                           borderRadius: BorderRadius.circular(20)),
                     ),
                   ),
@@ -93,26 +93,31 @@ class _TopicBottomNavBarState extends State<TopicBottomNavBar> {
               ],
             ),
           ),
-          InkWell(
-              onTap: () {
-                if (widget.completedStatus[0] == false) {
-                  widget.onInvalidClick(1);
-                  return;
-                }
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              InkWell(
+                  onTap: () {
+                    if (widget.completedStatus[0] == false) {
+                      widget.onInvalidClick(1);
+                      return;
+                    }
 
-                setState(() {
-                  activeIndex = 1;
-                });
+                    setState(() {
+                      activeIndex = 1;
+                    });
 
-                changePage(1);
-              },
-              child: _NavItem(
-                text: "Examples",
-                assetImage: "assets/stickers/example_bear.png",
-                isActive: activeIndex == 1,
-                index: 2,
-                isComplete: widget.completedStatus[1],
-              )),
+                    changePage(1);
+                  },
+                  child: _NavItem(
+                    text: "Examples",
+                    assetImage: "assets/stickers/example_bear.png",
+                    isActive: activeIndex == 1,
+                    index: 2,
+                    isComplete: widget.completedStatus[1],
+                  )),
+            ],
+          ),
         ],
       ),
     );
@@ -135,57 +140,71 @@ class _NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSize(
+    return AnimatedScale(
+      scale: isActive ? 1.05 : 0.95,
       duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-      child: Padding(
-        padding: isActive
-            ? const EdgeInsets.symmetric(horizontal: defaultPadding / 4)
-            : EdgeInsets.zero,
-        child: Row(
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              height: 25,
-              width: 25,
-              decoration: BoxDecoration(
-                color: isComplete ? AppColors.greenColor : null,
-                border: isComplete
-                    ? null
-                    : Border.all(
-                        color: isActive ? AppColors.buttonColor : Colors.grey,
-                        width: 1.4),
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                  child: isComplete
-                      ? const Icon(
-                          Icons.done_rounded,
-                          color: Colors.white,
-                          size: 15,
-                        )
-                      : Text(
-                          "$index",
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: isActive
-                                  ? AppColors.buttonColor
-                                  : Colors.grey),
-                        )),
+      child: AnimatedSize(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        child: AnimatedContainer(
+          curve: Curves.easeInOut,
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(
+              vertical: defaultPadding / 2, horizontal: defaultPadding),
+          decoration: BoxDecoration(
+              color: isComplete
+                  ? AppColors.greenColor
+                  : isActive
+                      ? AppColors.buttonColor
+                      : AppColors.greyTextColor,
+              borderRadius: BorderRadius.circular(10)),
+          child: Padding(
+            padding: isActive
+                ? const EdgeInsets.symmetric(horizontal: defaultPadding / 4)
+                : EdgeInsets.zero,
+            child: Row(
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  height: 25,
+                  width: 25,
+                  decoration: BoxDecoration(
+                    color: isComplete ? AppColors.greenColor : null,
+                    border: isComplete
+                        ? null
+                        : Border.all(color: Colors.grey, width: 1.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                      child: isComplete
+                          ? const Icon(
+                              Icons.done_rounded,
+                              color: Colors.black,
+                              size: 15,
+                            )
+                          : Text(
+                              "$index",
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            )),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: defaultPadding / 2),
+                  child: Text(
+                    text,
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight:
+                            isActive ? FontWeight.bold : FontWeight.w600,
+                        color: Colors.white),
+                  ),
+                ),
+              ],
             ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-              child: Text(
-                text,
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: isActive ? FontWeight.bold : FontWeight.w600,
-                    color: isActive ? Colors.black : Colors.grey),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

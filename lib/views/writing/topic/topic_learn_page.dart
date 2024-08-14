@@ -12,7 +12,9 @@ import 'topic_notes_page.dart';
 class TopicLearnPage extends StatefulWidget {
   final Topic topic;
   final Lesson? lesson;
-  const TopicLearnPage({super.key, required this.topic, this.lesson});
+  final void Function() onCompleted;
+  const TopicLearnPage(
+      {super.key, required this.topic, this.lesson, required this.onCompleted});
 
   @override
   State<TopicLearnPage> createState() => _TopicLearnPageState();
@@ -91,6 +93,7 @@ class _TopicLearnPageState extends State<TopicLearnPage> {
                           completedStatus[1] = true;
                           widget.topic.completed = true;
                         });
+                        widget.onCompleted();
 
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(

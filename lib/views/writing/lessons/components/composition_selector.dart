@@ -52,12 +52,13 @@ class _CompositionSelectorContainerState
           },
         );
       },
-      child: Container(
-        constraints: const BoxConstraints(minWidth: 150),
+      child: SizedBox(
+        height: 110,
         child: Stack(
           clipBehavior: Clip.none,
           children: [
             Container(
+              height: 100,
               decoration: BoxDecoration(
                   color: AppColors.secondaryColor,
                   borderRadius: BorderRadius.circular(10)),
@@ -106,12 +107,33 @@ class _CompositionSelectorContainerState
                   Divider(
                     color: Colors.black.withOpacity(0.1),
                   ),
+                  const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.info_outline_rounded,
+                            size: 12,
+                          ),
+                          SizedBox(
+                            width: defaultPadding / 2,
+                          ),
+                          Text(
+                            "Click To Switch Compositions",
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.greyTextColor),
+                          ),
+                        ],
+                      ))
                 ],
               ),
             ),
             Positioned(
               right: 0,
-              bottom: -17,
+              bottom: 0,
               child: SmallButton(
                 onPressed: () async {
                   SharedPreferences preferences =

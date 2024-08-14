@@ -57,10 +57,11 @@ class _FlashCardDialogState extends State<FlashCardDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(minHeight: 300),
+    return SizedBox(
+      height: widget.size.height * 0.7 + 50,
       child: Stack(
         clipBehavior: Clip.none,
+        fit: StackFit.passthrough,
         children: [
           Positioned(
             top: -60,
@@ -122,7 +123,7 @@ class _FlashCardDialogState extends State<FlashCardDialog> {
           widget.flashcardText.completed
               ? const SizedBox.shrink()
               : Positioned(
-                  bottom: -30,
+                  bottom: 0,
                   left: 0,
                   right: 0,
                   child: Center(
