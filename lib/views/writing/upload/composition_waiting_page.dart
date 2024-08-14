@@ -91,7 +91,19 @@ class _CompositionWaitingPageState extends State<CompositionWaitingPage> {
                         size: 80,
                       );
                     }
-                    return const LoadingSpinner();
+                    return const Column(
+                      children: [
+                        LoadingSpinner(),
+                        SizedBox(
+                          height: defaultPadding,
+                        ),
+                        Text(
+                          "Getting The Status Of Your Composition",
+                          style: TextStyle(
+                              fontSize: 12, color: AppColors.greyTextColor),
+                        )
+                      ],
+                    );
                   }),
                   Padding(
                     padding:
@@ -132,7 +144,7 @@ class _CompositionWaitingPageState extends State<CompositionWaitingPage> {
                               color: Colors.red),
                         );
                       }
-                      return const LoadingSpinner();
+                      return const SizedBox.shrink();
                     }),
                   ),
                 ],
