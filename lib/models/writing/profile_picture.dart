@@ -1,8 +1,8 @@
-import 'package:objectbox/objectbox.dart';
+// import 'package:objectbox/objectbox.dart';
 
-@Entity()
+// @Entity()
 class ProfilePicture {
-  @Id(assignable: true)
+  // @Id(assignable: true)
   int id;
   final String imageUrl;
   final String thumbnailUrl;

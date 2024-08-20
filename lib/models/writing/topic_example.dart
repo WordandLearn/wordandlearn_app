@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:objectbox/objectbox.dart';
+// import 'package:objectbox/objectbox.dart';
 
 List<TopicExample> topicExampleFromJson(String str) => List<TopicExample>.from(
     json.decode(str).map((x) => TopicExample.fromJson(x)));
@@ -12,9 +12,9 @@ List<TopicExample> topicExampleFromJson(String str) => List<TopicExample>.from(
 String topicExampleToJson(List<TopicExample> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-@Entity()
+// @Entity()
 class TopicExample {
-  @Id(assignable: true)
+  // @Id(assignable: true)
   final int id;
   final String originalText;
   final String transformedText;

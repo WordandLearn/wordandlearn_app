@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:objectbox/objectbox.dart';
+// import 'package:objectbox/objectbox.dart';
 
 List<School> schoolFromJson(String str) =>
     List<School>.from(json.decode(str).map((x) => School.fromJson(x)));
@@ -12,9 +12,9 @@ List<School> schoolFromJson(String str) =>
 String schoolToJson(List<School> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-@Entity()
+// @Entity()
 class School {
-  @Id(assignable: true)
+  // @Id(assignable: true)
   int id;
   String name;
   String? address;

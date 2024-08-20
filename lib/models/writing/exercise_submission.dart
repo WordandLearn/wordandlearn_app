@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:objectbox/objectbox.dart';
+// import 'package:objectbox/objectbox.dart';
 
 List<ExerciseSubmission> exerciseSubmissionFromJson(String str) =>
     List<ExerciseSubmission>.from(
@@ -13,9 +13,9 @@ List<ExerciseSubmission> exerciseSubmissionFromJson(String str) =>
 String exerciseSubmissionToJson(List<ExerciseSubmission> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-@Entity()
+// @Entity()
 class ExerciseSubmission {
-  @Id(assignable: true)
+  // @Id(assignable: true)
   final int id;
   final DateTime createdAt;
   final String imageUrl;

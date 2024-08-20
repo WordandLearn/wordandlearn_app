@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:objectbox/objectbox.dart';
+// import 'package:objectbox/objectbox.dart';
 import 'package:word_and_learn/models/writing/models.dart';
 
 List<Exercise> exerciseFromJson(String str) =>
@@ -13,9 +13,9 @@ List<Exercise> exerciseFromJson(String str) =>
 String exerciseToJson(List<Exercise> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-@Entity()
+// @Entity()
 class Exercise extends BaseModel {
-  @Id(assignable: true)
+  // @Id(assignable: true)
   final int id;
   final List<BaseModel>? results;
   final List<BaseModel>? submissions;
