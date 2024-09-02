@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
@@ -86,16 +87,53 @@ class _SubscriptionInactiveWidgetState
                   child: TapBounce(
                     onTap: () {
                       if (!widget.isTrial) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) {
-                                return PaymentPage(
-                                    subscriptionPackage:
-                                        widget.subscriptionPackage);
-                              },
-                              settings:
-                                  const RouteSettings(name: "PaymentPage")),
+                        _writingController.subscribeToPackage(
+                            widget.subscriptionPackage.id, {}).then(
+                          (value) async {
+                            if (value != null) {
+                              try {
+                                await launchUrl(Uri.parse(
+                                    value['data']['authorization_url']));
+                              } on Exception {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                          content: Row(
+                                    children: [
+                                      Icon(Icons.info, color: Colors.red),
+                                      SizedBox(
+                                        width: defaultPadding,
+                                      ),
+                                      Text("Could not open browser")
+                                    ],
+                                  )));
+                                }
+                              }
+                            }
+                          },
+                        ).onError(
+                          (error, stackTrace) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                                    content: Row(
+                              children: [
+                                Icon(
+                                  Icons.info,
+                                  color: Colors.red,
+                                ),
+                                SizedBox(
+                                  width: defaultPadding,
+                                ),
+                                Text("Could not contact payment gateway")
+                              ],
+                            )));
+                          },
+                        ).whenComplete(
+                          () {
+                            setState(() {
+                              loading = false;
+                            });
+                          },
                         );
                       } else {
                         // Call start free trial API
