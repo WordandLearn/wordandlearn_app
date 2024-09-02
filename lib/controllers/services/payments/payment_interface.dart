@@ -12,6 +12,6 @@ abstract class PaymentInterface {
 
   Future<bool?> cancelSubscription(int packageId);
 
-  Future<PesaPalRequest?> subscribeToPackage(
+  Future<Map<String,dynamic>?> subscribeToPackage(
       int packageId, Map<String, dynamic> body);
 }

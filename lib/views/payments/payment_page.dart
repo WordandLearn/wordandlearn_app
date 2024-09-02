@@ -222,7 +222,8 @@ class _PaymentPageState extends State<PaymentPage> {
                           (value) async {
                             if (value != null) {
                               try {
-                                await launchUrl(Uri.parse(value.redirectUrl));
+                                await launchUrl(Uri.parse(
+                                    value['data']['authorization_url']));
                               } on Exception {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context)

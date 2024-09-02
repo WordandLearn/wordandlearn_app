@@ -73,16 +73,16 @@ mixin PaymentMixin implements PaymentInterface {
   }
 
   @override
-  Future<PesaPalRequest?> subscribeToPackage(
+  Future<Map<String,dynamic>?> subscribeToPackage(
       int packageId, Map<String, dynamic> body) async {
     http.Response res =
         await client.post("$paymentUrl/package/$packageId/subscribe/", body);
 
     HttpResponse response = HttpResponse.fromResponse(res);
     if (response.isSuccess) {
-      return PesaPalRequest.fromJson(response.data["data"]);
+      return response.data;
     } else {
-      throw HttpFetchException("Could not subscribe to package", 200);
+      throw HttpFetchException("Could not subscribe to package", 400);
     }
   }
 }
