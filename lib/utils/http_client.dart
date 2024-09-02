@@ -8,21 +8,16 @@ class HttpClient {
   static final HttpClient _instance = HttpClient._internal();
   factory HttpClient() => _instance;
   final ResponseHandler _responseHandler = ResponseHandler();
-  HttpClient._internal() {
-    onInit();
-  }
+  HttpClient._internal();
 
-  String? _authToken;
-
-  Future<void> onInit() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    _authToken = preferences.getString("authToken");
-  }
+  // Future<void> onInit() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   _authToken = preferences.getString("authToken");
+  // }
 
   Future<void> saveAuthToken(String token) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setString("authToken", token);
-    _authToken = token;
   }
 
   Future<void> saveUserType(String userType) async {
@@ -34,43 +29,64 @@ class HttpClient {
     return {};
   }
 
-  Map<String, String> getAuthHeaders() {
-    return {"Authorization": "Bearer $_authToken"};
+  Future<Map<String, String>> getAuthHeaders() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? authToken = preferences.getString("authToken");
+    return {"Authorization": "Bearer $authToken"};
   }
 
   Future<http.Response> post(String url, Map<String, dynamic> body,
       {bool authRequired = true}) async {
     Map<String, String> headers =
-        authRequired ? getAuthHeaders() : getHeaders();
-    return await http.post(Uri.parse(url), body: body, headers: headers);
+        authRequired ? await getAuthHeaders() : getHeaders();
+    try {
+      return await http.post(Uri.parse(url), body: body, headers: headers);
+    } on SocketException {
+      ResponseHandler.showNoInternetError();
+      rethrow;
+    }
   }
 
   Future<http.Response> put(String url, Map<String, dynamic> body,
       {bool authRequired = true}) async {
     Map<String, String> headers =
-        authRequired ? getAuthHeaders() : getHeaders();
-    return await http.put(Uri.parse(url), body: body, headers: headers);
+        authRequired ? await getAuthHeaders() : getHeaders();
+    try {
+      return await http.put(Uri.parse(url), body: body, headers: headers);
+    } on SocketException {
+      ResponseHandler.showNoInternetError();
+      rethrow;
+    }
   }
 
   Future<http.Response> get(String url, {bool authRequired = true}) async {
     Map<String, String> headers =
-        authRequired ? getAuthHeaders() : getHeaders();
+        authRequired ? await getAuthHeaders() : getHeaders();
+    try {
+      final response = await http.get(Uri.parse(url), headers: headers);
+      _responseHandler.checkResponse(response);
 
-    final response = await http.get(Uri.parse(url), headers: headers);
-    _responseHandler.checkResponse(response);
-
-    return response;
+      return response;
+    } on SocketException {
+      ResponseHandler.showNoInternetError();
+      rethrow;
+    }
   }
 
   Future<http.Response> delete(String url, {Map? body}) async {
-    return await http.delete(Uri.parse(url),
-        body: body, headers: getAuthHeaders());
+    try {
+      return await http.delete(Uri.parse(url),
+          body: body, headers: await getAuthHeaders());
+    } on SocketException {
+      ResponseHandler.showNoInternetError();
+      rethrow;
+    }
   }
 
   Future<http.Response> upload(String url,
       {required List<File> files, String key = 'file'}) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.headers.addAll(getAuthHeaders());
+    request.headers.addAll(await getAuthHeaders());
     for (var file in files) {
       request.files.add(await http.MultipartFile.fromPath(key, file.path));
     }
@@ -94,14 +110,19 @@ class HttpClient {
       required Map<String, String> body}) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
 
-    request.headers.addAll(getAuthHeaders());
+    request.headers.addAll(await getAuthHeaders());
     for (var key in files.keys) {
       request.files
           .add(await http.MultipartFile.fromPath(key, files[key]!.path));
     }
     request.fields.addAll(body);
     var response = await request.send();
-    return await http.Response.fromStream(response);
+    try {
+      return await http.Response.fromStream(response);
+    } on SocketException {
+      ResponseHandler.showNoInternetError();
+      rethrow;
+    }
   }
 
   Future<File> downloadFile(String url) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/main.dart';
 import 'package:word_and_learn/views/writing/settings/subscription_settings.dart';
 
@@ -84,6 +85,17 @@ class ResponseHandler {
       case 500:
         handleInternalServerError();
         break;
+    }
+  }
+
+  static void showNoInternetError() {
+    if (navigatorKey.currentContext != null) {
+      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
+        const SnackBar(
+          content: Text("Please Check Your internet connection"),
+          backgroundColor: AppColors.redColor,
+        ),
+      );
     }
   }
 }

@@ -7,7 +7,6 @@ import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/payments/payment_models.dart';
-import 'package:word_and_learn/views/payments/payment_page.dart';
 
 class SubscriptionInactiveWidget extends StatefulWidget {
   const SubscriptionInactiveWidget({

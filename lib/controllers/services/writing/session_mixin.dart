@@ -7,6 +7,7 @@ import 'package:word_and_learn/models/writing/models.dart';
 import "package:http/http.dart" as http;
 import 'package:word_and_learn/utils/exceptions.dart';
 import 'package:word_and_learn/utils/http_client.dart';
+import 'package:word_and_learn/utils/response_handler.dart';
 
 import '../interfaces/session_interfaces.dart';
 
@@ -30,6 +31,7 @@ mixin SessionMixin implements SessionInterface {
     } on SocketException {
       List<Session>? sessions = await sessionDatabase.getUserSessions();
       if (sessions == null || sessions.isEmpty) {
+        ResponseHandler.showNoInternetError();
         throw HttpFetchException("No internet connection", 0);
       } else {
         return sessions;
