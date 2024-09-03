@@ -30,7 +30,7 @@ class _CompositionWaitingPageState extends State<CompositionWaitingPage> {
         });
       }
       if (response.models.first.state == TaskState.success) {
-        await _writingController.fetchUserSessions(navigate: false);
+        await _writingController.getUserSessions();
       }
     }
   }

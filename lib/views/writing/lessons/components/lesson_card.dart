@@ -10,10 +10,14 @@ class LessonCard extends StatefulWidget {
     super.key,
     required this.lesson,
     this.isAvaliable = false,
+    this.width,
+    this.height,
   });
 
   final Lesson lesson;
-  final bool isAvaliable; // Set to true when the previous lesson is complete
+  final bool isAvaliable;
+  final double? width;
+  final double? height;
 
   @override
   State<LessonCard> createState() => _LessonCardState();
@@ -71,6 +75,8 @@ class _LessonCardState extends State<LessonCard> {
         child: Stack(
           children: [
             Container(
+              width: widget.width,
+              height: widget.height,
               padding: const EdgeInsets.symmetric(
                   vertical: defaultPadding * 2, horizontal: defaultPadding * 2),
               decoration: BoxDecoration(

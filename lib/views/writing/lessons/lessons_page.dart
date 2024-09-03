@@ -25,12 +25,12 @@ class LessonsPage extends StatefulWidget {
 class _LessonsPageState extends State<LessonsPage> {
   WritingController writingController = Get.find<WritingController>();
   final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
-  late Future<List<Session>> userSessionsFuture;
+  late Future<List<Session>?> userSessionsFuture;
   late Future<Session?> currentSessionFuture;
   @override
   void initState() {
     writingController.getCurrentSession();
-    userSessionsFuture = writingController.fetchUserSessions();
+    userSessionsFuture = writingController.getUserSessions();
     currentSessionFuture = writingController.fetchCurrentSession();
     super.initState();
   }
@@ -110,9 +110,8 @@ class _LessonsPageState extends State<LessonsPage> {
               padding: const EdgeInsets.symmetric(
                   horizontal: defaultPadding, vertical: defaultPadding),
               child: Column(children: [
-                FutureBuilder<List<Session>>(
-                    future:
-                        writingController.fetchUserSessions(navigate: false),
+                FutureBuilder<List<Session>?>(
+                    future: userSessionsFuture,
                     builder: (context, snapshot) {
                       if (snapshot.hasData && snapshot.data!.isEmpty) {
                         return Center(
@@ -142,7 +141,7 @@ class _LessonsPageState extends State<LessonsPage> {
                         );
                       }
                       //
-                      if (snapshot.connectionState == ConnectionState.waiting) {
+                      if (!snapshot.hasData) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: defaultPadding),
@@ -200,51 +199,8 @@ class _LessonsPageState extends State<LessonsPage> {
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: defaultPadding * 2),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Your Lessons",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge,
-                                    ),
-                                    const SizedBox(
-                                      height: defaultPadding,
-                                    ),
-                                    FutureBuilder<Session?>(
-                                        future: writingController
-                                            .fetchCurrentSession(),
-                                        builder: (context, snapshot_) {
-                                          return AnimatedSwitcher(
-                                            duration: const Duration(
-                                                milliseconds: 600),
-                                            child: Builder(
-                                              builder: (context) {
-                                                if (snapshot_.connectionState ==
-                                                    ConnectionState.waiting) {
-                                                  return const ShimmerSessionLessonsList();
-                                                }
-                                                if (snapshot_.hasError) {
-                                                  return Text(snapshot_.error
-                                                      .toString());
-                                                }
-                                                if (snapshot_.hasData) {
-                                                  return SessionLessonsList(
-                                                    currentSession:
-                                                        snapshot_.data!,
-                                                  );
-                                                }
-                                                return const ShimmerSessionLessonsList();
-                                              },
-                                            ),
-                                          );
-                                        }),
-                                  ],
-                                ),
+                              _LessonsList(
+                                currentSessionFuture: currentSessionFuture,
                               )
                             ],
                           ),
@@ -265,5 +221,63 @@ class _LessonsPageState extends State<LessonsPage> {
             ),
           ),
         ));
+  }
+}
+
+class _LessonsList extends StatefulWidget {
+  const _LessonsList({super.key, required this.currentSessionFuture});
+
+  final Future<Session?> currentSessionFuture;
+  @override
+  State<_LessonsList> createState() => __LessonsListState();
+}
+
+class __LessonsListState extends State<_LessonsList> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  final WritingController writingController = Get.find<WritingController>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: defaultPadding * 2),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Your Lessons",
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const SizedBox(
+            height: defaultPadding,
+          ),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 600),
+            child: Builder(
+              builder: (context) {
+                return Obx(
+                  () {
+                    Session? session =
+                        writingController.currentUserSession.value;
+                    if (session == null) {
+                      return const ShimmerSessionLessonsList();
+                    } else {
+                      return SessionLessonsList(
+                        currentSession: session,
+                      );
+                    }
+                  },
+                  key: ValueKey<int?>(
+                      writingController.currentUserSession.value?.id),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

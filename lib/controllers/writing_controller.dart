@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:retry/retry.dart';
 import 'package:word_and_learn/controllers/services/auth/user_profile_mixin.dart';
 import 'package:word_and_learn/controllers/services/mixins/user_settings_http.dart';
 import 'package:word_and_learn/controllers/services/payments/payment_mixin.dart';
@@ -7,9 +6,6 @@ import 'package:word_and_learn/controllers/services/writing/session_mixin.dart';
 import 'package:word_and_learn/controllers/services/writing_controller_database.dart';
 import 'package:word_and_learn/controllers/services/writing_controller_http.dart';
 import 'package:word_and_learn/models/writing/models.dart';
-import 'package:word_and_learn/objectbox.g.dart';
-import 'package:word_and_learn/utils/exceptions.dart';
-import 'package:word_and_learn/views/writing/upload/onboarding.dart';
 
 class WritingController extends GetxController
     with UserSettingsMixin, UserProfileMixin, SessionMixin, PaymentMixin {
@@ -29,39 +25,41 @@ class WritingController extends GetxController
   }
 
   void refetch() {
-    if (isRefreshing == false) {
-      isRefreshing = true;
-      retry(
-        () async {
-          await fetchUserSessions();
-        },
-        retryIf: (e) => e is HttpFetchException,
-      );
-    }
+    getUserSessions().then(
+      (value) {
+        if (value != null) {
+          userSessions.value = value;
+        }
+        fetchCurrentSession();
+      },
+    );
   }
 
-  Future<List<Session>> fetchUserSessions({bool navigate = true}) async {
-    List<Session> sessions = await retry<List<Session>>(
-      () {
-        return getUserSessions();
-      },
-      retryIf: (p0) => p0 is HttpFetchException,
-    );
-    if (sessions.isEmpty) {
-      if (navigate) {
-        Get.snackbar(
-            "Add a New Composition", "Add a new composition to start off");
-        Get.to(() => const UploadOnboardingPage());
-      }
-      return sessions;
-    } else {
-      await fetchCurrentSession();
-    }
-    userSessions.value = sessions;
-    return sessions;
-  }
+  // Future<List<Session>?> fetchUserSessions({bool navigate = true}) async {
+  //   List<Session>? sessions = await retry<List<Session>>(
+  //     () {
+  //       return getUserSessions();
+  //     },
+  //     retryIf: (p0) => p0 is HttpFetchException,
+  //   );
+  //   if (sessions.isEmpty) {
+  //     if (navigate) {
+  //       Get.snackbar(
+  //           "Add a New Composition", "Add a new composition to start off");
+  //       Get.to(() => const UploadOnboardingPage());
+  //     }
+  //     return sessions;
+  //   } else {
+  //     await fetchCurrentSession();
+  //   }
+  //   userSessions.value = sessions;
+  //   return sessions;
+  // }
 
   Future<Session?> fetchCurrentSession() async {
+    if (currentUserSession.value != null) {
+      return currentUserSession.value;
+    }
     try {
       Session? session = await getCurrentSession();
       if (session == null && userSessions.isNotEmpty) {
@@ -83,7 +81,8 @@ class WritingController extends GetxController
   }
 
   Future<void> setCurrentSession(Session session) async {
-    await saveCurrentSession(session);
     currentUserSession.value = session;
+    currentUserSession.refresh();
+    await saveCurrentSession(session);
   }
 }

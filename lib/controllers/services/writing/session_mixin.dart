@@ -17,7 +17,7 @@ mixin SessionMixin implements SessionInterface {
   final SessionDatabase sessionDatabase = SessionDatabase();
 
   @override
-  Future<List<Session>> getUserSessions() async {
+  Future<List<Session>?> getUserSessions() async {
     try {
       http.Response res = await client.get(sessionLessonsUrl);
       HttpResponse<Session> response = HttpResponse<Session>.fromResponse(res);

@@ -133,15 +133,17 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
                             ),
                           ),
                         ),
-                        Text(
-                          widget.topic.description,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.grey),
+                        Center(
+                          child: Text(
+                            widget.topic.description,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey),
+                          ),
                         )
                       ],
                     ),
