@@ -12,7 +12,6 @@ class WritingController extends GetxController
   RxList<Session> userSessions = <Session>[].obs;
   Rx<Session?> currentUserSession = Rxn<Session>();
   bool isRefreshing = false;
-  late Store store;
   WritingControllerHttp controllerHttp = WritingControllerHttp();
   WritingControllerDatabase controllerDatabase = WritingControllerDatabase();
 

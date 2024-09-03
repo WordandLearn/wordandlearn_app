@@ -34,8 +34,7 @@ class _LessonsPageState extends State<LessonsPage> {
     currentSessionFuture = writingController.fetchCurrentSession();
     super.initState();
   }
-  //TODO: Check internet connectivity and act on it
- 
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
