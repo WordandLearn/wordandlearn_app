@@ -67,7 +67,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  //TODO: Implement some sound effects and vibrations
   @override
   void initState() {
     FirebaseMessaging.onMessage.listen(

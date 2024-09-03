@@ -1,11 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:word_and_learn/components/small_button.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/writing/models.dart';
-import 'package:word_and_learn/views/writing/session_report.dart';
 
 class SessionReportCard extends StatelessWidget {
   const SessionReportCard({

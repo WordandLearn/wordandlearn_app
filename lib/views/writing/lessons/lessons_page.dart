@@ -224,7 +224,7 @@ class _LessonsPageState extends State<LessonsPage> {
 }
 
 class _LessonsList extends StatefulWidget {
-  const _LessonsList({super.key, required this.currentSessionFuture});
+  const _LessonsList({required this.currentSessionFuture});
 
   final Future<Session?> currentSessionFuture;
   @override
