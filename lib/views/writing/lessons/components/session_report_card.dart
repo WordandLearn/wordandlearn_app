@@ -77,19 +77,10 @@ class SessionReportCard extends StatelessWidget {
                                 vertical: defaultPadding),
                             child: SmallButton(
                               onPressed: () async {
-                                if (kIsWeb) {
-                                  if (session != null &&
-                                      session!.reportUrl != null) {
-                                    await launchUrl(
-                                        Uri.parse(session!.reportUrl!));
-                                  }
-                                } else {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              SessionReportPage(
-                                                  session: session!)));
+                                if (session != null &&
+                                    session!.reportUrl != null) {
+                                  await launchUrl(
+                                      Uri.parse(session!.reportUrl!));
                                 }
                               },
                               text: "View Report",
