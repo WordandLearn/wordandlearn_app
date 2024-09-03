@@ -33,6 +33,8 @@ dependencies:
   cached_network_image: ^3.3.1
   circular_countdown_timer: ^0.2.3
   cloud_firestore: ^5.2.1
+  cross_file: ^0.3.4+2
+  cross_file_image: ^1.1.0
   cunning_document_scanner: ^1.1.4
   cupertino_icons: ^1.0.2
   date_field: ^5.2.1

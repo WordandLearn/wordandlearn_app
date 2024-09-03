@@ -220,12 +220,12 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
                                 ? widget.topic.exerciseCompleted
                                     ? AppColors.greenColor
                                     : Theme.of(context).primaryColor
-                                : Colors.white70,
+                                : AppColors.inactiveColor,
                             border: widget.topic.completed
                                 ? widget.topic.exerciseCompleted
                                     ? Border.all(
                                         color: AppColors.buttonColor
-                                            .withOpacity(0.2))
+                                            .withOpacity(0.6))
                                     : null
                                 : null,
                             boxShadow: [
@@ -264,24 +264,23 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SvgPicture.asset(
-                                    "assets/icons/lock.svg",
-                                    width: 20,
-                                    theme: const SvgTheme(
-                                        currentColor: Colors.black),
-                                    // color: Colors.grey,
-                                  ),
+                                  SvgPicture.asset("assets/icons/lock.svg",
+                                      width: 20,
+                                      theme: const SvgTheme(
+                                          currentColor: Colors.white),
+                                      // ignore: deprecated_member_use
+                                      color: Colors.white),
                                   const SizedBox(
                                     width: defaultPadding,
                                   ),
                                   Text(
-                                    "Exercise Not Available",
+                                    "Exercise Not Accessible",
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium!
                                         .copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.grey),
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white),
                                   )
                                 ],
                               ),

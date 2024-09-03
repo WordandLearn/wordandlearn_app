@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:cross_file/cross_file.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/writing/models.dart';
 import 'package:http/http.dart' as http;
@@ -49,10 +48,10 @@ class TeacherControllerHttp implements TeacherInterface {
   }
 
   Future<HttpResponse> uploadStudentCompositions(
-      int studentId, List<File> files) async {
+      int studentId, List<XFile> files) async {
     // Upload student compositions
     Map<String, String> body = {"student_id": studentId.toString()};
-    Map<String, File> images = {};
+    Map<String, XFile> images = {};
     for (int i = 0; i < files.length; i++) {
       images["image$i"] = files[i];
     }

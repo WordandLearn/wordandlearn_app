@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:word_and_learn/components/small_button.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/writing/models.dart';
@@ -62,12 +64,19 @@ class SessionReportCard extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             vertical: defaultPadding),
                         child: SmallButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        SessionReportPage(session: session!)));
+                          onPressed: () async {
+                            if (kIsWeb) {
+                              if (session != null &&
+                                  session!.reportUrl != null) {
+                                await launchUrl(Uri.parse(session!.reportUrl!));
+                              }
+                            } else {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SessionReportPage(
+                                          session: session!)));
+                            }
                           },
                           text: "View Report",
                           icon: const Icon(

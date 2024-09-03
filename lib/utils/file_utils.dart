@@ -1,7 +1,7 @@
-import 'dart:io';
+import 'package:cross_file/cross_file.dart';
 
 class FileUtils {
-  static File getFileFromPath(String path) {
-    return File(path);
+  static XFile getFileFromPath(String path) {
+    return XFile(path);
   }
 }

@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:cross_file/cross_file.dart';
 import 'package:get/get.dart';
 import 'package:word_and_learn/controllers/services/teachers/teacher_controller_database.dart';
 import 'package:word_and_learn/controllers/services/teachers/teacher_controller_http.dart';
@@ -8,7 +7,7 @@ import 'package:word_and_learn/models/writing/models.dart';
 class TeacherController extends GetxController {
   Rx<Profile?> profile = Rx<Profile?>(null);
   RxList<Class_> classes = <Class_>[].obs;
-  Map<int, List<File>> compositionImages = {};
+  Map<int, List<XFile>> compositionImages = {};
 
   TeacherControllerDatabase controllerDatabase = TeacherControllerDatabase();
   TeacherControllerHttp controllerHttp = TeacherControllerHttp();
@@ -52,7 +51,7 @@ class TeacherController extends GetxController {
   }
 
   Future<HttpResponse> uploadCompositions(
-      int studentId, List<File> images) async {
+      int studentId, List<XFile> images) async {
     HttpResponse response =
         await controllerHttp.uploadStudentCompositions(studentId, images);
     return response;

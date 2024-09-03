@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cross_file/cross_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/services/writing/session_database.dart';
@@ -247,7 +248,7 @@ mixin SessionMixin implements SessionInterface {
   }
 
   Future<ExerciseSubmission?> uploadExercise(
-      int exerciseId, List<File> images) async {
+      int exerciseId, List<XFile> images) async {
     http.Response res = await client.upload(exerciseUploadUrl(exerciseId),
         files: images, key: 'image');
 
@@ -275,12 +276,12 @@ mixin SessionMixin implements SessionInterface {
     }
   }
 
-  Future<HttpResponse> uploadComposition(List<File> images) async {
-    Map<String, File> imageMap = {};
-    File image1 = images[0];
+  Future<HttpResponse> uploadComposition(List<XFile> images) async {
+    Map<String, XFile> imageMap = {};
+    XFile image1 = images[0];
     imageMap['image1'] = image1;
     if (images.length > 1) {
-      File? image2 = images[1];
+      XFile? image2 = images[1];
       imageMap['image2'] = image2;
     }
 

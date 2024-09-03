@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:cross_file/cross_file.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/services/auth/user_database.dart';
@@ -85,7 +84,7 @@ mixin UserProfileMixin implements UserInterface {
     }
   }
 
-  Future<ProfilePicture?> addProfilePicture(File image) async {
+  Future<ProfilePicture?> addProfilePicture(XFile image) async {
     http.Response res = await client
         .uploadWithKeys(profilePictureUrl, files: {"image": image}, body: {});
 

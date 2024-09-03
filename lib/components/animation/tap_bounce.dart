@@ -39,6 +39,7 @@ class _TapBounceState extends State<TapBounce> {
       curve: widget.curve,
       duration: widget.duration,
       child: InkWell(
+          borderRadius: BorderRadius.circular(20),
           onTap: () {
             _animateBounce();
             Future.delayed(widget.duration, () {

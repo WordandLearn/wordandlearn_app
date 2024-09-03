@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cross_file/cross_file.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:word_and_learn/utils/response_handler.dart';
@@ -84,11 +86,17 @@ class HttpClient {
   }
 
   Future<http.Response> upload(String url,
-      {required List<File> files, String key = 'file'}) async {
+      {required List<XFile> files, String key = 'file'}) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.headers.addAll(await getAuthHeaders());
     for (var file in files) {
-      request.files.add(await http.MultipartFile.fromPath(key, file.path));
+      if (kIsWeb) {
+        request.files.add(http.MultipartFile.fromBytes(
+            key, await file.readAsBytes(),
+            filename: file.name));
+      } else {
+        request.files.add(await http.MultipartFile.fromPath(key, file.path));
+      }
     }
     var response = await request.send();
     return await http.Response.fromStream(response);
@@ -106,14 +114,20 @@ class HttpClient {
   // }
 
   Future<http.Response> uploadWithKeys(String url,
-      {required Map<String, File> files,
+      {required Map<String, XFile> files,
       required Map<String, String> body}) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
 
     request.headers.addAll(await getAuthHeaders());
     for (var key in files.keys) {
-      request.files
-          .add(await http.MultipartFile.fromPath(key, files[key]!.path));
+      if (kIsWeb) {
+        request.files.add(http.MultipartFile.fromBytes(
+            key, await files[key]!.readAsBytes(),
+            filename: files[key]!.name));
+      } else {
+        request.files
+            .add(await http.MultipartFile.fromPath(key, files[key]!.path));
+      }
     }
     request.fields.addAll(body);
     var response = await request.send();

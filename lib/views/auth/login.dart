@@ -4,13 +4,11 @@ import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/authentication_controller.dart';
-import 'package:word_and_learn/controllers/teacher_controller.dart';
 import 'package:word_and_learn/controllers/writing_controller.dart';
 import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/views/auth/forgot_password_email.dart';
 import 'package:word_and_learn/views/auth/profile_onboarding.dart';
 import 'package:word_and_learn/views/auth/signup.dart';
-import 'package:word_and_learn/views/teachers/home.dart';
 import 'package:word_and_learn/views/writing/lessons/lessons_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -158,7 +156,19 @@ class _LoginPageState extends State<LoginPage> {
                                 settings: const RouteSettings(
                                     name: "ProfileOnboardingPage")));
                       } else {
-                        if (response.data['user']['role'] == 'C') {
+                        if (response.data["user"]["role"] != "C") {
+                          setState(() {
+                            error = "Only students can login here";
+                          });
+
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                                  content: Text(
+                            "Only students can login here",
+                            style: TextStyle(color: Colors.red),
+                          )));
+                          return;
+                        } else {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
                                   content: Text(
@@ -173,26 +183,6 @@ class _LoginPageState extends State<LoginPage> {
                                   builder: (context) => const LessonsPage(),
                                   settings: const RouteSettings(
                                       name: "LessonsPage")));
-                        } else if (response.data['user']['role'] == 'T') {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                                  content: Text(
-                            "That was a success :)",
-                            style: TextStyle(color: Colors.green),
-                          )));
-                          Get.put(TeacherController());
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const TeachersHome(),
-                              ));
-                        } else {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                                  content: Text(
-                            "An error has occured :()",
-                            style: TextStyle(color: Colors.red),
-                          )));
                         }
                       }
                     } else {

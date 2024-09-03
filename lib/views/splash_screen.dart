@@ -5,7 +5,6 @@ import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/views/auth/login.dart';
 import 'package:word_and_learn/views/auth/profile_onboarding.dart';
-import 'package:word_and_learn/views/teachers/home.dart';
 import 'package:word_and_learn/views/writing/lessons/lessons_page.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -39,15 +38,6 @@ class _SplashScreenState extends State<SplashScreen> {
                     MaterialPageRoute(
                         builder: (context) => const LessonsPage(),
                         settings: const RouteSettings(name: "LessonsPage")));
-              } else if (preferences.getString("userType") == "teacher") {
-                Get.put(TeacherController());
-                if (mounted) {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const TeachersHome(),
-                          settings: const RouteSettings(name: "TeachersHome")));
-                }
               }
             }
           }

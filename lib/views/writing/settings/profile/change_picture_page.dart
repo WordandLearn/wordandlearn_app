@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -22,13 +22,13 @@ class _ChangePicturePageState extends State<ChangePicturePage> {
 
   final ImagePicker _picker = ImagePicker();
   bool uploading = false;
-  File? selectedFile;
+  XFile? selectedFile;
 
   void pickImage() async {
     XFile? imageFile = await _picker.pickImage(source: ImageSource.gallery);
     if (imageFile != null) {
       setState(() {
-        selectedFile = File(imageFile.path);
+        selectedFile = imageFile;
       });
     }
   }
@@ -66,14 +66,19 @@ class _ChangePicturePageState extends State<ChangePicturePage> {
                             shape: BoxShape.circle),
                         child: AnimatedSwitcher(
                           duration: const Duration(milliseconds: 300),
-                          child: CircleAvatar(
-                              key: ValueKey<bool>(selectedFile != null),
-                              radius: 100,
-                              backgroundImage: selectedFile != null
-                                  ? Image.file(selectedFile!).image
-                                  : CachedNetworkImageProvider(snapshot.hasData
-                                      ? snapshot.data!.imageUrl
-                                      : defaultImageUrl)),
+                          child: FutureBuilder<Uint8List?>(
+                              future: selectedFile?.readAsBytes(),
+                              builder: (context, snapshot_) {
+                                return CircleAvatar(
+                                    key: ValueKey<bool>(selectedFile != null),
+                                    radius: 100,
+                                    backgroundImage: snapshot_.hasData
+                                        ? Image.memory(snapshot_.data!).image
+                                        : CachedNetworkImageProvider(
+                                            snapshot.hasData
+                                                ? snapshot.data!.imageUrl
+                                                : defaultImageUrl));
+                              }),
                         ),
                       ),
                     ),

@@ -20,7 +20,8 @@ class _SmallButtonState extends State<SmallButton> {
   double scale = 1;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
+      borderRadius: BorderRadius.circular(20),
       onTap: () {
         setState(() {
           scale = 0.9;

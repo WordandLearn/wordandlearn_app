@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cross_file/cross_file.dart';
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class _CompositionUploadPageState extends State<CompositionUploadPage> {
 
   final WritingController writingController = Get.find<WritingController>();
 
-  void _uploadComposition(List<File> images) {
+  void _uploadComposition(List<XFile> images) {
     if (!uploading) {
       showDialog(
           barrierDismissible: false,
@@ -335,7 +336,7 @@ class _CompositionUploadPageState extends State<CompositionUploadPage> {
                                   scale: 1.01,
                                   onTap: () {
                                     _uploadComposition(imagePaths
-                                        .map((e) => File(e!))
+                                        .map((e) => XFile(e!))
                                         .toList());
                                   },
                                   curve: Curves.bounceInOut,

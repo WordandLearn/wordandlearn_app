@@ -136,6 +136,13 @@ class _CompositionSelectorContainerState
               bottom: 0,
               child: SmallButton(
                 onPressed: () async {
+                  if (kIsWeb) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                            "Error: Scanning a composition is only available on mobile.")));
+                    return;
+                  }
+
                   SharedPreferences preferences =
                       await SharedPreferences.getInstance();
                   if (!preferences.containsKey("uploadOnboarded")) {
