@@ -47,8 +47,12 @@ class _SubscriptionSettingsState extends State<SubscriptionSettings> {
                   future: packagesFuture,
                   builder: (context, snapshot) {
                     return snapshot.hasData && snapshot.data!.isNotEmpty
-                        ? _SubscriptionPackagesWidget(
-                            package: snapshot.data!.first)
+                        ? Column(
+                            children: [
+                              ...snapshot.data!.map((e) =>
+                                  _SubscriptionPackagesWidget(package: e)),
+                            ],
+                          )
                         : const LoadingSpinner();
                   }),
             ),

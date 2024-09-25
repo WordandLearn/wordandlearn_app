@@ -28,29 +28,31 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseMessaging.instance.setAutoInitEnabled(true);
-  await FirebaseMessaging.instance.requestPermission(provisional: true);
-  final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
-  if (apnsToken != null) {
-    // APNS token is available, make FCM plugin API requests...}
+  if (!kIsWeb) {
+    await FirebaseMessaging.instance.setAutoInitEnabled(true);
+    await FirebaseMessaging.instance.requestPermission(provisional: true);
+    final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+    if (apnsToken != null) {
+      // APNS token is available, make FCM plugin API requests...}
+    }
+
+    FirebaseMessaging.instance.getToken().then(
+      (value) {
+        if (value != null) {
+          NotificationUtils.registerDeviceToken(value);
+        }
+      },
+    );
+
+    FirebaseMessaging.instance.onTokenRefresh.listen(
+      (token) async {
+        await NotificationUtils.registerDeviceToken(token);
+      },
+    );
+
+    FirebaseMessaging.onBackgroundMessage(
+        NotificationUtils.firebaseMessagingBackgroundHandler);
   }
-
-  FirebaseMessaging.instance.getToken().then(
-    (value) {
-      if (value != null) {
-        NotificationUtils.registerDeviceToken(value);
-      }
-    },
-  );
-
-  FirebaseMessaging.instance.onTokenRefresh.listen(
-    (token) async {
-      await NotificationUtils.registerDeviceToken(token);
-    },
-  );
-
-  FirebaseMessaging.onBackgroundMessage(
-      NotificationUtils.firebaseMessagingBackgroundHandler);
 
   runApp(const MyApp());
 }
