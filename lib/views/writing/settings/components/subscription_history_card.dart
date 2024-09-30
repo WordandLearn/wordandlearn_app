@@ -34,7 +34,9 @@ class SubscriptionHistoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(10)),
+          border: Border.all(color: AppColors.secondaryContainer),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.symmetric(vertical: defaultPadding),
       padding: const EdgeInsets.symmetric(
           horizontal: defaultPadding * 1.5, vertical: defaultPadding * 1.5),
@@ -45,7 +47,7 @@ class SubscriptionHistoryCard extends StatelessWidget {
               height: 40,
               // padding: const EdgeInsets.all(defaultPadding),
               decoration: BoxDecoration(
-                  color: AppColors.secondaryContainer,
+                  color: AppColors.secondaryContainer.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(10)),
               child: Center(child: Text(label))),
           Expanded(
@@ -58,9 +60,7 @@ class SubscriptionHistoryCard extends StatelessWidget {
                   Text(
                     paymentHistory.subscription.name,
                     style: const TextStyle(
-                        fontSize: 14,
-                        color: AppColors.greyTextColor,
-                        fontWeight: FontWeight.w500),
+                        fontSize: 14, fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(
                     height: defaultPadding / 2,
@@ -76,7 +76,7 @@ class SubscriptionHistoryCard extends StatelessWidget {
           ),
           Text(
             "KES ${paymentHistory.subscription.price}",
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
           ),
         ],
       ),

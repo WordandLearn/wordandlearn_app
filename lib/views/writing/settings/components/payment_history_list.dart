@@ -31,9 +31,13 @@ class _PaymentHistoryListState extends State<PaymentHistoryList> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "History",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+        const Row(
+          children: [
+            Text(
+              "Payment History",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+          ],
         ),
         FutureBuilder<List<PaymentHistory>?>(
             future: _future,

@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:get/get.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/colors.dart';
 import 'package:word_and_learn/constants/theme.dart';
 import 'package:word_and_learn/utils/navigation_observer.dart';
@@ -107,7 +109,11 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: navigatorKey,
       title: 'Word & Learn',
       theme: AppTheme.getTheme(),
-      home: const SplashScreen(),
+      home: LoaderOverlay(
+          overlayWidgetBuilder: (progress) {
+            return const Center(child: LoadingSpinner());
+          },
+          child: const SplashScreen()),
     );
   }
 }

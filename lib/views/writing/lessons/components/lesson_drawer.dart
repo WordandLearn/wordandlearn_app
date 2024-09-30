@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:word_and_learn/components/animation/tap_bounce.dart';
+import 'package:word_and_learn/components/build_alert_dialog.dart';
 import 'package:word_and_learn/components/circle_profile_avatar.dart';
 import 'package:word_and_learn/components/primary_icon_button.dart';
 import 'package:word_and_learn/constants/constants.dart';
@@ -299,51 +300,22 @@ class _LessonDrawerState extends State<LessonDrawer> {
             showDialog(
                 context: context,
                 builder: (context) {
-                  return AlertDialog(
-                    backgroundColor: Colors.white,
-                    title: const Text(
-                      "Logout",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
-                      textAlign: TextAlign.center,
-                    ),
-                    content: const Text("Are you sure you want to logout?"),
-                    actions: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                "Cancel",
-                                style: TextStyle(color: Colors.black),
-                              )),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                writingController.logout().then((value) {
-                                  Get.delete<WritingController>();
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const LoginPage(),
-                                    ),
-                                    (route) => false,
-                                  );
-                                });
-                              },
-                              child: const Text(
-                                "Logout",
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.w600),
-                              ))
-                        ],
-                      ),
-                    ],
-                  );
+                  return buildAlertDialog(context,
+                      title: "Logout",
+                      content: "Are you sure you want to logout?",
+                      buttonText: "Logout", onPressed: () {
+                    Navigator.pop(context);
+                    writingController.logout().then((value) {
+                      Get.delete<WritingController>();
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginPage(),
+                        ),
+                        (route) => false,
+                      );
+                    });
+                  });
                 });
           },
           child: const PrimaryIconButton(

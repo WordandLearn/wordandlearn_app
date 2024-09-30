@@ -55,6 +55,7 @@ const String alertSettingsUrl = "$settingsUrl/alert-settings/";
 //Payment Endpoints
 const String paymentUrl = "$baseUrl/payments";
 const String packagesUrl = "$paymentUrl/package";
+const String userSubscriptionUrl = "$paymentUrl/subscription/?service=W";
 
 //ToS Endpoints
 const String tosUrl = "https://wordandlearn.com/terms-of-service";

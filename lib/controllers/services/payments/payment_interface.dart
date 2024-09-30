@@ -1,6 +1,7 @@
 import 'package:word_and_learn/models/payments/payment_models.dart';
 
 abstract class PaymentInterface {
+  Future<List<UserSubscription>?> getUserSubscription();
   Future<List<SubscriptionPackage>?> getSubscriptionPackages();
 
   Future<PackageSubscriptionDetails?> getPackageSubscriptionDetails(
@@ -12,6 +13,6 @@ abstract class PaymentInterface {
 
   Future<bool?> cancelSubscription(int packageId);
 
-  Future<Map<String,dynamic>?> subscribeToPackage(
+  Future<Map<String, dynamic>?> subscribeToPackage(
       int packageId, Map<String, dynamic> body);
 }

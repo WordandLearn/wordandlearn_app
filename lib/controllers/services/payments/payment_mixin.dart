@@ -10,9 +10,21 @@ mixin PaymentMixin implements PaymentInterface {
   final HttpClient client = HttpClient();
 
   @override
+  Future<List<UserSubscription>?> getUserSubscription() async {
+    http.Response res = await client.get(userSubscriptionUrl);
+
+    HttpResponse response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      return userSubscriptionFromJson(res.body);
+    } else {
+      throw HttpFetchException(
+          "Could not fetch user subscription", res.statusCode);
+    }
+  }
+
+  @override
   Future<List<SubscriptionPackage>?> getSubscriptionPackages() async {
     http.Response res = await client.get(packagesUrl);
-
     HttpResponse response = HttpResponse.fromResponse(res);
     if (response.isSuccess) {
       return subscriptionPackageFromJson(res.body);
@@ -73,7 +85,7 @@ mixin PaymentMixin implements PaymentInterface {
   }
 
   @override
-  Future<Map<String,dynamic>?> subscribeToPackage(
+  Future<Map<String, dynamic>?> subscribeToPackage(
       int packageId, Map<String, dynamic> body) async {
     http.Response res =
         await client.post("$paymentUrl/package/$packageId/subscribe/", body);

@@ -4,6 +4,7 @@ import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/authentication_controller.dart';
+import 'package:word_and_learn/views/auth/login.dart';
 import 'package:word_and_learn/views/auth/reset_password.dart';
 import 'package:word_and_learn/views/writing/settings/components/build_settings_app_bar.dart';
 
@@ -107,7 +108,13 @@ class _OtpValidationPageState extends State<OtpValidationPage> {
                           if (value.isSuccess) {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                    content: Text("Account Activated")));
+                                    content: Text(
+                                        "Account Activated. You can now log in")));
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginPage(),
+                                ));
                           } else {
                             setState(() {
                               error = value.data["error"];

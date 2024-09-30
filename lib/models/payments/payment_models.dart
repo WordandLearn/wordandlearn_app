@@ -4,6 +4,7 @@ export 'subscription_package.dart';
 export 'package_subscription_details.dart';
 export 'payment_history.dart';
 export 'pesapal_request.dart';
+export 'user_subscription.dart';
 
 class PaymentModel {
   String formattedDate(DateTime date) {

@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:get/get_navigation/get_navigation.dart';
+import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
-import 'package:word_and_learn/models/payments/payment_models.dart';
 import 'package:word_and_learn/views/writing/settings/components/build_settings_app_bar.dart';
 import 'package:word_and_learn/views/writing/settings/components/payment_history_list.dart';
+import 'package:word_and_learn/views/writing/settings/components/plan_list_modal.dart';
 import 'package:word_and_learn/views/writing/settings/components/subscription_details_container.dart';
 import 'package:word_and_learn/views/writing/settings/components/subscription_inactive_widget.dart';
 
-import 'components/subscription_active_widget.dart';
+import '../../../models/payments/payment_models.dart';
 
 class SubscriptionSettings extends StatefulWidget {
   const SubscriptionSettings({super.key});
@@ -19,285 +25,216 @@ class SubscriptionSettings extends StatefulWidget {
 }
 
 class _SubscriptionSettingsState extends State<SubscriptionSettings> {
-  late Future<List<SubscriptionPackage>?> packagesFuture;
+  late Future<List<UserSubscription>?> userSubscriptionFuture;
+  final WritingController _writingController = Get.find<WritingController>();
   @override
   void initState() {
-    packagesFuture = _writingController.getSubscriptionPackages();
+    userSubscriptionFuture = _writingController.getUserSubscription();
     super.initState();
   }
 
-  final WritingController _writingController = Get.find<WritingController>();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        backgroundColor: AppColors.secondaryContainer,
-        appBar: buildSettingsAppBar(context, title: "Your Subscription"),
-        body: ListView(children: [
-          AnimatedSize(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-            child: Container(
-              width: double.infinity,
-              constraints: BoxConstraints(minHeight: size.height * 0.4),
-              padding: const EdgeInsets.symmetric(
-                  horizontal: defaultPadding, vertical: defaultPadding * 2),
-              decoration: const BoxDecoration(color: Colors.white),
-              child: FutureBuilder<List<SubscriptionPackage>?>(
-                  future: packagesFuture,
-                  builder: (context, snapshot) {
-                    return snapshot.hasData && snapshot.data!.isNotEmpty
-                        ? Column(
-                            children: [
-                              ...snapshot.data!.map((e) =>
-                                  _SubscriptionPackagesWidget(package: e)),
-                            ],
-                          )
-                        : const LoadingSpinner();
-                  }),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: defaultPadding * 2, horizontal: defaultPadding),
-            child: PaymentHistoryList(),
-          )
-        ]));
-  }
-}
+        backgroundColor: Colors.white,
+        appBar: buildSettingsAppBar(context,
+            title: "Your Subscription", actions: []),
+        body: ListView(
+          children: [
+            AnimatedSize(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              child: Column(
+                children: [
+                  FutureBuilder<List<UserSubscription>?>(
+                      future: userSubscriptionFuture,
+                      builder: (context, snapshot) {
+                        print(snapshot.hasData && snapshot.data!.isEmpty);
 
-class _SubscriptionPackagesWidget extends StatefulWidget {
-  const _SubscriptionPackagesWidget({
-    required this.package,
-  });
-  final SubscriptionPackage package;
-
-  @override
-  State<_SubscriptionPackagesWidget> createState() =>
-      _SubscriptionPackagesWidgetState();
-}
-
-class _SubscriptionPackagesWidgetState
-    extends State<_SubscriptionPackagesWidget> {
-  final WritingController _writingController = Get.find<WritingController>();
-  late Future<PackageSubscriptionDetails?> _future;
-
-  @override
-  void initState() {
-    _future =
-        _writingController.getPackageSubscriptionDetails(widget.package.id);
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<PackageSubscriptionDetails?>(
-        future: _future,
-        builder: (context, snapshot) {
-          // print(snapshot.error);
-          // print(snapshot.stackTrace);
-          return Column(
-            children: [
-              //Fetch Subscription from API
-              SubscriptionDetailsContainer(
-                subscriptionPackage: widget.package,
-              ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: defaultPadding * 2, horizontal: defaultPadding),
-                child: snapshot.hasData
-                    ? Column(
-                        children: [
-                          snapshot.data!.active
-                              ? Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: defaultPadding),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          Shimmer.fromColors(
+                            baseColor: Colors.grey[300]!,
+                            highlightColor: Colors.grey[100]!,
+                            child: Container(
+                              height: 200,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                          );
+                        }
+                        if (snapshot.hasData) {
+                          if (snapshot.data!.isEmpty) {
+                            return SubscriptionInactiveWidget();
+                          }
+                          return SizedBox(
+                            height: size.height - 120,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: defaultPadding,
+                                  vertical: defaultPadding),
+                              child: Column(
+                                children: [
+                                  SubscriptionDetailsContainer(
+                                      subscriptionDetails: snapshot.data?.first,
+                                      subscriptionPackage:
+                                          snapshot.data![0].subscription),
+                                  const SizedBox(
+                                    height: defaultPadding,
+                                  ),
+                                  snapshot.hasData && snapshot.data!.isNotEmpty
+                                      ? Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: defaultPadding),
+                                          child: Row(
+                                            children: [
+                                              _PaymentDateWidget(
+                                                label: "Last Payment",
+                                                date: DateFormat.yMMMMd()
+                                                    .format(snapshot.data?.first
+                                                            .updatedAt ??
+                                                        DateTime.now()),
+                                                icon: const Icon(
+                                                  FeatherIcons.clock,
+                                                  color:
+                                                      AppColors.inactiveColor,
+                                                  size: 16,
+                                                ),
+                                              ),
+                                              const Spacer(),
+                                              _PaymentDateWidget(
+                                                label: "Next Payment",
+                                                date: DateFormat.yMMMMd()
+                                                    .format(snapshot.data?.first
+                                                            .endDate ??
+                                                        DateTime.now()),
+                                                icon: const Icon(
+                                                  FeatherIcons.calendar,
+                                                  color:
+                                                      AppColors.inactiveColor,
+                                                  size: 16,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      : const SizedBox.shrink(),
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: defaultPadding * 3),
+                                    child: PaymentHistoryList(),
+                                  ),
+                                  const Spacer(),
+                                  Row(
                                     children: [
-                                      Container(
-                                        height: 10,
-                                        width: 10,
-                                        decoration: BoxDecoration(
-                                            color: snapshot.data!.isTrial
-                                                ? Colors.green
-                                                : snapshot
-                                                        .data!
-                                                        .subscriptionDetails!
-                                                        .cancelled
-                                                    ? Colors.red
-                                                    : Colors.blue,
-                                            shape: BoxShape.circle),
-                                      ),
+                                      Expanded(
+                                          child: TapBounce(
+                                        onTap: () {
+                                          showModalBottomSheet(
+                                              context: context,
+                                              isScrollControlled: true,
+                                              builder: (context) {
+                                                return SizedBox(
+                                                    height: size.height * 0.6,
+                                                    child: PlanListModal(
+                                                      userSubscription:
+                                                          snapshot.data?.first,
+                                                    ));
+                                              });
+                                        },
+                                        child: PrimaryIconButton(
+                                            text: "Change Plan",
+                                            icon: SvgPicture.asset(
+                                              "assets/icons/exchange.svg",
+                                              width: 15,
+                                              color: Colors.white,
+                                            )),
+                                      )),
                                       const SizedBox(
-                                        width: defaultPadding / 2,
+                                        width: defaultPadding,
                                       ),
-                                      Text(
-                                        snapshot.data!.isTrial
-                                            ? "Trial in Progress"
-                                            : snapshot
-                                                    .data!
-                                                    .subscriptionDetails!
-                                                    .cancelled
-                                                ? "Subscription Cancelled"
-                                                : "Subscription Active",
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                            color: snapshot.data!.isTrial
-                                                ? Colors.green
-                                                : snapshot
-                                                        .data!
-                                                        .subscriptionDetails!
-                                                        .cancelled
-                                                    ? Colors.red
-                                                    : Colors.blue),
+                                      TapBounce(
+                                        onTap: () {},
+                                        child: Container(
+                                            padding: allPadding * 1.25,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: const Icon(
+                                                FeatherIcons.moreHorizontal)),
                                       )
                                     ],
-                                  ),
-                                )
-                              : const SizedBox.shrink(),
-                          Builder(builder: (context) {
-                            PackageSubscriptionDetails
-                                packageSubscriptionDetails = snapshot.data!;
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        }
 
-                            if (!packageSubscriptionDetails.active) {
-                              // Handle not active, either start a trial or initiate subscription
-                              if (packageSubscriptionDetails.trialEligible) {
-                                return SubscriptionInactiveWidget(
-                                  subscriptionPackage: widget.package,
-                                  onStarted: () {
-                                    setState(() {
-                                      _future = _writingController
-                                          .getPackageSubscriptionDetails(
-                                              widget.package.id);
-                                    });
-                                  },
-                                  isTrial: true,
-                                );
-                              } else {
-                                return SubscriptionInactiveWidget(
-                                  isTrial: false,
-                                  subscriptionPackage: widget.package,
-                                  onStarted: () {
-                                    setState(() {
-                                      _future = _writingController
-                                          .getPackageSubscriptionDetails(
-                                              widget.package.id);
-                                    });
-                                  },
-                                );
-                              }
-                            } else {
-                              if (packageSubscriptionDetails
-                                          .subscriptionDetails !=
-                                      null ||
-                                  packageSubscriptionDetails.trialDetails !=
-                                      null) {
-                                return Column(
-                                  children: [
-                                    Column(
-                                      children: [
-                                        _SubscriptionDetail(
-                                          title: "Price",
-                                          detail: "KES ${widget.package.price}",
-                                        ),
-                                        _SubscriptionDetail(
-                                          title: "Payment",
-                                          detail: widget.package.isYearly
-                                              ? "Yearly"
-                                              : "Monthly",
-                                        ),
-                                        _SubscriptionDetail(
-                                          title:
-                                              packageSubscriptionDetails.isTrial
-                                                  ? "Trial Start Date"
-                                                  : "Start Subscription",
-                                          detail:
-                                              packageSubscriptionDetails.isTrial
-                                                  ? packageSubscriptionDetails
-                                                      .trialDetails!
-                                                      .createdAtFormatted
-                                                  : packageSubscriptionDetails
-                                                      .subscriptionDetails!
-                                                      .paidAtFormatted,
-                                        ),
-                                        _SubscriptionDetail(
-                                          title:
-                                              packageSubscriptionDetails.isTrial
-                                                  ? "Trial Ends Date"
-                                                  : "Next Payment Date",
-                                          detail: packageSubscriptionDetails
-                                                  .isTrial
-                                              ? packageSubscriptionDetails
-                                                  .trialDetails!
-                                                  .endDateFormatted
-                                              : packageSubscriptionDetails
-                                                      .subscriptionDetails!
-                                                      .cancelled
-                                                  ? "N/A"
-                                                  : packageSubscriptionDetails
-                                                      .subscriptionDetails!
-                                                      .endDateFormatted,
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: defaultPadding,
-                                    ),
-                                    SubscriptionActiveWidget(
-                                      packageSubscriptionDetails:
-                                          packageSubscriptionDetails,
-                                    )
-                                  ],
-                                );
-                              }
-                            }
-                            return const SizedBox.shrink();
-                          }),
-                        ],
-                      )
-                    : const LoadingSpinner(),
+                        return Container();
+                      }),
+                ],
               ),
-              const SizedBox(
-                height: defaultPadding,
-              ),
-            ],
-          );
-        });
+            ),
+          ],
+        ));
   }
 }
 
-class _SubscriptionDetail extends StatelessWidget {
-  const _SubscriptionDetail({
-    required this.title,
-    required this.detail,
+class _PaymentDateWidget extends StatelessWidget {
+  const _PaymentDateWidget({
+    super.key,
+    required this.label,
+    required this.date,
+    required this.icon,
   });
-
-  final String title;
-  final String detail;
+  final String label;
+  final String date;
+  final Widget icon;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: defaultPadding / 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-                fontSize: 14,
-                color: AppColors.inactiveColor,
-                fontWeight: FontWeight.w500),
-          ),
-          Text(
-            detail,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-          )
-        ],
-      ),
-    );
+    return Container(
+        padding: const EdgeInsets.symmetric(
+            horizontal: defaultPadding * 1.5, vertical: defaultPadding),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: AppColors.secondaryColor),
+            boxShadow: [
+              // BoxShadow(
+              //     color: Colors.grey.withOpacity(0.1),
+              //     blurRadius: 10,
+              //     offset: const Offset(0, 5))
+            ]),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            icon,
+            const SizedBox(
+              width: defaultPadding,
+            ),
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  color: AppColors.inactiveColor,
+                  fontSize: 12,
+                ),
+              ),
+              Text(
+                date,
+                style: const TextStyle(
+                    color: AppColors.textColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
+              ),
+            ]),
+          ],
+        ));
   }
 }

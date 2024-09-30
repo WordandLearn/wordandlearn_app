@@ -1,6 +1,7 @@
 import 'package:date_field/date_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:word_and_learn/components/animation/tap_bounce.dart';
@@ -152,8 +153,8 @@ class _ProfileOnboardingPageState extends State<ProfileOnboardingPage> {
                                           hintText: "",
                                           fillColor:
                                               AppColors.secondaryContainer,
-                                          suffixIcon: const Icon(
-                                              CupertinoIcons.calendar),
+                                          suffixIcon:
+                                              const Icon(FeatherIcons.calendar),
                                           contentPadding:
                                               const EdgeInsets.symmetric(
                                                   horizontal:
