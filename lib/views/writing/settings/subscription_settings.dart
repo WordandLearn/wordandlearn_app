@@ -1,8 +1,9 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/get_navigation.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:word_and_learn/components/animation/tap_bounce.dart';
@@ -10,6 +11,7 @@ import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/views/writing/settings/components/build_settings_app_bar.dart';
+import 'package:word_and_learn/views/writing/settings/components/cancel_alert_dialog.dart';
 import 'package:word_and_learn/views/writing/settings/components/payment_history_list.dart';
 import 'package:word_and_learn/views/writing/settings/components/plan_list_modal.dart';
 import 'package:word_and_learn/views/writing/settings/components/subscription_details_container.dart';
@@ -50,8 +52,6 @@ class _SubscriptionSettingsState extends State<SubscriptionSettings> {
                   FutureBuilder<List<UserSubscription>?>(
                       future: userSubscriptionFuture,
                       builder: (context, snapshot) {
-                        print(snapshot.hasData && snapshot.data!.isEmpty);
-
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           Shimmer.fromColors(
@@ -69,10 +69,10 @@ class _SubscriptionSettingsState extends State<SubscriptionSettings> {
                         }
                         if (snapshot.hasData) {
                           if (snapshot.data!.isEmpty) {
-                            return SubscriptionInactiveWidget();
+                            return const SubscriptionInactiveWidget();
                           }
                           return SizedBox(
-                            height: size.height - 120,
+                            height: size.height * 0.85,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: defaultPadding,
@@ -158,14 +158,39 @@ class _SubscriptionSettingsState extends State<SubscriptionSettings> {
                                         width: defaultPadding,
                                       ),
                                       TapBounce(
-                                        onTap: () {},
+                                        onTap: () {
+                                          showDialog(
+                                              context: context,
+                                              barrierDismissible: false,
+                                              builder: (context) {
+                                                return const CancelAlertDialog();
+                                              });
+                                        },
                                         child: Container(
                                             padding: allPadding * 1.25,
                                             decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
-                                            child: const Icon(
-                                                FeatherIcons.moreHorizontal)),
+                                            child: const Row(
+                                              children: [
+                                                Icon(
+                                                  FeatherIcons.trash,
+                                                  color: Colors.red,
+                                                  size: 20,
+                                                ),
+                                                SizedBox(
+                                                  width: defaultPadding / 2,
+                                                ),
+                                                Text(
+                                                  "Cancel",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.red,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                              ],
+                                            )),
                                       )
                                     ],
                                   )
@@ -175,7 +200,7 @@ class _SubscriptionSettingsState extends State<SubscriptionSettings> {
                           );
                         }
 
-                        return Container();
+                        return const LoadingSpinner();
                       }),
                 ],
               ),
@@ -187,7 +212,6 @@ class _SubscriptionSettingsState extends State<SubscriptionSettings> {
 
 class _PaymentDateWidget extends StatelessWidget {
   const _PaymentDateWidget({
-    super.key,
     required this.label,
     required this.date,
     required this.icon,
@@ -205,7 +229,7 @@ class _PaymentDateWidget extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: AppColors.secondaryColor),
-            boxShadow: [
+            boxShadow: const [
               // BoxShadow(
               //     color: Colors.grey.withOpacity(0.1),
               //     blurRadius: 10,

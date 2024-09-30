@@ -11,9 +11,9 @@ import 'package:word_and_learn/components/primary_icon_button.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/views/auth/login.dart';
-import 'package:word_and_learn/views/writing/lessons/lessons_page.dart';
 import 'package:word_and_learn/views/writing/settings/components/build_settings_app_bar.dart';
 import 'package:word_and_learn/views/writing/settings/components/radio_input.dart';
+import 'package:word_and_learn/views/writing/settings/components/subscription_inactive_widget.dart';
 
 class ProfileOnboardingPage extends StatefulWidget {
   const ProfileOnboardingPage({super.key});
@@ -325,9 +325,10 @@ class _ProfileOnboardingPageState extends State<ProfileOnboardingPage> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const LessonsPage(),
+                                      builder: (context) =>
+                                          const SubscriptionInactivePage(),
                                       settings: const RouteSettings(
-                                          name: "LessonsPage")));
+                                          name: "SubscriptionInactivePage")));
                             } else {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(

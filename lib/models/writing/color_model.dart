@@ -20,4 +20,12 @@ class ColorModel {
   Color get darkerColor {
     return TinyColor.fromColor(colorValue).darken(10).color;
   }
+
+  @Transient()
+  Color get darkerTextColor {
+    //Generates a color depending on the color value that passes accecisbility test, not black or white, just darker colorvalue or lighter
+    return TinyColor.fromColor(colorValue).isLight()
+        ? TinyColor.fromColor(colorValue).darken(50).color
+        : TinyColor.fromColor(colorValue).lighten(50).color;
+  }
 }

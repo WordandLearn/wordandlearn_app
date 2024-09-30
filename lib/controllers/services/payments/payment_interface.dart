@@ -9,9 +9,9 @@ abstract class PaymentInterface {
 
   Future<List<PaymentHistory>?> getPaymentHistory();
 
-  Future<TrialDetails?> startTrial(int packageId);
+  Future<bool> startTrial();
 
-  Future<bool?> cancelSubscription(int packageId);
+  Future<bool?> cancelSubscription();
 
   Future<Map<String, dynamic>?> subscribeToPackage(
       int packageId, Map<String, dynamic> body);

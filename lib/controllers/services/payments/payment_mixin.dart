@@ -59,22 +59,24 @@ mixin PaymentMixin implements PaymentInterface {
   }
 
   @override
-  Future<TrialDetails?> startTrial(int packageId) async {
+  Future<bool> startTrial() async {
     http.Response res = await client.get(
-      "$packagesUrl/$packageId/trial/start/",
+      "$paymentUrl/start_trial/W/",
     );
     HttpResponse response = HttpResponse.fromResponse(res);
     if (response.isSuccess) {
-      return TrialDetails.fromJson(response.data["details"]);
+      return response.isSuccess;
     } else {
       throw HttpFetchException("Could not start trial", res.statusCode);
     }
   }
 
   @override
-  Future<bool?> cancelSubscription(int packageId) async {
+  Future<bool?> cancelSubscription() async {
     http.Response res =
-        await client.delete('$paymentUrl/subscription/$packageId/cancel/');
+        await client.delete('$paymentUrl/subscription/W/cancel/');
+
+    print(res.body);
 
     HttpResponse response = HttpResponse.fromResponse(res);
     if (response.isSuccess) {

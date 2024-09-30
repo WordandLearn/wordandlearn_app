@@ -25,6 +25,7 @@ class SubscriptionPackage extends ColorModel {
   int discount;
   String interval;
   String currency;
+  bool recommended;
 
   SubscriptionPackage({
     required this.id,
@@ -38,6 +39,7 @@ class SubscriptionPackage extends ColorModel {
     required this.discount,
     required this.interval,
     required this.currency,
+    this.recommended = false,
   });
 
   factory SubscriptionPackage.fromJson(Map<String, dynamic> json) =>
@@ -54,6 +56,7 @@ class SubscriptionPackage extends ColorModel {
         discount: json["discount"],
         interval: json["interval"],
         currency: json["currency"],
+        recommended: json["recommended"] ?? false,
       );
 
   Map<String, dynamic> toJson() => {
@@ -82,6 +85,20 @@ class SubscriptionPackage extends ColorModel {
 
   @override
   int get hashCode => id;
+
+  String get intervalAsNoun {
+    switch (interval) {
+      case "monthly":
+        return "month";
+      case "yearly":
+        return "year";
+
+      case "weekly":
+        return "week";
+      default:
+        return "Unknown";
+    }
+  }
 }
 
 class SubscriptionConstraint {
