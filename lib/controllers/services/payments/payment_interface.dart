@@ -1,6 +1,8 @@
 import 'package:word_and_learn/models/payments/payment_models.dart';
 
 abstract class PaymentInterface {
+  Future<SubscriptionStatus?> getUserSubscriptionStatus();
+
   Future<List<UserSubscription>?> getUserSubscription();
   Future<List<SubscriptionPackage>?> getSubscriptionPackages();
 

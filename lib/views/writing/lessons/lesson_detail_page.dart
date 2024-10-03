@@ -1,20 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
+import 'package:word_and_learn/controllers/controllers.dart';
+import 'package:word_and_learn/models/payments/payment_models.dart';
 import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/utils/timer.dart';
 import 'package:word_and_learn/views/writing/lessons/components/lesson_header_container.dart';
 import 'package:word_and_learn/views/writing/topic/lesson_topics_page.dart';
 
-const String sampleText =
-    "Every story is like a painting, and words are your colours. Today, we will add more colours to your palette by learning new words that you can use to describe your experiences in a more vivid and interesting way.";
-
-class LessonDetailPage extends StatelessWidget {
+class LessonDetailPage extends StatefulWidget {
   const LessonDetailPage(
       {super.key, required this.lesson, required this.isAvailable});
   final Lesson lesson;
   final bool isAvailable;
+
+  @override
+  State<LessonDetailPage> createState() => _LessonDetailPageState();
+}
+
+class _LessonDetailPageState extends State<LessonDetailPage> {
+  final WritingController writingController = Get.find<WritingController>();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,30 +30,30 @@ class LessonDetailPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: defaultPadding),
           child: LessonHeaderContainer(
-            lesson: lesson,
+            lesson: widget.lesson,
           ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: defaultPadding),
           child: Text(
-            lesson.description,
+            widget.lesson.description,
             textAlign: TextAlign.center,
             style:
                 Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 22),
           ),
         ),
         TimedWidget(
-          duration: TimerUtil.timeToRead(lesson.description) * 0.9,
+          duration: TimerUtil.timeToRead(widget.lesson.description) * 0.9,
           child: SizedBox(
             width: 300,
-            child: isAvailable
+            child: widget.isAvailable
                 ? PrimaryButton(
                     onPressed: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  LessonTopicsPage(lesson: lesson),
+                                  LessonTopicsPage(lesson: widget.lesson),
                               settings: const RouteSettings(
                                   name: "LessonTopicsPage")));
                     },
@@ -57,9 +64,9 @@ class LessonDetailPage extends StatelessWidget {
                           color: Colors.black, fontWeight: FontWeight.w600),
                     ),
                   )
-                : const Column(
+                : Column(
                     children: [
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(CupertinoIcons.lock_circle_fill),
@@ -72,12 +79,19 @@ class LessonDetailPage extends StatelessWidget {
                                   color: AppColors.greyTextColor)),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: defaultPadding / 2,
                       ),
                       Text(
-                        "Complete Previous Lesson",
-                        style: TextStyle(
+                        writingController.subscriptionStatus != null
+                            ? writingController.subscriptionStatus ==
+                                    SubscriptionStatus.trialActive
+                                ? widget.lesson.number > 1
+                                    ? "Subscribe to access this lesson"
+                                    : "Complete Previous Lesson"
+                                : "Complete Previous Lesson"
+                            : "Complete Previous Lesson",
+                        style: const TextStyle(
                             fontSize: 12, color: AppColors.greyTextColor),
                       )
                     ],

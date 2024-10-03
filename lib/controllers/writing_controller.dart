@@ -17,9 +17,11 @@ class WritingController extends GetxController
 
   @override
   void onInit() {
+    getUserSubscriptionStatus();
     Future.delayed(const Duration(seconds: 1), () {
       refetch();
     });
+
     super.onInit();
   }
 

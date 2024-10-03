@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:get/get.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/colors.dart';
 import 'package:word_and_learn/constants/theme.dart';
 import 'package:word_and_learn/utils/navigation_observer.dart';
@@ -103,17 +102,14 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    //TODO: put checks on lesson completion to upload and also trial and stuff
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorObservers: [routeObserver],
       navigatorKey: navigatorKey,
       title: 'Word & Learn',
       theme: AppTheme.getTheme(),
-      home: LoaderOverlay(
-          overlayWidgetBuilder: (progress) {
-            return const Center(child: LoadingSpinner());
-          },
-          child: const SplashScreen()),
+      home: const LoaderOverlay(child: SplashScreen()),
     );
   }
 }

@@ -9,6 +9,23 @@ import 'package:http/http.dart' as http;
 mixin PaymentMixin implements PaymentInterface {
   final HttpClient client = HttpClient();
 
+  SubscriptionStatus? subscriptionStatus;
+
+  @override
+  Future<SubscriptionStatus?> getUserSubscriptionStatus() async {
+    http.Response res = await client.get(userSubscriptionStatusUrl);
+    HttpResponse response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      UserSubscriptionStatus userSubscriptionStatus =
+          UserSubscriptionStatus.fromJson(response.data);
+      subscriptionStatus = userSubscriptionStatus.status;
+      return subscriptionStatus;
+    } else {
+      throw HttpFetchException(
+          "Could not fetch user subscription status", res.statusCode);
+    }
+  }
+
   @override
   Future<List<UserSubscription>?> getUserSubscription() async {
     http.Response res = await client.get(userSubscriptionUrl);
@@ -75,8 +92,6 @@ mixin PaymentMixin implements PaymentInterface {
   Future<bool?> cancelSubscription() async {
     http.Response res =
         await client.delete('$paymentUrl/subscription/W/cancel/');
-
-    print(res.body);
 
     HttpResponse response = HttpResponse.fromResponse(res);
     if (response.isSuccess) {

@@ -26,6 +26,7 @@ class Lesson extends ColorModel {
   final LessonProgress? progress;
   final bool unlocked;
   final int session;
+  final int number;
 
   Lesson(
       {required this.title,
@@ -35,6 +36,7 @@ class Lesson extends ColorModel {
       this.image,
       required this.session,
       this.progress,
+      this.number = 0,
       this.unlocked = true,
       this.isCompleted = false});
 
@@ -44,6 +46,7 @@ class Lesson extends ColorModel {
       createdAt: DateTime.parse(json["created_at"]),
       id: json["id"],
       isCompleted: json["completed"] ?? false,
+      number: json["number"] ?? 0,
       progress: json["progress"] != null
           ? LessonProgress.fromJson(json['progress'])
           : null,

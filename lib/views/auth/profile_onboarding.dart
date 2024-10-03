@@ -1,5 +1,4 @@
 import 'package:date_field/date_field.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
@@ -354,7 +353,7 @@ class _ProfileOnboardingPageState extends State<ProfileOnboardingPage> {
                                 size: 15,
                               )
                             : const Icon(
-                                CupertinoIcons.cloud_upload,
+                                FeatherIcons.uploadCloud,
                                 color: Colors.white,
                                 size: 17,
                               )),
