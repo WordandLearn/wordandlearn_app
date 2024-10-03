@@ -6,6 +6,7 @@ import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/writing_controller.dart';
 import 'package:word_and_learn/models/writing/models.dart';
+import 'package:word_and_learn/views/writing/lessons/components/session_error_dialog.dart';
 import 'package:word_and_learn/views/writing/topic/components/topic_example_card.dart';
 
 class TopicExamplePage extends StatefulWidget {
@@ -191,10 +192,16 @@ class __ExampleWidgetState extends State<_ExampleWidget> {
                         onTap: index_ == index
                             ? () {
                                 if (!understoodExamples[index]) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              "Please read the instructions before proceeding")));
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return const SessionErrorDialog(
+                                        title: "Cannot Proceed",
+                                        reason:
+                                            "Please read the instructions before proceeding",
+                                      );
+                                    },
+                                  );
                                 } else {
                                   if (index < widget.examples.length - 1) {
                                     setState(() {

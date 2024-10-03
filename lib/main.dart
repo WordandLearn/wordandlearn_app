@@ -102,7 +102,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: put checks on lesson completion to upload and also trial and stuff
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorObservers: [routeObserver],

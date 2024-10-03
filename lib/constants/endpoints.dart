@@ -41,6 +41,7 @@ String exerciseSubmissionDetailUrl(int exerciseId) =>
 String exerciseSubmissionAssessUrl(int exerciseId) =>
     "$exerciseUrl/submission/$exerciseId/assess/";
 
+const String compositionUrl = "$writingUrl/composition";
 const String compositionUploadUrl = "$writingUrl/composition/upload/";
 
 //Teachers endpoints

@@ -45,10 +45,15 @@ class _CompositionSelectorContainerState
   Future<void> goToUpload(BuildContext context) async {
     if (kIsWeb) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-                "Error: Scanning a composition is only available on mobile.")));
-        return;
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const SessionErrorDialog(
+              title: "Error",
+              reason: "Scanning a composition is only available on mobile.",
+            );
+          },
+        );
       }
     }
 
@@ -185,7 +190,7 @@ class _CompositionSelectorContainerState
                 onPressed: () async {
                   //Check if the current session is complete
 
-                  if (writingController.subscriptionStatus ==
+                  if (writingController.subscriptionStatus !=
                       SubscriptionStatus.trialActive) {
                     showDialog(
                       context: context,
@@ -218,23 +223,19 @@ class _CompositionSelectorContainerState
                     });
 
                     if (writingController.currentUserSession.value != null) {
-                      writingController
-                          .isSessionComplete(
-                              writingController.currentUserSession.value!)
-                          .then(
+                      writingController.checkUploadComposition().then(
                         (value) async {
-                          if (value != null && value) {
+                          if (value.canUpload) {
                             await goToUpload(context);
                           } else {
                             if (context.mounted) {
                               showDialog(
                                 context: context,
                                 builder: (context) {
-                                  return const SessionErrorDialog(
+                                  return SessionErrorDialog(
                                     title:
                                         "You cannot upload a new composition",
-                                    reason:
-                                        "Complete your current lessons to continue",
+                                    reason: value.reason,
                                   );
                                 },
                               );

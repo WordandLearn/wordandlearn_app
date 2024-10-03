@@ -40,7 +40,6 @@ class _LessonsPageState extends State<LessonsPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    //TODO: Check if the session is complete before uploading
     return Scaffold(
         key: _key,
         drawerEnableOpenDragGesture: true,
@@ -254,7 +253,10 @@ class _LessonsPageState extends State<LessonsPage> {
                               child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text("Free Trial"),
+                                  Text("You are on the free trial",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600)),
                                 ],
                               )),
                         ),

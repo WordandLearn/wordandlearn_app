@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:word_and_learn/components/animation/tap_bounce.dart';
+import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/components/fade_indexed_stack.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/writing/models.dart';
+import 'package:word_and_learn/views/writing/exercise/exercise_page.dart';
 import 'package:word_and_learn/views/writing/lessons/components/session_error_dialog.dart';
+import 'package:word_and_learn/views/writing/lessons/components/session_success_dialog.dart';
 import 'package:word_and_learn/views/writing/topic/topic_example_page.dart';
 
 import 'components/topic_bottom_navbar.dart';
@@ -102,23 +106,32 @@ class _TopicLearnPageState extends State<TopicLearnPage> {
                         });
                         widget.onCompleted();
 
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                                content: Row(
-                          children: [
-                            Icon(
-                              Icons.done_rounded,
-                              color: Colors.white,
-                            ),
-                            SizedBox(
-                              width: defaultPadding,
-                            ),
-                            Expanded(
-                              child: Text(
-                                  "You have completed the learning activity on this Topic. You can now try out the exercise"),
-                            )
-                          ],
-                        )));
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return SessionSuccessDialog(
+                                title: "Congratulations!",
+                                reason:
+                                    "You have completed the learning activity on this Topic. You can now try out the exercise",
+                                action: TapBounce(
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (context) {
+                                        return ExercisePage(
+                                          topic: widget.topic,
+                                        );
+                                      }));
+                                    },
+                                    child: const PrimaryIconButton(
+                                        text: "Exercise",
+                                        icon: Icon(
+                                          Icons.chevron_right,
+                                          color: Colors.white,
+                                          size: 17,
+                                        ))));
+                          },
+                        );
                       },
                     ),
                   ],

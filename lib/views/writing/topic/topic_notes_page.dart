@@ -135,7 +135,6 @@ class _FlashcardListState extends State<FlashcardList> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return ListView.builder(
       itemCount: widget.flashCards.length,
       itemBuilder: (context, index) {
@@ -168,7 +167,6 @@ class _FlashcardListState extends State<FlashcardList> {
                         height: 300,
                         child: Center(
                           child: FlashCardDialog(
-                            size: size,
                             flashcardText: flashcardText,
                             onUnderstand: () => widget.onUnderstand(index),
                           ),

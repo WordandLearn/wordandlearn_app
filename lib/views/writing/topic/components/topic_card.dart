@@ -8,6 +8,7 @@ import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/views/writing/exercise/exercise_page.dart';
 import 'package:word_and_learn/views/writing/lessons/components/session_error_dialog.dart';
+import 'package:word_and_learn/views/writing/lessons/components/session_success_dialog.dart';
 import 'package:word_and_learn/views/writing/topic/topic_learn_page.dart';
 
 class LessonTopicCard extends StatefulWidget {
@@ -67,10 +68,11 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
                             ),
                         settings: const RouteSettings(name: "TopicLearnPage")));
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Complete Previous Topic To Unlock"),
-                  ),
+                showDialog(
+                  context: context,
+                  builder: (context) => const SessionErrorDialog(
+                      title: "Cannot Access Topic",
+                      reason: "Complete previous topic to unlock"),
                 );
               }
             },
@@ -189,11 +191,12 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
                       onTap: () {
                         if (widget.topic.completed) {
                           if (widget.topic.exerciseCompleted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                    "Good job you completed this exercise"),
-                              ),
+                            showDialog(
+                              context: context,
+                              builder: (context) => const SessionSuccessDialog(
+                                  title: "Hooray",
+                                  reason:
+                                      "Good job you completed this exercise"),
                             );
                           } else {
                             Navigator.push(

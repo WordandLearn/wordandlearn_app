@@ -4,6 +4,7 @@ import 'package:cross_file/cross_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/services/writing/session_database.dart';
+import 'package:word_and_learn/models/writing/composition_upload_check.dart';
 import 'package:word_and_learn/models/writing/models.dart';
 import "package:http/http.dart" as http;
 import 'package:word_and_learn/utils/exceptions.dart';
@@ -44,6 +45,18 @@ mixin SessionMixin implements SessionInterface {
   Future<Session?> getCurrentSession() async {
     Session? session = await sessionDatabase.getCurrentSession();
     return session;
+  }
+
+  Future<CompositionUploadCheck> checkUploadComposition() async {
+    http.Response res = await client.get("$compositionUrl/can_upload/");
+    HttpResponse<CompositionUploadCheck> response =
+        HttpResponse<CompositionUploadCheck>.fromResponse(res);
+    if (response.isSuccess) {
+      return CompositionUploadCheck.fromJson(response.data);
+    } else {
+      throw HttpFetchException("Could not check if composition can be uploaded",
+          response.statusCode);
+    }
   }
 
   Future<bool?> isSessionComplete(Session session) async {

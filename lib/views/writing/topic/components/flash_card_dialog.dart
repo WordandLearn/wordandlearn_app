@@ -14,12 +14,10 @@ import 'dialog_audio_player.dart';
 class FlashCardDialog extends StatefulWidget {
   const FlashCardDialog({
     super.key,
-    required this.size,
     required this.flashcardText,
     required this.onUnderstand,
   });
 
-  final Size size;
   final FlashcardText flashcardText;
   final void Function() onUnderstand;
 
@@ -57,8 +55,9 @@ class _FlashCardDialogState extends State<FlashCardDialog> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.sizeOf(context);
     return SizedBox(
-      height: widget.size.height * 0.7 + 50,
+      height: size.height * 0.7 + 50,
       child: Stack(
         clipBehavior: Clip.none,
         fit: StackFit.passthrough,
@@ -75,7 +74,7 @@ class _FlashCardDialogState extends State<FlashCardDialog> {
             turns: rotation,
             duration: const Duration(milliseconds: 1),
             child: Container(
-              height: widget.size.height * 0.7,
+              height: size.height * 0.7,
               margin:
                   const EdgeInsets.symmetric(horizontal: defaultPadding * 2),
               padding: const EdgeInsets.symmetric(

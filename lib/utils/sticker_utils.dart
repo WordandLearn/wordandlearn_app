@@ -34,6 +34,12 @@ class StickerUtils {
     "crying_dog.png",
   ];
 
+  static List<String> successAssetsUrl = [
+    "monkey_pencil.png",
+    "fly_happy.png",
+    "panda_happy.png"
+  ];
+
   static String getRandomSticker() {
     String randomItem = (assetsUrls.toList()..shuffle()).first;
 
@@ -42,6 +48,12 @@ class StickerUtils {
 
   static String getRandomErrorSticker() {
     String randomItem = (errorAssetsUrl.toList()..shuffle()).first;
+
+    return "assets/stickers/$randomItem";
+  }
+
+  static String getRandomSuccessSticker() {
+    String randomItem = (successAssetsUrl.toList()..shuffle()).first;
 
     return "assets/stickers/$randomItem";
   }
