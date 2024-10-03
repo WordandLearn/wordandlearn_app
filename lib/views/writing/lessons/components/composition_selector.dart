@@ -1,15 +1,20 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/components/small_button.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
+import 'package:word_and_learn/models/payments/payment_models.dart';
 import 'package:word_and_learn/models/writing/models.dart';
+import 'package:word_and_learn/views/writing/lessons/components/session_error_dialog.dart';
+import 'package:word_and_learn/views/writing/settings/subscription_settings.dart';
 import 'package:word_and_learn/views/writing/upload/composition_upload_page.dart';
 import 'package:word_and_learn/views/writing/upload/onboarding.dart';
 
@@ -34,6 +39,46 @@ class CompositionSelectorContainer extends StatefulWidget {
 class _CompositionSelectorContainerState
     extends State<CompositionSelectorContainer> {
   final WritingController writingController = Get.find<WritingController>();
+
+  bool loading = true;
+
+  Future<void> goToUpload(BuildContext context) async {
+    if (kIsWeb) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+                "Error: Scanning a composition is only available on mobile.")));
+        return;
+      }
+    }
+
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    if (!preferences.containsKey("uploadOnboarded")) {
+      if (context.mounted) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const UploadOnboardingPage(),
+                settings: const RouteSettings(name: "UploadOnboardingPage")));
+      }
+    } else {
+      if (context.mounted) {
+        List<String?>? pictures = await CunningDocumentScanner.getPictures(
+            noOfPages: 2, isGalleryImportAllowed: true);
+        if (pictures != null) {
+          if (context.mounted) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CompositionUploadPage(
+                          imagePaths: pictures,
+                        )));
+          }
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -54,12 +99,12 @@ class _CompositionSelectorContainerState
         );
       },
       child: SizedBox(
-        height: 110,
+        height: 130,
         child: Stack(
           clipBehavior: Clip.none,
           children: [
             Container(
-              height: 100,
+              height: 120,
               decoration: BoxDecoration(
                   color: AppColors.secondaryColor,
                   borderRadius: BorderRadius.circular(10)),
@@ -89,7 +134,7 @@ class _CompositionSelectorContainerState
                               style: Theme.of(context)
                                   .textTheme
                                   .titleLarge!
-                                  .copyWith(),
+                                  .copyWith(fontSize: 18),
                             )
                           ],
                         ),
@@ -136,41 +181,81 @@ class _CompositionSelectorContainerState
               right: 0,
               bottom: 0,
               child: SmallButton(
+                isLoading: loading,
                 onPressed: () async {
-                  if (kIsWeb) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text(
-                            "Error: Scanning a composition is only available on mobile.")));
-                    return;
-                  }
+                  //Check if the current session is complete
 
-                  SharedPreferences preferences =
-                      await SharedPreferences.getInstance();
-                  if (!preferences.containsKey("uploadOnboarded")) {
-                    if (context.mounted) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const UploadOnboardingPage(),
-                              settings: const RouteSettings(
-                                  name: "UploadOnboardingPage")));
-                    }
+                  if (writingController.subscriptionStatus ==
+                      SubscriptionStatus.trialActive) {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return SessionErrorDialog(
+                          title: "You cannot upload a new composition",
+                          reason: "Complete your subscription to continue",
+                          action: TapBounce(
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) {
+                                    return const SubscriptionSettings();
+                                  },
+                                ));
+                              },
+                              child: const PrimaryIconButton(
+                                  text: "Subscribe",
+                                  icon: Icon(
+                                    CupertinoIcons.chevron_right,
+                                    color: Colors.white,
+                                    size: 17,
+                                  ))),
+                        );
+                      },
+                    );
+                    return;
                   } else {
-                    if (context.mounted) {
-                      List<String?>? pictures =
-                          await CunningDocumentScanner.getPictures(
-                              noOfPages: 2, isGalleryImportAllowed: true);
-                      if (pictures != null) {
-                        if (context.mounted) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CompositionUploadPage(
-                                        imagePaths: pictures,
-                                      )));
-                        }
-                      }
+                    setState(() {
+                      loading = true;
+                    });
+
+                    if (writingController.currentUserSession.value != null) {
+                      writingController
+                          .isSessionComplete(
+                              writingController.currentUserSession.value!)
+                          .then(
+                        (value) async {
+                          if (value != null && value) {
+                            await goToUpload(context);
+                          } else {
+                            if (context.mounted) {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const SessionErrorDialog(
+                                    title:
+                                        "You cannot upload a new composition",
+                                    reason:
+                                        "Complete your current lessons to continue",
+                                  );
+                                },
+                              );
+                              return;
+                            }
+                          }
+                        },
+                      ).onError(
+                        (error, stackTrace) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      "Could not check if session is complete")));
+                        },
+                      ).whenComplete(
+                        () {
+                          setState(() {
+                            loading = false;
+                          });
+                        },
+                      );
                     }
                   }
                 },

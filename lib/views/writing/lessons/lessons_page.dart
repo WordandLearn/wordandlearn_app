@@ -40,6 +40,7 @@ class _LessonsPageState extends State<LessonsPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    //TODO: Check if the session is complete before uploading
     return Scaffold(
         key: _key,
         drawerEnableOpenDragGesture: true,

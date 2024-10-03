@@ -1,4 +1,5 @@
 class StickerUtils {
+  //TODO: Get assets from freepik, https://www.freepik.com/search?format=search&last_filter=page&last_value=2&page=2&query=sad+illustration+animal&type=vector#uuid=8bbe0432-7802-4bc8-97bd-f30fe9bf6e96
   static List<String> assetsUrls = [
     "brain_2.png",
     "brain.png",
@@ -27,8 +28,20 @@ class StickerUtils {
     "owl_idea.png"
   ];
 
+  static List<String> errorAssetsUrl = [
+    "sad dog.png",
+    "sad_dirty_dog.png",
+    "crying_dog.png",
+  ];
+
   static String getRandomSticker() {
     String randomItem = (assetsUrls.toList()..shuffle()).first;
+
+    return "assets/stickers/$randomItem";
+  }
+
+  static String getRandomErrorSticker() {
+    String randomItem = (errorAssetsUrl.toList()..shuffle()).first;
 
     return "assets/stickers/$randomItem";
   }

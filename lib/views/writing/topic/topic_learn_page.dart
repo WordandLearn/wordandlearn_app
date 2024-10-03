@@ -4,6 +4,7 @@ import 'package:word_and_learn/components/fade_indexed_stack.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/writing/models.dart';
+import 'package:word_and_learn/views/writing/lessons/components/session_error_dialog.dart';
 import 'package:word_and_learn/views/writing/topic/topic_example_page.dart';
 
 import 'components/topic_bottom_navbar.dart';
@@ -51,9 +52,15 @@ class _TopicLearnPageState extends State<TopicLearnPage> {
           },
           completedStatus: completedStatus,
           onInvalidClick: (index) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(invalidClickErrors[index]),
-            ));
+            showDialog(
+              context: context,
+              builder: (context) {
+                return SessionErrorDialog(
+                  title: "You cannot access this right now",
+                  reason: invalidClickErrors[index],
+                );
+              },
+            );
           },
         ),
         body: SafeArea(

@@ -24,6 +24,7 @@ class Session {
   final String? reportUrl;
   final String? summary;
   final int profile;
+  bool completed;
 
   Session({
     required this.id,
@@ -35,6 +36,7 @@ class Session {
     required this.reportUrl,
     required this.summary,
     required this.profile,
+    this.completed = false,
   });
 
   factory Session.fromJson(Map<String, dynamic> json) => Session(
@@ -47,6 +49,7 @@ class Session {
         reportUrl: json["report_url"],
         summary: json["summary"],
         profile: json["profile"],
+        completed: json["completed"] ?? false,
       );
 
   Map<String, dynamic> toJson() => {

@@ -46,6 +46,19 @@ mixin SessionMixin implements SessionInterface {
     return session;
   }
 
+  Future<bool?> isSessionComplete(Session session) async {
+    http.Response res =
+        await client.get('$sessionLessonsUrl/${session.id}/is_completed/');
+
+    HttpResponse response = HttpResponse<bool>.fromResponse(res);
+    if (response.isSuccess) {
+      return response.data['completed'];
+    } else {
+      throw HttpFetchException(
+          "Could not check if session is complete", response.statusCode);
+    }
+  }
+
   Future<void> saveCurrentSession(Session session) async {
     await sessionDatabase.saveCurrentSession(session);
   }

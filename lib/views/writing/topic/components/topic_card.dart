@@ -7,6 +7,7 @@ import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/views/writing/exercise/exercise_page.dart';
+import 'package:word_and_learn/views/writing/lessons/components/session_error_dialog.dart';
 import 'package:word_and_learn/views/writing/topic/topic_learn_page.dart';
 
 class LessonTopicCard extends StatefulWidget {
@@ -204,12 +205,15 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
                                         name: "ExercisePage")));
                           }
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content:
-                                  Text("Complete Topic To Access Exercise"),
-                            ),
-                          );
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return const SessionErrorDialog(
+                                  title: "You cannot access this exercise",
+                                  reason:
+                                      "Complete the topic to access the exercise we made just for you",
+                                );
+                              });
                         }
                       },
                       child: Container(
