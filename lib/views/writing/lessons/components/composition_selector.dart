@@ -40,7 +40,7 @@ class _CompositionSelectorContainerState
     extends State<CompositionSelectorContainer> {
   final WritingController writingController = Get.find<WritingController>();
 
-  bool loading = true;
+  bool loading = false;
 
   Future<void> goToUpload(BuildContext context) async {
     if (kIsWeb) {
@@ -235,7 +235,8 @@ class _CompositionSelectorContainerState
                                   return SessionErrorDialog(
                                     title:
                                         "You cannot upload a new composition",
-                                    reason: value.reason,
+                                    reason: value.reason ??
+                                        "There is an error on our end, you can try again later",
                                   );
                                 },
                               );

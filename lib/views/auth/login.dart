@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         AuthTextField(
                           controller: usernameController,
-                          hintText: "Username",
+                          hintText: "Username or Email",
                           validator: (p0) {
                             if (p0!.isEmpty) {
                               return "Username cannot be empty";

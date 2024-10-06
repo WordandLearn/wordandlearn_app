@@ -4,15 +4,14 @@ import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:word_and_learn/components/circle_profile_avatar.dart';
 import 'package:word_and_learn/components/components.dart';
-import 'package:word_and_learn/components/small_button.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/payments/payment_models.dart';
 import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/views/writing/lessons/components/lesson_drawer.dart';
+import 'package:word_and_learn/views/writing/lessons/components/lesson_empty_state.dart';
 import 'package:word_and_learn/views/writing/settings/profile/change_picture_page.dart';
 import 'package:word_and_learn/views/writing/settings/subscription_settings.dart';
-import 'package:word_and_learn/views/writing/upload/onboarding.dart';
 import 'components/composition_selector.dart';
 import 'components/session_lessons_list.dart';
 import 'components/session_report_card.dart';
@@ -117,30 +116,15 @@ class _LessonsPageState extends State<LessonsPage> {
                         future: userSessionsFuture,
                         builder: (context, snapshot) {
                           if (snapshot.hasData && snapshot.data!.isEmpty) {
-                            return Center(
-                              child: Column(
-                                children: [
-                                  const Text(
-                                    "No Compositions Added, Scan a new one to continue",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: AppColors.greyTextColor),
-                                  ),
-                                  SmallButton(
-                                    text: "Scan New Composition",
-                                    icon: const Icon(Icons.scanner_rounded),
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const UploadOnboardingPage(),
-                                              settings: const RouteSettings(
-                                                  name:
-                                                      "UploadOnboardingPage")));
-                                    },
-                                  )
-                                ],
+                            return SizedBox(
+                              height: size.height * 0.8,
+                              child: const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: defaultPadding,
+                                      vertical: defaultPadding),
+                                  child: LessonEmptyState(),
+                                ),
                               ),
                             );
                           }
@@ -220,9 +204,11 @@ class _LessonsPageState extends State<LessonsPage> {
                       Session? session =
                           writingController.currentUserSession.value;
 
-                      return SessionReportCard(
-                        session: session,
-                      );
+                      return session == null
+                          ? const SizedBox.shrink()
+                          : SessionReportCard(
+                              session: session,
+                            );
                     })
                   ]),
                 ),

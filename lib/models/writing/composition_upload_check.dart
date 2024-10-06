@@ -12,11 +12,11 @@ String compositionUploadCheckToJson(CompositionUploadCheck data) =>
 
 class CompositionUploadCheck {
   final bool canUpload;
-  final String reason;
+  final String? reason;
 
   CompositionUploadCheck({
     required this.canUpload,
-    required this.reason,
+    this.reason,
   });
 
   factory CompositionUploadCheck.fromJson(Map<String, dynamic> json) =>

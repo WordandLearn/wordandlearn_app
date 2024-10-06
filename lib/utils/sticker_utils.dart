@@ -1,5 +1,4 @@
 class StickerUtils {
-  //TODO: Get assets from freepik, https://www.freepik.com/search?format=search&last_filter=page&last_value=2&page=2&query=sad+illustration+animal&type=vector#uuid=8bbe0432-7802-4bc8-97bd-f30fe9bf6e96
   static List<String> assetsUrls = [
     "brain_2.png",
     "brain.png",
@@ -25,7 +24,10 @@ class StickerUtils {
     "rabbit_math.png",
     "seal_book.png",
     "owl_cap.png",
-    "owl_idea.png"
+    "owl_idea.png",
+    "tiger_draw.png",
+    "ting_book.png",
+    "panda_write.png"
   ];
 
   static List<String> errorAssetsUrl = [
