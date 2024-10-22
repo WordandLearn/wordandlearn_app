@@ -61,7 +61,7 @@ class _LessonDetailPageState extends State<LessonDetailPage> {
                     child: const Text(
                       "Go To Lesson",
                       style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w600),
+                          color: Colors.white, fontWeight: FontWeight.w600),
                     ),
                   )
                 : Column(

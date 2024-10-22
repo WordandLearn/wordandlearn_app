@@ -30,7 +30,7 @@ class _CompositionWaitingPageState extends State<CompositionWaitingPage> {
         });
       }
       if (response.models.first.state == TaskState.success) {
-        await _writingController.getUserSessions();
+        _writingController.refetch();
       }
     }
   }
@@ -156,9 +156,12 @@ class _CompositionWaitingPageState extends State<CompositionWaitingPage> {
                     padding:
                         const EdgeInsets.symmetric(vertical: defaultPadding),
                     child: TapBounce(
-                      onTap: () {
-                        Navigator.popUntil(context,
-                            (route) => route.settings.name == "LessonsPage");
+                      onTap: () async {
+                        // await _writingController.refetch();
+                        if (context.mounted) {
+                          Navigator.popUntil(context,
+                              (route) => route.settings.name == "LessonsPage");
+                        }
                       },
                       child: PrimaryButton(
                         color: Colors.grey.withOpacity(0.2),

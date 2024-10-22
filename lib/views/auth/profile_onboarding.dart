@@ -10,9 +10,9 @@ import 'package:word_and_learn/components/primary_icon_button.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/views/auth/login.dart';
+import 'package:word_and_learn/views/writing/lessons/lessons_page.dart';
 import 'package:word_and_learn/views/writing/settings/components/build_settings_app_bar.dart';
 import 'package:word_and_learn/views/writing/settings/components/radio_input.dart';
-import 'package:word_and_learn/views/writing/settings/components/subscription_inactive_widget.dart';
 
 class ProfileOnboardingPage extends StatefulWidget {
   const ProfileOnboardingPage({super.key});
@@ -132,6 +132,8 @@ class _ProfileOnboardingPageState extends State<ProfileOnboardingPage> {
                                   ),
                                   DateTimeFormField(
                                       mode: DateTimeFieldPickerMode.date,
+                                      pickerPlatform:
+                                          DateTimeFieldPickerPlatform.adaptive,
                                       onChanged: (date) {
                                         setState(() {
                                           dateOfBirth = date;
@@ -324,10 +326,9 @@ class _ProfileOnboardingPageState extends State<ProfileOnboardingPage> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SubscriptionInactivePage(),
+                                      builder: (context) => const LessonsPage(),
                                       settings: const RouteSettings(
-                                          name: "SubscriptionInactivePage")));
+                                          name: "LessonsPage")));
                             } else {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(

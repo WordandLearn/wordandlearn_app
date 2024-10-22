@@ -174,8 +174,8 @@ class _SignUpPageState extends State<SignUpPage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      const OtpValidationPage(),
+                                  builder: (context) => OtpValidationPage(
+                                      email: emailController.text),
                                   settings: const RouteSettings(
                                       name: "OtpValidationPage")));
                         }

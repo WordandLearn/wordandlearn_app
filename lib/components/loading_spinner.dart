@@ -39,9 +39,8 @@ class _LoadingSpinnerState extends State<LoadingSpinner>
         animation: _animationController,
         builder: (context, child) {
           return SpinKitRing(
-            color: widget.color ??
-                colorAnimation.value ??
-                Theme.of(context).primaryColor,
+            color:
+                widget.color ?? colorAnimation.value ?? AppColors.primaryColor,
             size: widget.size ?? 30,
             lineWidth: 1.5,
           );

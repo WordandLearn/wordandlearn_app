@@ -54,8 +54,13 @@ mixin SessionMixin implements SessionInterface {
     if (response.isSuccess) {
       return CompositionUploadCheck.fromJson(response.data);
     } else {
-      throw HttpFetchException("Could not check if composition can be uploaded",
-          response.statusCode);
+      if (response.data["error"] != null) {
+        throw HttpFetchException(response.data["error"], response.statusCode);
+      } else {
+        throw HttpFetchException(
+            "Could not check if composition can be uploaded",
+            response.statusCode);
+      }
     }
   }
 
@@ -69,6 +74,18 @@ mixin SessionMixin implements SessionInterface {
     } else {
       throw HttpFetchException(
           "Could not check if session is complete", response.statusCode);
+    }
+  }
+
+  Future<String> generateSessionReport(Session session) async {
+    http.Response res =
+        await client.get("$sessionLessonsUrl/${session.id}/report/");
+    HttpResponse response = HttpResponse.fromResponse(res);
+    if (response.isSuccess) {
+      return response.data['report_url'];
+    } else {
+      throw HttpFetchException(
+          "Could not generate session report", response.statusCode);
     }
   }
 

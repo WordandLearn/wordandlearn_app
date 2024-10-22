@@ -13,6 +13,7 @@ import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/payments/payment_models.dart';
 import 'package:word_and_learn/models/writing/models.dart';
+import 'package:word_and_learn/utils/exceptions.dart';
 import 'package:word_and_learn/views/writing/lessons/components/session_error_dialog.dart';
 import 'package:word_and_learn/views/writing/settings/subscription_settings.dart';
 import 'package:word_and_learn/views/writing/upload/composition_upload_page.dart';
@@ -63,6 +64,7 @@ class _CompositionSelectorContainerState
         Navigator.push(
             context,
             MaterialPageRoute(
+                maintainState: false,
                 builder: (context) => const UploadOnboardingPage(),
                 settings: const RouteSettings(name: "UploadOnboardingPage")));
       }
@@ -75,6 +77,7 @@ class _CompositionSelectorContainerState
             Navigator.push(
                 context,
                 MaterialPageRoute(
+                    maintainState: false,
                     builder: (context) => CompositionUploadPage(
                           imagePaths: pictures,
                         )));
@@ -246,10 +249,26 @@ class _CompositionSelectorContainerState
                         },
                       ).onError(
                         (error, stackTrace) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text(
-                                      "Could not check if session is complete")));
+                          if (error is HttpFetchException) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return SessionErrorDialog(
+                                  title: error.statusCode < 500
+                                      ? "You cannot upload a composition"
+                                      : "Could not check if session is complete",
+                                  reason: error.statusCode < 500
+                                      ? "Ensure you have completed the current session, or you havent reached your plan upload limit."
+                                      : "An error occurred while checking if the session is complete. Don't worry its an issue on our end, you can try again later",
+                                );
+                              },
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        "Could not check if session is complete")));
+                          }
                         },
                       ).whenComplete(
                         () {

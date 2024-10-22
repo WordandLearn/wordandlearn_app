@@ -23,7 +23,7 @@ class SubscriptionInactivePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: SubscriptionInactiveWidget(),
+      body: SafeArea(child: SubscriptionInactiveWidget()),
     );
   }
 }
@@ -79,7 +79,7 @@ class _SubscriptionInactiveWidgetState
                           padding:
                               EdgeInsets.symmetric(vertical: defaultPadding),
                           child: Text(
-                            "To use Re-Write and enjoy a redefined writing experience, you need to subscribe to a plan.",
+                            "To use WordandLearn and enjoy a redefined writing experience, you need to subscribe to a plan.",
                             style: TextStyle(
                                 fontSize: 14,
                                 height: 1.5,

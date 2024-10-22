@@ -51,7 +51,7 @@ class Topic extends ColorModel {
       createdAt: DateTime.parse(json["created_at"]),
       updatedAt: DateTime.parse(json["updated_at"]),
       title: json["title"],
-      description: json["description"],
+      description: utf8.decode(json["description"].toString().codeUnits),
       completed: json["completed"],
       tag: json["tag"],
       lesson: json["lesson"],

@@ -26,13 +26,9 @@ class LessonsPage extends StatefulWidget {
 class _LessonsPageState extends State<LessonsPage> {
   WritingController writingController = Get.find<WritingController>();
   final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
-  late Future<List<Session>?> userSessionsFuture;
-  late Future<Session?> currentSessionFuture;
   @override
   void initState() {
     writingController.getCurrentSession();
-    userSessionsFuture = writingController.getUserSessions();
-    currentSessionFuture = writingController.fetchCurrentSession();
     super.initState();
   }
 
@@ -113,7 +109,7 @@ class _LessonsPageState extends State<LessonsPage> {
                       horizontal: defaultPadding, vertical: defaultPadding),
                   child: Column(children: [
                     FutureBuilder<List<Session>?>(
-                        future: userSessionsFuture,
+                        future: writingController.getUserSessions(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData && snapshot.data!.isEmpty) {
                             return SizedBox(
@@ -178,11 +174,6 @@ class _LessonsPageState extends State<LessonsPage> {
                                             onChanged: (session) async {
                                               await writingController
                                                   .setCurrentSession(session);
-                                              setState(() {
-                                                currentSessionFuture =
-                                                    writingController
-                                                        .fetchCurrentSession();
-                                              });
                                             },
                                           );
                                         }),
@@ -190,7 +181,8 @@ class _LessonsPageState extends State<LessonsPage> {
                                     ),
                                   ),
                                   _LessonsList(
-                                    currentSessionFuture: currentSessionFuture,
+                                    currentSessionFuture:
+                                        writingController.fetchCurrentSession(),
                                   )
                                 ],
                               ),

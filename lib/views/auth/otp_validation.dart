@@ -9,8 +9,11 @@ import 'package:word_and_learn/views/auth/reset_password.dart';
 import 'package:word_and_learn/views/writing/settings/components/build_settings_app_bar.dart';
 
 class OtpValidationPage extends StatefulWidget {
-  const OtpValidationPage({super.key, this.isPasswordReset = false});
+  const OtpValidationPage(
+      {super.key, this.isPasswordReset = false, this.email});
   final bool isPasswordReset;
+
+  final String? email;
 
   @override
   State<OtpValidationPage> createState() => _OtpValidationPageState();
@@ -101,8 +104,9 @@ class _OtpValidationPageState extends State<OtpValidationPage> {
                         },
                       );
                     } else {
+                      assert(widget.email != null);
                       authenticationController
-                          .activateEmail(otpTextController.text)
+                          .activateEmail(widget.email!, otpTextController.text)
                           .then(
                         (value) {
                           if (value.isSuccess) {

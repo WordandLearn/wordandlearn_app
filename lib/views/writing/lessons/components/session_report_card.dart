@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/components/small_button.dart';
 import 'package:word_and_learn/constants/constants.dart';
+import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/writing/models.dart';
+import 'package:word_and_learn/views/writing/lessons/components/session_error_dialog.dart';
 
-class SessionReportCard extends StatelessWidget {
+class SessionReportCard extends StatefulWidget {
   const SessionReportCard({
     super.key,
     required this.session,
   });
 
   final Session? session;
+
+  @override
+  State<SessionReportCard> createState() => _SessionReportCardState();
+}
+
+class _SessionReportCardState extends State<SessionReportCard> {
+  final WritingController writingController = Get.find<WritingController>();
+  bool isLoading = true;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -39,7 +51,7 @@ class SessionReportCard extends StatelessWidget {
                     'assets/images/gray_squiggles.png',
                     fit: BoxFit.fill,
                   ).image)),
-          child: session != null
+          child: widget.session != null
               ? Stack(
                   clipBehavior: Clip.none,
                   children: [
@@ -74,19 +86,83 @@ class SessionReportCard extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(
                                 vertical: defaultPadding),
                             child: SmallButton(
-                              onPressed: () async {
-                                if (session != null &&
-                                    session!.reportUrl != null) {
-                                  await launchUrl(
-                                      Uri.parse(session!.reportUrl!));
+                              onPressed: () {
+                                if (widget.session != null &&
+                                    widget.session!.reportUrl != null) {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  launchUrl(
+                                          Uri.parse(widget.session!.reportUrl!))
+                                      .onError(
+                                    (error, stackTrace) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return const SessionErrorDialog(
+                                            title: "Could not open report",
+                                            reason:
+                                                "An error occurred while opening the report. Please try again later.",
+                                          );
+                                        },
+                                      );
+                                      if (error != null) {
+                                        throw error;
+                                      } else {
+                                        throw Exception(
+                                            "An error occurred while opening the report. Please try again later.");
+                                      }
+                                    },
+                                  ).whenComplete(
+                                    () {
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                    },
+                                  );
+                                } else {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+
+                                  writingController
+                                      .generateSessionReport(widget.session!)
+                                      .then(
+                                    (value) async {
+                                      await launchUrl(Uri.parse(value));
+                                    },
+                                  ).onError(
+                                    (error, stackTrace) {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return const SessionErrorDialog(
+                                              title:
+                                                  "Could not generate report",
+                                              reason:
+                                                  "An error occurred while generating the report. Please try again later.",
+                                            );
+                                          });
+                                    },
+                                  ).whenComplete(
+                                    () {
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                    },
+                                  );
                                 }
                               },
                               text: "View Report",
-                              icon: const Icon(
-                                Icons.play_circle,
-                                color: Colors.black,
-                                size: 15,
-                              ),
+                              icon: isLoading
+                                  ? const LoadingSpinner(
+                                      size: 17,
+                                    )
+                                  : const Icon(
+                                      Icons.play_circle,
+                                      color: Colors.black,
+                                      size: 15,
+                                    ),
                             ),
                           )
                         ],

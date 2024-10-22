@@ -22,7 +22,7 @@ class CompositionUploadCheck {
   factory CompositionUploadCheck.fromJson(Map<String, dynamic> json) =>
       CompositionUploadCheck(
         canUpload: json["can_upload"],
-        reason: json["reason"],
+        reason: json["reason"] ?? json["error"],
       );
 
   Map<String, dynamic> toJson() => {

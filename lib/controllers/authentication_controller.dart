@@ -16,7 +16,6 @@ class AuthenticationController extends GetxController {
     http.Response res = await client.post(
         loginEndpoint, {"username": username, "password": password},
         authRequired: false);
-
     HttpResponse<User> response = HttpResponse.fromResponse(res);
     if (response.isSuccess) {
       await client.saveAuthToken(response.data["token"]);
@@ -43,9 +42,17 @@ class AuthenticationController extends GetxController {
     return response;
   }
 
-  Future<HttpResponse> activateEmail(String code) async {
-    http.Response res =
-        await client.post("$authUrl/email/activate/", {"code": code});
+  Future<HttpResponse> activateEmail(String email, String code) async {
+    http.Response res = await client
+        .post("$authUrl/email/activate/", {"code": code, "email": email});
+    HttpResponse<User> response = HttpResponse.fromResponse(res);
+    return response;
+  }
+
+  Future<HttpResponse> resendActivationEmail(String email) async {
+    http.Response res = await client.post(
+        "$authUrl/email/activate/resend/", {"email": email},
+        authRequired: false);
     HttpResponse<User> response = HttpResponse.fromResponse(res);
     return response;
   }

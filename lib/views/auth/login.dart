@@ -7,6 +7,7 @@ import 'package:word_and_learn/controllers/authentication_controller.dart';
 import 'package:word_and_learn/controllers/writing_controller.dart';
 import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/views/auth/forgot_password_email.dart';
+import 'package:word_and_learn/views/auth/otp_validation.dart';
 import 'package:word_and_learn/views/auth/profile_onboarding.dart';
 import 'package:word_and_learn/views/auth/signup.dart';
 import 'package:word_and_learn/views/writing/lessons/lessons_page.dart';
@@ -195,15 +196,36 @@ class _LoginPageState extends State<LoginPage> {
                               }
                             }
                           } else {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                                    content: Text(
-                              "An error has occured :()",
-                              style: TextStyle(color: Colors.red),
-                            )));
-                            setState(() {
-                              error = response.data['error'];
-                            });
+                            if (response.data['error'] ==
+                                "Email not verified") {
+                              setState(() {
+                                error = "Email not verified";
+                              });
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                      content: Text(
+                                "Your email is not verified. We have sent a code to you. Please verify your email to continue",
+                                style: TextStyle(color: Colors.red),
+                              )));
+
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) {
+                                  return OtpValidationPage(
+                                    email: usernameController.text,
+                                  );
+                                },
+                              ));
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                      content: Text(
+                                "An error has occured :()",
+                                style: TextStyle(color: Colors.red),
+                              )));
+                              setState(() {
+                                error = response.data['error'];
+                              });
+                            }
                           }
                         }).whenComplete(() => toggleLoading());
                       }

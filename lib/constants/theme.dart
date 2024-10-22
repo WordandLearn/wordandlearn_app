@@ -5,12 +5,12 @@ class AppTheme {
   static ThemeData getTheme() {
     return ThemeData(
         colorScheme: const ColorScheme.light(
-          primary: AppColors.primaryColor,
+          primary: AppColors.buttonColor,
           secondary: AppColors.secondaryColor,
           surface: AppColors.containerColor,
-          onPrimary: AppColors.textColor,
-          onSecondary: AppColors.textColor,
-          onSurface: AppColors.textColor,
+          // onPrimary: AppColors.textColor,
+          // onSecondary: AppColors.textColor,
+          // onSurface: AppColors.textColor,
         ),
         textTheme: fredokaOneTextTheme,
         useMaterial3: true
