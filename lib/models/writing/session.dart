@@ -4,8 +4,6 @@
 
 import 'dart:convert';
 
-// import 'package:objectbox/objectbox.dart';
-
 List<Session> sessionFromJson(String str) =>
     List<Session>.from(json.decode(str).map((x) => Session.fromJson(x)));
 
@@ -97,6 +95,7 @@ class CurrentSession {
   // @Id(assignable: true)
   int id;
   Session? session;
+  // @Property(type: PropertyType.dateNano)
   final DateTime dateOpened;
 
   CurrentSession({required this.dateOpened, this.id = 0});
