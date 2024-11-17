@@ -1,0 +1,26 @@
+name: Deploy Web Version
+on:
+    push:
+        branches:
+            - web
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: cedvdb/action-flutter-build-web@v1
+              with:
+                  build-cmd: flutter build web --release
+                  working-directory: ./
+
+            - name: Deploy to webserver using SCP
+              uses: appleboy/scp-action@master
+              with:
+                host: ${{ secrets.SCP_HOST }}
+                username: ${{ secrets.SCP_USERNAME }}
+                key: ${{ secrets.SCP_KEY }}
+                port: ${{ secrets.SCP_PORT }}
+                source: "build/web/*"
+                target: ${{ secrets.SCP_TARGET }}
+
+
