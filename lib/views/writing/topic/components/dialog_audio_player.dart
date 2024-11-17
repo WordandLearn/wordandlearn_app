@@ -114,9 +114,6 @@ class _DialogAudioPlayerState extends State<DialogAudioPlayer> {
       volume: 1.0,
     );
 
-    _playerController.startPlayer(
-        forceRefresh: true, finishMode: FinishMode.pause);
-
     _playerController.onPlayerStateChanged.listen((state) {
       if (mounted) {
         setState(() {

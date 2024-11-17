@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:word_and_learn/components/animation/tap_bounce.dart';
+import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/writing/models.dart';
@@ -80,12 +81,15 @@ class _ExampleDialogState extends State<ExampleDialog> {
                     left: 0,
                     right: 0,
                     child: Center(
-                        child: TapBounce(
-                            child: ExampleDialogButton(
-                      example: widget.example,
-                      onUnderstood: widget.onUnderstand,
-                      understood: understood,
-                    ))))
+                        child: TimedWidget(
+                      duration: TimerUtil.timeToRead(widget.example.guide),
+                      child: TapBounce(
+                          child: ExampleDialogButton(
+                        example: widget.example,
+                        onUnderstood: widget.onUnderstand,
+                        understood: true,
+                      )),
+                    )))
                 : const SizedBox.shrink()
           ],
         ),

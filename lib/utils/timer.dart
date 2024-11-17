@@ -25,7 +25,7 @@ class TimerUtil {
     time *= 0.05;
 
     // Return ceiling of time
-    return Duration(seconds: time.ceil());
+    return Duration(seconds: time.ceil()) * 2.3;
   }
 
   static String timeFormat(Duration duration) {

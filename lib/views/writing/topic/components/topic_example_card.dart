@@ -25,7 +25,6 @@ class _TopicExampleCardState extends State<TopicExampleCard> {
   void _showAlertDialog(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible: widget.example.completed,
       builder: (context) {
         return ExampleDialog(
           example: widget.example,

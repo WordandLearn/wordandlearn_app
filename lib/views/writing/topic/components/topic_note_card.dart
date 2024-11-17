@@ -131,8 +131,7 @@ class _TopicNoteCardState extends State<TopicNoteCard> {
                         ),
                         Text(
                           TimerUtil.timeFormat(
-                              TimerUtil.timeToRead(widget.flashcardText.text) *
-                                  3),
+                              TimerUtil.timeToRead(widget.flashcardText.text)),
                           style:
                               const TextStyle(color: Colors.grey, fontSize: 12),
                         )

@@ -104,6 +104,7 @@ class _TopicLearnPageState extends State<TopicLearnPage> {
                           completedStatus[1] = true;
                           widget.topic.completed = true;
                         });
+
                         widget.onCompleted();
 
                         showDialog(

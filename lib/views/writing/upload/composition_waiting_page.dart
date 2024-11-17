@@ -7,6 +7,7 @@ import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/writing/models.dart';
+import 'package:word_and_learn/views/writing/lessons/lessons_page.dart';
 
 class CompositionWaitingPage extends StatefulWidget {
   const CompositionWaitingPage({super.key, required this.taskId});
@@ -159,8 +160,10 @@ class _CompositionWaitingPageState extends State<CompositionWaitingPage> {
                       onTap: () async {
                         // await _writingController.refetch();
                         if (context.mounted) {
-                          Navigator.popUntil(context,
-                              (route) => route.settings.name == "LessonsPage");
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return const LessonsPage();
+                          }));
                         }
                       },
                       child: PrimaryButton(

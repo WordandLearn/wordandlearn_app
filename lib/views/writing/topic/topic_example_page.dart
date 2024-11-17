@@ -128,16 +128,16 @@ class __ExampleWidgetState extends State<_ExampleWidget> {
                       Example example_ = widget.examples[index];
                       if (!example_.completed) {
                         _writingController.markExampleCompleted(example_);
+                        Navigator.pop(context);
                       }
                       if (index == widget.examples.length - 1) {
+                        Navigator.pop(context);
                         widget.onComplete();
                       }
-
                       setState(() {
                         understoodExamples[example] = true;
                         widget.examples[index].completed = true;
                       });
-                      Navigator.pop(context);
                     },
                   ),
                 ),
@@ -230,13 +230,15 @@ class __ExampleWidgetState extends State<_ExampleWidget> {
                                           ? const Icon(
                                               Icons.star_rounded,
                                               size: 30,
+                                              color: Colors.white,
                                             )
                                           : const Icon(
                                               Icons.chevron_right_rounded,
+                                              color: Colors.white,
                                               size: 30,
                                             )
                                       : const LoadingSpinner(
-                                          color: Colors.black,
+                                          color: Colors.white,
                                           size: 20,
                                         ),
                                 )

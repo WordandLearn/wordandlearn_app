@@ -4,8 +4,8 @@ import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/writing_controller.dart';
 import 'package:word_and_learn/models/writing/models.dart';
-import 'package:word_and_learn/views/writing/topic/components/flash_card_dialog.dart';
 import 'package:word_and_learn/views/writing/topic/components/topic_note_card.dart';
+import 'package:word_and_learn/views/writing/topic/flashcard_page.dart';
 
 class TopicNotesPage extends StatefulWidget {
   const TopicNotesPage(
@@ -159,21 +159,32 @@ class _FlashcardListState extends State<FlashcardList> {
                     activeFlashcard = index;
                   });
                 } else {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: flashcardText.completed,
-                    builder: (context) {
-                      return SizedBox(
-                        height: 300,
-                        child: Center(
-                          child: FlashCardDialog(
-                            flashcardText: flashcardText,
-                            onUnderstand: () => widget.onUnderstand(index),
-                          ),
-                        ),
-                      );
-                    },
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FlashcardPage(
+                        flashcardText: flashcardText,
+                        onComplete: () {
+                          widget.onUnderstand(index);
+                        },
+                      ),
+                    ),
                   );
+                  // showDialog(
+                  //   context: context,
+                  //   barrierDismissible: flashcardText.completed,
+                  //   builder: (context) {
+                  //     return SizedBox(
+                  //       height: 300,
+                  //       child: Center(
+                  //         child: FlashCardDialog(
+                  //           flashcardText: flashcardText,
+                  //           onUnderstand: () => widget.onUnderstand(index),
+                  //         ),
+                  //       ),
+                  //     );
+                  //   },
+                  // );
                 }
               },
               isOpened: index == activeFlashcard,

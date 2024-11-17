@@ -106,7 +106,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       navigatorObservers: [routeObserver],
       navigatorKey: navigatorKey,
-      title: 'Word & Learn',
+      title: 'WordandLearn',
       theme: AppTheme.getTheme(),
       home: const LoaderOverlay(child: SplashScreen()),
     );

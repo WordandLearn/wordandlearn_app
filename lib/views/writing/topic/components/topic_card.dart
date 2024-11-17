@@ -228,7 +228,7 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
                             color: widget.topic.completed
                                 ? widget.topic.exerciseCompleted
                                     ? AppColors.greenColor
-                                    : Theme.of(context).primaryColor
+                                    : AppColors.primaryColor
                                 : AppColors.inactiveColor,
                             border: widget.topic.completed
                                 ? widget.topic.exerciseCompleted
