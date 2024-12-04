@@ -241,6 +241,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     });
                                   },
                                   initialValue: dateOfBirth,
+                                  materialDatePickerOptions:
+                                      const MaterialDatePickerOptions(
+                                          initialEntryMode:
+                                              DatePickerEntryMode.input,
+                                          initialDatePickerMode:
+                                              DatePickerMode.day),
                                   decoration: InputDecoration(
                                       hintText: "",
                                       suffixIcon:

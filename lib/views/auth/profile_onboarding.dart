@@ -132,6 +132,15 @@ class _ProfileOnboardingPageState extends State<ProfileOnboardingPage> {
                                   ),
                                   DateTimeFormField(
                                       mode: DateTimeFieldPickerMode.date,
+                                      materialDatePickerOptions:
+                                          MaterialDatePickerOptions(
+                                              initialEntryMode:
+                                                  DatePickerEntryMode.input,
+                                              selectableDayPredicate:
+                                                  (DateTime day) {
+                                                return day
+                                                    .isBefore(DateTime.now());
+                                              }),
                                       pickerPlatform:
                                           DateTimeFieldPickerPlatform.adaptive,
                                       onChanged: (date) {

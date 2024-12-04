@@ -39,6 +39,8 @@ class _LessonTopicsPageState extends State<LessonTopicsPage> {
           child: FutureBuilder<List<Topic>?>(
               future: _future,
               builder: (context, snapshot) {
+                print(snapshot.stackTrace);
+                print(snapshot.error);
                 return Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: defaultPadding * 2, vertical: defaultPadding),

@@ -177,7 +177,9 @@ class _LessonsPageState extends State<LessonsPage> {
                                           "There was an error fetching your lessons. Please try again later",
                                       action: TapBounce(
                                         onTap: () {
-                                          writingController.refetch();
+                                          setState(() {
+                                            writingController.refetch();
+                                          });
                                         },
                                         child: const PrimaryIconButton(
                                             text: "Try Again",

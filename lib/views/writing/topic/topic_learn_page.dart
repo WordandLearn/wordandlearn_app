@@ -31,11 +31,74 @@ class _TopicLearnPageState extends State<TopicLearnPage> {
   @override
   void initState() {
     super.initState();
+
+    pages = [
+      TopicNotesPage(
+        topic: widget.topic,
+        lesson: widget.lesson!,
+        onComplete: () {
+          setState(() {
+            completedStatus[0] = true;
+          });
+        },
+        onProgress: (progress) {
+          setState(() {
+            this.progress = progress;
+            if (progress == 1) {
+              completedStatus[0] = true;
+            }
+          });
+        },
+      ),
+      TopicExamplePage(
+        topic: widget.topic,
+        isPageActive: activePage == 1,
+        onComplete: () {
+          writingController.markTopicCompleted(widget.topic);
+          setState(() {
+            completedStatus[1] = true;
+            widget.topic.completed = true;
+          });
+
+          widget.onCompleted();
+
+          showDialog(
+            context: context,
+            builder: (context) {
+              return SessionSuccessDialog(
+                  title: "Congratulations!",
+                  reason:
+                      "You have completed the learning activity on this Topic. You can now try out the exercise",
+                  action: TapBounce(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return ExercisePage(
+                            topic: widget.topic,
+                          );
+                        }));
+                      },
+                      child: const PrimaryIconButton(
+                          text: "Exercise",
+                          icon: Icon(
+                            Icons.chevron_right,
+                            color: Colors.white,
+                            size: 17,
+                          ))));
+            },
+          );
+        },
+      ),
+    ];
   }
 
   int activePage = 0;
   double progress = 0;
   List<bool> completedStatus = [false, false, false];
+
+  List<Widget> pages = [];
+
   @override
   Widget build(BuildContext context) {
     List<String> invalidClickErrors = [
@@ -75,67 +138,9 @@ class _TopicLearnPageState extends State<TopicLearnPage> {
                 child: buildAppbar(context),
               ),
               Expanded(
-                child: FadeIndexedStack(
+                child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
-                  index: activePage,
-                  children: [
-                    TopicNotesPage(
-                      topic: widget.topic,
-                      lesson: widget.lesson!,
-                      onComplete: () {
-                        setState(() {
-                          completedStatus[0] = true;
-                        });
-                      },
-                      onProgress: (progress) {
-                        setState(() {
-                          this.progress = progress;
-                          if (progress == 1) {
-                            completedStatus[0] = true;
-                          }
-                        });
-                      },
-                    ),
-                    TopicExamplePage(
-                      topic: widget.topic,
-                      onComplete: () {
-                        writingController.markTopicCompleted(widget.topic);
-                        setState(() {
-                          completedStatus[1] = true;
-                          widget.topic.completed = true;
-                        });
-
-                        widget.onCompleted();
-
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return SessionSuccessDialog(
-                                title: "Congratulations!",
-                                reason:
-                                    "You have completed the learning activity on this Topic. You can now try out the exercise",
-                                action: TapBounce(
-                                    onTap: () {
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(builder: (context) {
-                                        return ExercisePage(
-                                          topic: widget.topic,
-                                        );
-                                      }));
-                                    },
-                                    child: const PrimaryIconButton(
-                                        text: "Exercise",
-                                        icon: Icon(
-                                          Icons.chevron_right,
-                                          color: Colors.white,
-                                          size: 17,
-                                        ))));
-                          },
-                        );
-                      },
-                    ),
-                  ],
+                  child: pages[activePage],
                 ),
               ),
             ],

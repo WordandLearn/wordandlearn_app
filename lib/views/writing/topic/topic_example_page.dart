@@ -11,9 +11,13 @@ import 'package:word_and_learn/views/writing/topic/components/topic_example_card
 
 class TopicExamplePage extends StatefulWidget {
   const TopicExamplePage(
-      {super.key, required this.topic, required this.onComplete});
+      {super.key,
+      required this.topic,
+      required this.onComplete,
+      this.isPageActive = false});
   final Topic topic;
   final void Function() onComplete;
+  final bool isPageActive;
 
   @override
   State<TopicExamplePage> createState() => _TopicExamplePageState();
@@ -52,6 +56,7 @@ class _TopicExamplePageState extends State<TopicExamplePage> {
             if (snapshot.hasData) {
               return _ExampleWidget(
                 examples: snapshot.data!,
+                isPageActive: widget.isPageActive,
                 onComplete: widget.onComplete,
               );
             }
@@ -62,9 +67,13 @@ class _TopicExamplePageState extends State<TopicExamplePage> {
 }
 
 class _ExampleWidget extends StatefulWidget {
-  const _ExampleWidget({required this.examples, required this.onComplete});
+  const _ExampleWidget(
+      {required this.examples,
+      required this.onComplete,
+      required this.isPageActive});
   final List<Example> examples;
   final void Function() onComplete;
+  final bool isPageActive;
 
   @override
   State<_ExampleWidget> createState() => __ExampleWidgetState();
@@ -123,6 +132,7 @@ class __ExampleWidgetState extends State<_ExampleWidget> {
                       borderRadius: BorderRadius.circular(20)),
                   child: TopicExampleCard(
                     example: example,
+                    isPageActive: widget.isPageActive,
                     index: index,
                     onUnderstand: (example) {
                       Example example_ = widget.examples[index];

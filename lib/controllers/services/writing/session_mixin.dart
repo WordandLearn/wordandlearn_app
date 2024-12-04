@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cross_file/cross_file.dart';
@@ -23,7 +24,7 @@ mixin SessionMixin implements SessionInterface {
       http.Response res = await client.get(sessionLessonsUrl);
       HttpResponse<Session> response = HttpResponse<Session>.fromResponse(res);
       if (response.isSuccess) {
-        List<Session> sessions = sessionFromJson(res.body);
+        List<Session> sessions = sessionFromJson(res.body.toString());
         sessionDatabase.saveUserSessions(sessions);
         return sessions;
       } else {
@@ -105,7 +106,7 @@ mixin SessionMixin implements SessionInterface {
 
     HttpResponse<Lesson> response = HttpResponse.fromResponse(res);
     if (response.isSuccess) {
-      List<Lesson> lessons = lessonFromJson(res.body);
+      List<Lesson> lessons = lessonFromJson(res.body.toString());
       sessionDatabase.saveSessionLessons(lessons);
       return lessons;
     } else {
@@ -121,11 +122,11 @@ mixin SessionMixin implements SessionInterface {
     }
 
     http.Response res = await client.get("$lessonTopicsUrl/$lessonId/topics");
-
     HttpResponse<Topic> response = HttpResponse.fromResponse(res);
     if (response.isSuccess) {
-      List<Topic> topics = topicFromJson(res.body);
+      List<Topic> topics = topicFromJson(res.body.toString());
       sessionDatabase.saveLessonTopics(topics);
+
       return topics;
     } else {
       throw HttpFetchException("Could not fetch topics", response.statusCode);
@@ -143,7 +144,7 @@ mixin SessionMixin implements SessionInterface {
 
     HttpResponse<Example> response = HttpResponse.fromResponse(res);
     if (response.isSuccess) {
-      List<Example> examples = exampleFromJson(res.body);
+      List<Example> examples = exampleFromJson(res.body.toString());
       sessionDatabase.saveTopicExamples(examples);
       return examples;
     } else {
@@ -182,7 +183,8 @@ mixin SessionMixin implements SessionInterface {
       http.Response res = await client.get(topicFlashcardsUrl(topicId));
       HttpResponse<FlashcardText> response = HttpResponse.fromResponse(res);
       if (response.isSuccess) {
-        List<FlashcardText> flashcards = flashcardTextFromJson(res.body);
+        List<FlashcardText> flashcards =
+            flashcardTextFromJson(res.body.toString());
         sessionDatabase.saveTopicFlashcards(flashcards);
         return flashcards;
       } else {

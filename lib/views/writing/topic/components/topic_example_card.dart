@@ -1,8 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/components/animation/tap_bounce.dart';
+import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/models/writing/models.dart';
+import 'package:word_and_learn/utils/timer.dart';
 import 'package:word_and_learn/views/writing/topic/components/example_dialog.dart';
 
 class TopicExampleCard extends StatefulWidget {
@@ -11,10 +13,12 @@ class TopicExampleCard extends StatefulWidget {
       required this.example,
       this.visited = false,
       required this.onUnderstand,
-      required this.index});
+      required this.index,
+      required this.isPageActive});
   final Example example;
   final bool visited;
   final int index;
+  final bool isPageActive;
   final void Function(int index) onUnderstand;
 
   @override
@@ -34,6 +38,11 @@ class _TopicExampleCardState extends State<TopicExampleCard> {
         );
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -100,9 +109,30 @@ class _TopicExampleCardState extends State<TopicExampleCard> {
                                         offset: const Offset(0, 5))
                                   ],
                                   borderRadius: BorderRadius.circular(20)),
-                              child: const Text(
-                                "Reveal Instructions",
-                                style: TextStyle(fontWeight: FontWeight.w600),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  TimedWidget(
+                                    onCompleted: () {
+                                      if (!widget.visited ||
+                                          !widget.example.completed) {
+                                        _showAlertDialog(context);
+                                      }
+                                    },
+                                    child: const SizedBox.shrink(),
+                                    duration: TimerUtil.timeToRead(
+                                        widget.example.transformedText +
+                                            widget.example.originalText),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  const Text(
+                                    "Reveal Instructions",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ],
                               )),
                         ),
                       )

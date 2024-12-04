@@ -62,7 +62,7 @@ class _TimedWidgetState extends State<TimedWidget>
                         fontWeight: FontWeight.w600,
                       ),
                   strokeCap: StrokeCap.round,
-                  fillColor: AppColors.buttonColor,
+                  fillColor: AppColors.secondaryColor,
                   controller: countDownController,
                   onComplete: () {
                     setState(() {
@@ -72,7 +72,7 @@ class _TimedWidgetState extends State<TimedWidget>
                       widget.onCompleted!();
                     }
                   },
-                  ringColor: widget.color ?? Theme.of(context).primaryColor,
+                  ringColor: Theme.of(context).primaryColor,
                 );
               }),
     );
