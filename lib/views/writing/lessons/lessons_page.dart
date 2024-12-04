@@ -131,7 +131,6 @@ class _LessonsPageState extends State<LessonsPage> {
                             );
                           }
                           if (snapshot.hasError) {
-                            print(snapshot.error);
                             return Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: defaultPadding),
@@ -218,7 +217,7 @@ class _LessonsPageState extends State<LessonsPage> {
                                             const Duration(milliseconds: 500),
                                         child: Obx(() {
                                           if (writingController
-                                                  .currentUserSession.value ==
+                                                  .currentSession ==
                                               null) {
                                             return Shimmer.fromColors(
                                                 baseColor: Colors.grey[300]!,

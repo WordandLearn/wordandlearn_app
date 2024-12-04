@@ -7,8 +7,8 @@ import 'dart:convert';
 import 'package:objectbox/objectbox.dart';
 import 'package:word_and_learn/models/writing/models.dart';
 
-List<Exercise> exerciseFromJson(String str) =>
-    List<Exercise>.from(json.decode(str).map((x) => Exercise.fromJson(x)));
+List<Exercise> exerciseFromJson(String str) => List<Exercise>.from(
+    json.decode(utf8.decode(str.codeUnits)).map((x) => Exercise.fromJson(x)));
 
 String exerciseToJson(List<Exercise> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));

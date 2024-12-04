@@ -9,8 +9,8 @@ import 'color_model.dart';
 //
 //     final topic = topicFromJson(jsonString);
 
-List<Topic> topicFromJson(String str) =>
-    List<Topic>.from(json.decode(str).map((x) => Topic.fromJson(x)));
+List<Topic> topicFromJson(String str) => List<Topic>.from(
+    json.decode(utf8.decode(str.codeUnits)).map((x) => Topic.fromJson(x)));
 
 String topicToJson(List<Topic> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));

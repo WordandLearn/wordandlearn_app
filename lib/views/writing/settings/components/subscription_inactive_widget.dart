@@ -281,6 +281,7 @@ class _SubscriptionInactiveWidgetState
                                         backgroundColor: Colors.green,
                                       ),
                                     );
+                                    _writingController.refetch();
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) =>

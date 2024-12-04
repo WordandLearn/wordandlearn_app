@@ -9,8 +9,9 @@ import 'package:objectbox/objectbox.dart';
 import 'package:word_and_learn/models/writing/models.dart';
 
 List<FlashcardText> flashcardTextFromJson(String str) =>
-    List<FlashcardText>.from(
-        json.decode(str).map((x) => FlashcardText.fromJson(x)));
+    List<FlashcardText>.from(json
+        .decode(utf8.decode(str.codeUnits))
+        .map((x) => FlashcardText.fromJson(x)));
 
 String flashcardTextToJson(List<FlashcardText> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -35,7 +36,7 @@ class FlashcardText extends ColorModel {
 
   factory FlashcardText.fromJson(Map<String, dynamic> json) => FlashcardText(
       id: json["id"],
-      text: json["text"],
+      text: utf8.decode(json["text"].codeUnits),
       topic: json["topic"],
       title: json["title"],
       miniActivity: json["data"] != null

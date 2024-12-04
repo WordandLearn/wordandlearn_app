@@ -36,6 +36,17 @@ class WritingController extends GetxController
     );
   }
 
+  Session? get currentSession {
+    if (currentUserSession.value != null) {
+      return currentUserSession.value!;
+    } else {
+      if (userSessions.isNotEmpty) {
+        return userSessions.first;
+      }
+      return null;
+    }
+  }
+
   // Future<List<Session>?> fetchUserSessions({bool navigate = true}) async {
   //   List<Session>? sessions = await retry<List<Session>>(
   //     () {

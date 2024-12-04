@@ -7,7 +7,7 @@ import 'dart:convert';
 import 'package:word_and_learn/objectbox.g.dart';
 
 MiniActivity miniActivityFromJson(String str) =>
-    MiniActivity.fromJson(json.decode(str));
+    MiniActivity.fromJson(json.decode(utf8.decode(str.codeUnits)));
 
 String miniActivityToJson(MiniActivity data) => json.encode(data.toJson());
 

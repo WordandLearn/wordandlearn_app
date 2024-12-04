@@ -6,8 +6,8 @@ import 'dart:convert';
 
 import 'package:objectbox/objectbox.dart';
 
-List<Session> sessionFromJson(String str) =>
-    List<Session>.from(json.decode(str).map((x) => Session.fromJson(x)));
+List<Session> sessionFromJson(String str) => List<Session>.from(
+    json.decode(utf8.decode(str.codeUnits)).map((x) => Session.fromJson(x)));
 
 String sessionToJson(List<Session> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
