@@ -57,19 +57,19 @@ flutter_native_splash:
     # 640 pixels in diameter.
     # App icon without an icon background: This should be 1152×1152 pixels, and fit within a circle
     # 768 pixels in diameter.
-    image: assets/logo/mascot_purple.png
+    # image: assets/logo/purple_large.png
 
     # Splash screen background color.
-    color: "#F8F5FE"
+    color: "#BAA3CF"
 
     # App icon background color.
     #icon_background_color: "#111111"
 
     # The branding property allows you to specify an image used as branding in the splash screen.
-    branding: assets/logo/Logotype_1.png
+    # branding: assets/logo/Logotype_1@0.5x.png
 
-    branding_mode: bottom
-    branding_bottom_padding: 24
+    # branding_mode: bottom
+    # branding_bottom_padding: 24
 
 
 
