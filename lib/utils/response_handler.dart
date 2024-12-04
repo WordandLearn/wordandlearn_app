@@ -1,17 +1,64 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:word_and_learn/components/animation/tap_bounce.dart';
+import 'package:word_and_learn/components/primary_icon_button.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/main.dart';
+import 'package:word_and_learn/views/writing/lessons/components/session_error_dialog.dart';
 import 'package:word_and_learn/views/writing/settings/subscription_settings.dart';
 
 class ResponseHandler {
   bool showedPaymentSnackBar = false;
+  bool paymentDialogShowing = false;
+  DateTime? lastPaymentDialogTime;
+  Duration paymentDialogInterval = const Duration(minutes: 5);
   void _showSnackBar(text) {
     if (navigatorKey.currentContext != null) {
       ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(SnackBar(
           content: Row(
         children: [Text(text)],
       )));
+    }
+  }
+
+  void _showSubscriptionDialog() {
+    if (navigatorKey.currentContext != null && !paymentDialogShowing) {
+      lastPaymentDialogTime = DateTime.now();
+      showDialog(
+          context: navigatorKey.currentContext!,
+          barrierDismissible: false,
+          builder: (context) {
+            return PopScope(
+              onPopInvoked: (invoked) {
+                paymentDialogShowing = false;
+              },
+              child: SessionErrorDialog(
+                title: "Subscription or Trial Required To Continue",
+                reason:
+                    "You need to renew your subscription or start a trial to continue using wordandlearn",
+                action: Column(
+                  children: [
+                    TapBounce(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) {
+                              return const SubscriptionSettings();
+                            },
+                          ));
+                        },
+                        child: const PrimaryIconButton(
+                            text: "Go to Subscription Settings",
+                            icon: Icon(
+                              CupertinoIcons.chevron_right,
+                              color: Colors.white,
+                              size: 17,
+                            ))),
+                  ],
+                ),
+              ),
+            );
+          });
     }
   }
 
@@ -32,20 +79,13 @@ class ResponseHandler {
 
   void handlePaymentRequired() {
     // Handle payment required response
-    if (!showedPaymentSnackBar) {
-      _showSnackBar("You need to renew your subscription or start a trial");
-      showedPaymentSnackBar = true;
-
-      if (navigatorKey.currentContext != null) {
-        //check if not on the subscriptionSetting already
-        if (routeObserver.currentRoute != "SubscriptionSettings") {
-          final newRoute = MaterialPageRoute(
-              builder: (context) => const SubscriptionSettings(),
-              settings: const RouteSettings(name: "SubscriptionSettings"));
-
-          Navigator.push(navigatorKey.currentContext!, newRoute);
-        }
-      }
+    if (routeObserver.currentRoute == "SubscriptionSettings") return;
+    if (lastPaymentDialogTime != null &&
+        DateTime.now().difference(lastPaymentDialogTime!) <
+            paymentDialogInterval) {
+      return;
+    } else {
+      _showSubscriptionDialog();
     }
   }
 

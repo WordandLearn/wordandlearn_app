@@ -4,10 +4,15 @@ import 'package:word_and_learn/utils/sticker_utils.dart';
 
 class SessionErrorDialog extends StatelessWidget {
   const SessionErrorDialog(
-      {super.key, this.action, required this.title, required this.reason});
+      {super.key,
+      this.action,
+      required this.title,
+      required this.reason,
+      this.onBack});
   final Widget? action;
   final String title;
   final String reason;
+  final void Function()? onBack;
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -49,6 +54,9 @@ class SessionErrorDialog extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () {
+                          if (onBack != null) {
+                            onBack!();
+                          }
                           Navigator.pop(context);
                         },
                         child: const Row(
@@ -68,7 +76,7 @@ class SessionErrorDialog extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: -70,
+              top: -100,
               left: 0,
               right: 0,
               child: Center(

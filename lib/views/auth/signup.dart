@@ -181,14 +181,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         }
                       } else {
                         setState(() {
-                          error = response.data.entries
-                              .map(
-                                (e) {
-                                  return "${e.key} - ${e.value.join(". ")}";
-                                },
-                              )
-                              .toList()
-                              .join("\n");
+                          error = response.errors?.join("\n").capitalize;
                         });
                       }
                     },

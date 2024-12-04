@@ -1,15 +1,21 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/circle_profile_avatar.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/payments/payment_models.dart';
 import 'package:word_and_learn/models/writing/models.dart';
+import 'package:word_and_learn/utils/exceptions.dart';
 import 'package:word_and_learn/views/writing/lessons/components/lesson_drawer.dart';
 import 'package:word_and_learn/views/writing/lessons/components/lesson_empty_state.dart';
+import 'package:word_and_learn/views/writing/lessons/components/lesson_error_page.dart';
+import 'package:word_and_learn/views/writing/lessons/components/session_error_dialog.dart';
 import 'package:word_and_learn/views/writing/settings/profile/change_picture_page.dart';
 import 'package:word_and_learn/views/writing/settings/subscription_settings.dart';
 import 'components/composition_selector.dart';
@@ -122,6 +128,68 @@ class _LessonsPageState extends State<LessonsPage> {
                                   child: LessonEmptyState(),
                                 ),
                               ),
+                            );
+                          }
+                          if (snapshot.hasError) {
+                            print(snapshot.error);
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: defaultPadding),
+                              child: SizedBox(
+                                  height: size.height * 0.9,
+                                  child:
+                                      Center(child: Builder(builder: (context) {
+                                    if (snapshot.error is HttpFetchException) {
+                                      HttpFetchException exception =
+                                          snapshot.error as HttpFetchException;
+                                      if (exception.statusCode == 402) {
+                                        return LessonErrorPage(
+                                          assetUrl:
+                                              "assets/illustrations/penguin_holding_card.png",
+                                          errorTitle:
+                                              "Subscription or Trial Required",
+                                          errorText:
+                                              "You need to subscribe or start a free trial to use WordandLearn",
+                                          action: TapBounce(
+                                            onTap: () {
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) {
+                                                return const SubscriptionSettings();
+                                              }));
+                                            },
+                                            child: const PrimaryIconButton(
+                                                text:
+                                                    "Go To Subscription Settings",
+                                                icon: Icon(
+                                                  CupertinoIcons.chevron_right,
+                                                  size: 17,
+                                                  color: Colors.white,
+                                                )),
+                                          ),
+                                        );
+                                      }
+                                    }
+                                    return LessonErrorPage(
+                                      errorTitle: "An error has occured",
+                                      assetUrl:
+                                          "assets/illustrations/penguin_holding_error.png",
+                                      errorText:
+                                          "There was an error fetching your lessons. Please try again later",
+                                      action: TapBounce(
+                                        onTap: () {
+                                          writingController.refetch();
+                                        },
+                                        child: const PrimaryIconButton(
+                                            text: "Try Again",
+                                            icon: Icon(
+                                              CupertinoIcons.refresh,
+                                              size: 17,
+                                              color: Colors.white,
+                                            )),
+                                      ),
+                                    );
+                                  }))),
                             );
                           }
                           //

@@ -74,11 +74,13 @@ class _LoginPageState extends State<LoginPage> {
                               const SizedBox(
                                 width: defaultPadding,
                               ),
-                              Text(
-                                error!,
-                                style: const TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.w600),
+                              Expanded(
+                                child: Text(
+                                  error!,
+                                  style: const TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.w600),
+                                ),
                               ),
                             ],
                           ),
@@ -179,10 +181,11 @@ class _LoginPageState extends State<LoginPage> {
                                 return;
                               } else {
                                 ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
+                                    .showSnackBar(SnackBar(
                                         content: Text(
-                                  "That was a success :)",
-                                  style: TextStyle(color: Colors.green),
+                                  response.responseMessage ??
+                                      "Login Successful",
+                                  style: const TextStyle(color: Colors.green),
                                 )));
                                 Get.put(WritingController());
 
@@ -196,16 +199,15 @@ class _LoginPageState extends State<LoginPage> {
                               }
                             }
                           } else {
-                            if (response.data['error'] ==
-                                "Email not verified") {
+                            if (response.data['code'] == "EMAIL.NOT_VERIFIED") {
                               setState(() {
-                                error = "Email not verified";
+                                error = response.errors?.join("\n");
                               });
                               ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
+                                  .showSnackBar(SnackBar(
                                       content: Text(
-                                "Your email is not verified. We have sent a code to you. Please verify your email to continue",
-                                style: TextStyle(color: Colors.red),
+                                response.data['error'],
+                                style: const TextStyle(color: Colors.red),
                               )));
 
                               Navigator.push(context, MaterialPageRoute(
@@ -215,15 +217,16 @@ class _LoginPageState extends State<LoginPage> {
                                   );
                                 },
                               ));
+                              return;
                             } else {
                               ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
+                                  .showSnackBar(SnackBar(
                                       content: Text(
-                                "An error has occured :()",
-                                style: TextStyle(color: Colors.red),
+                                response.data['error'],
+                                style: const TextStyle(color: Colors.red),
                               )));
                               setState(() {
-                                error = response.data['error'];
+                                error = response.errors?.join("\n");
                               });
                             }
                           }
