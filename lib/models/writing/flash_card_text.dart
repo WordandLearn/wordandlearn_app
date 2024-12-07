@@ -4,14 +4,12 @@
 
 import 'dart:convert';
 
-import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:objectbox/objectbox.dart';
 import 'package:word_and_learn/models/writing/models.dart';
 
 List<FlashcardText> flashcardTextFromJson(String str) =>
-    List<FlashcardText>.from(json
-        .decode(utf8.decode(str.codeUnits))
-        .map((x) => FlashcardText.fromJson(x)));
+    List<FlashcardText>.from(
+        json.decode(str).map((x) => FlashcardText.fromJson(x)));
 
 String flashcardTextToJson(List<FlashcardText> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -36,7 +34,7 @@ class FlashcardText extends ColorModel {
 
   factory FlashcardText.fromJson(Map<String, dynamic> json) => FlashcardText(
       id: json["id"],
-      text: utf8.decode(json["text"].codeUnits),
+      text: json["text"],
       topic: json["topic"],
       title: json["title"],
       miniActivity: json["data"] != null
@@ -59,14 +57,7 @@ class FlashcardText extends ColorModel {
 
   Future<String?> get flashCardTitle {
     if (title == null) {
-      Gemini gemini = Gemini.instance;
-      return gemini
-          .text(
-              "Generate a title for a flashcard with the following text: $text")
-          .then((value) {
-        title = value?.content?.parts?.map((e) => e.text).first;
-        return title;
-      });
+      return Future.value("");
     } else {
       return Future.value(title);
     }

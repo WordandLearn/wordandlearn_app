@@ -7,9 +7,8 @@ import 'dart:convert';
 import 'package:objectbox/objectbox.dart';
 
 List<ExerciseResult> exerciseResultFromJson(String str) =>
-    List<ExerciseResult>.from(json
-        .decode(utf8.decode(str.codeUnits))
-        .map((x) => ExerciseResult.fromJson(x)));
+    List<ExerciseResult>.from(
+        json.decode(str).map((x) => ExerciseResult.fromJson(x)));
 
 String exerciseResultToJson(List<ExerciseResult> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));

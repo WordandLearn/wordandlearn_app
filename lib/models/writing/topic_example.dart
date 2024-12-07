@@ -6,10 +6,8 @@ import 'dart:convert';
 
 import 'package:objectbox/objectbox.dart';
 
-List<TopicExample> topicExampleFromJson(String str) =>
-    List<TopicExample>.from(json
-        .decode(utf8.decode(str.codeUnits))
-        .map((x) => TopicExample.fromJson(x)));
+List<TopicExample> topicExampleFromJson(String str) => List<TopicExample>.from(
+    json.decode(str).map((x) => TopicExample.fromJson(x)));
 
 String topicExampleToJson(List<TopicExample> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));

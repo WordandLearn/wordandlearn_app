@@ -8,8 +8,8 @@ import 'package:objectbox/objectbox.dart';
 import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/utils/sticker_utils.dart';
 
-List<Lesson> lessonFromJson(String str) => List<Lesson>.from(
-    json.decode(utf8.decode(str.codeUnits)).map((x) => Lesson.fromJson(x)));
+List<Lesson> lessonFromJson(String str) =>
+    List<Lesson>.from(json.decode(str).map((x) => Lesson.fromJson(x)));
 
 String lessonToJson(List<Lesson> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));

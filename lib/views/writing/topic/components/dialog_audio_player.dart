@@ -144,8 +144,7 @@ class _DialogAudioPlayerState extends State<DialogAudioPlayer> {
             if (_playerController.playerState == PlayerState.playing) {
               _playerController.pausePlayer();
             } else {
-              _playerController.startPlayer(
-                  forceRefresh: true, finishMode: FinishMode.pause);
+              _playerController.startPlayer(forceRefresh: true);
             }
           },
           child: AnimatedContainer(

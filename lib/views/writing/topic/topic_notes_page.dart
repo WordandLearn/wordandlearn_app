@@ -56,6 +56,7 @@ class _TopicNotesPageState extends State<TopicNotesPage> {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
             child: Builder(builder: (context) {
+              print(snapshot.stackTrace);
               if (snapshot.hasError) {
                 return const Center(
                   child:
