@@ -12,7 +12,7 @@ class ColorModel {
       return color!;
     } else {
       color = ColorUtils.randomHueFromColor();
-      return color!;
+      return color!; //Returns a random color
     }
   }
 
