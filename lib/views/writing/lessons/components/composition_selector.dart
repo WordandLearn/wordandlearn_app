@@ -44,19 +44,19 @@ class _CompositionSelectorContainerState
   bool loading = false;
 
   Future<void> goToUpload(BuildContext context) async {
-    if (kIsWeb) {
-      if (context.mounted) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return const SessionErrorDialog(
-              title: "Error",
-              reason: "Scanning a composition is only available on mobile.",
-            );
-          },
-        );
-      }
-    }
+    // if (kIsWeb) {
+    //   if (context.mounted) {
+    //     showDialog(
+    //       context: context,
+    //       builder: (context) {
+    //         return const SessionErrorDialog(
+    //           title: "Error",
+    //           reason: "Scanning a composition is only available on mobile.",
+    //         );
+    //       },
+    //     );
+    //   }
+    // }
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
     if (!preferences.containsKey("uploadOnboarded")) {

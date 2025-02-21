@@ -60,6 +60,6 @@ const String userSubscriptionUrl = "$paymentUrl/subscription/?service=W";
 const String userSubscriptionStatusUrl = "$paymentUrl/subscription/W/status";
 
 //ToS Endpoints
-const String tosUrl = "https://wordandlearn.com/terms-of-service";
+const String tosUrl = "https://wordandlearn.com/terms-of-use/";
 const String privacyPolicyUrl = "https://wordandlearn.com/privacy-policy";
 const String contactUsUrl = "https://wordandlearn.com#contact-page";

@@ -30,6 +30,7 @@ class _OtpValidationPageState extends State<OtpValidationPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: buildSettingsAppBar(context, title: "Verify OTP Code"),
       body: Padding(
         padding: const EdgeInsets.symmetric(

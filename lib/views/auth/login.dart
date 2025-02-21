@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
+import 'package:word_and_learn/constants/error_codes.dart';
 import 'package:word_and_learn/controllers/authentication_controller.dart';
 import 'package:word_and_learn/controllers/writing_controller.dart';
 import 'package:word_and_learn/models/writing/models.dart';
@@ -74,11 +75,13 @@ class _LoginPageState extends State<LoginPage> {
                               const SizedBox(
                                 width: defaultPadding,
                               ),
-                              Text(
-                                error!,
-                                style: const TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.w600),
+                              Expanded(
+                                child: Text(
+                                  error!,
+                                  style: const TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.w600),
+                                ),
                               ),
                             ],
                           ),
@@ -196,25 +199,26 @@ class _LoginPageState extends State<LoginPage> {
                               }
                             }
                           } else {
-                            if (response.data['error'] ==
-                                "Email not verified") {
+                            if (response.data['code'] ==
+                                ErrorCodes.emailNotVerifed) {
                               setState(() {
                                 error = "Email not verified";
                               });
+                              if (context.mounted) {
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) {
+                                    return OtpValidationPage(
+                                      email: usernameController.text,
+                                    );
+                                  },
+                                ));
+                              }
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(
                                       content: Text(
                                 "Your email is not verified. We have sent a code to you. Please verify your email to continue",
                                 style: TextStyle(color: Colors.red),
                               )));
-
-                              Navigator.push(context, MaterialPageRoute(
-                                builder: (context) {
-                                  return OtpValidationPage(
-                                    email: usernameController.text,
-                                  );
-                                },
-                              ));
                             } else {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(
