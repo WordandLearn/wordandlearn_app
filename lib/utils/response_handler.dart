@@ -17,10 +17,8 @@ class ResponseHandler {
   Duration errorDialogInterval = const Duration(seconds: 20);
   void _showSnackBar(text) {
     if (navigatorKey.currentContext != null) {
-      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(SnackBar(
-          content: Row(
-        children: [Text(text)],
-      )));
+      ScaffoldMessenger.of(navigatorKey.currentContext!)
+          .showSnackBar(SnackBar(content: Text(text)));
     }
   }
 

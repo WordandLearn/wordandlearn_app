@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cross_file/cross_file.dart';
-import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -46,20 +45,6 @@ class _CompositionSelectorContainerState
   bool loading = false;
 
   Future<void> goToUpload(BuildContext context) async {
-    if (kIsWeb) {
-      if (context.mounted) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return const SessionErrorDialog(
-              title: "Error",
-              reason: "Scanning a composition is only available on mobile.",
-            );
-          },
-        );
-      }
-    }
-
     SharedPreferences preferences = await SharedPreferences.getInstance();
     if (!preferences.containsKey("uploadOnboarded")) {
       if (context.mounted) {
