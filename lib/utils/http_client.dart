@@ -9,8 +9,14 @@ import 'package:word_and_learn/utils/response_handler.dart';
 class HttpClient {
   static final HttpClient _instance = HttpClient._internal();
   factory HttpClient() => _instance;
+  static String? _authToken;
   final ResponseHandler _responseHandler = ResponseHandler();
   HttpClient._internal();
+
+  static Future<void> init() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    _authToken = preferences.getString("authToken");
+  }
 
   // Future<void> onInit() async {
   //   SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -20,6 +26,7 @@ class HttpClient {
   Future<void> saveAuthToken(String token) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setString("authToken", token);
+    _authToken = token;
   }
 
   Future<void> saveUserType(String userType) async {
@@ -31,16 +38,16 @@ class HttpClient {
     return {};
   }
 
-  Future<Map<String, String>> getAuthHeaders() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    String? authToken = preferences.getString("authToken");
-    return {"Authorization": "Bearer $authToken"};
+  Map<String, String> getAuthHeaders() {
+    if (_authToken != null) {
+      return {"Authorization": "Bearer $_authToken"};
+    }
+    return {};
   }
 
   Future<http.Response> post(String url, Map<String, dynamic> body,
       {bool authRequired = true}) async {
-    Map<String, String> headers =
-        authRequired ? await getAuthHeaders() : getHeaders();
+    Map<String, String>? headers = authRequired ? getAuthHeaders() : null;
     try {
       return await http.post(Uri.parse(url), body: body, headers: headers);
     } on SocketException {
@@ -51,8 +58,7 @@ class HttpClient {
 
   Future<http.Response> put(String url, Map<String, dynamic> body,
       {bool authRequired = true}) async {
-    Map<String, String> headers =
-        authRequired ? await getAuthHeaders() : getHeaders();
+    Map<String, String>? headers = authRequired ? getAuthHeaders() : null;
     try {
       return await http.put(Uri.parse(url), body: body, headers: headers);
     } on SocketException {
@@ -62,8 +68,7 @@ class HttpClient {
   }
 
   Future<http.Response> get(String url, {bool authRequired = true}) async {
-    Map<String, String> headers =
-        authRequired ? await getAuthHeaders() : getHeaders();
+    Map<String, String>? headers = authRequired ? getAuthHeaders() : null;
     try {
       final response = await http.get(Uri.parse(url), headers: headers);
       _responseHandler.checkResponse(response);
@@ -78,7 +83,7 @@ class HttpClient {
   Future<http.Response> delete(String url, {Map? body}) async {
     try {
       return await http.delete(Uri.parse(url),
-          body: body, headers: await getAuthHeaders());
+          body: body, headers: getAuthHeaders());
     } on SocketException {
       ResponseHandler.showNoInternetError();
       rethrow;
@@ -88,7 +93,7 @@ class HttpClient {
   Future<http.Response> upload(String url,
       {required List<XFile> files, String key = 'file'}) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.headers.addAll(await getAuthHeaders());
+    request.headers.addAll(getAuthHeaders());
     for (var file in files) {
       if (kIsWeb) {
         request.files.add(http.MultipartFile.fromBytes(
@@ -118,7 +123,7 @@ class HttpClient {
       required Map<String, String> body}) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
 
-    request.headers.addAll(await getAuthHeaders());
+    request.headers.addAll(getAuthHeaders());
     for (var key in files.keys) {
       if (kIsWeb) {
         request.files.add(http.MultipartFile.fromBytes(

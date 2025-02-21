@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:word_and_learn/constants/colors.dart';
 import 'package:word_and_learn/constants/theme.dart';
+import 'package:word_and_learn/utils/http_client.dart';
 import 'package:word_and_learn/utils/navigation_observer.dart';
 import 'package:word_and_learn/utils/notification_utils.dart';
 
@@ -69,6 +70,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
+    HttpClient.init();
+
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) {
         if (message.notification != null) {}
