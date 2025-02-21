@@ -23,7 +23,7 @@ class SessionReportCard extends StatefulWidget {
 
 class _SessionReportCardState extends State<SessionReportCard> {
   final WritingController writingController = Get.find<WritingController>();
-  bool isLoading = true;
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
