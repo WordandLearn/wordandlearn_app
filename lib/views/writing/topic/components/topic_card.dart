@@ -139,6 +139,8 @@ class _LessonTopicCardState extends State<LessonTopicCard> {
                         Center(
                           child: Text(
                             widget.topic.description,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
                             style: Theme.of(context)
                                 .textTheme
