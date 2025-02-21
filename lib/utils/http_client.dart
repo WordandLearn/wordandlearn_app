@@ -38,16 +38,19 @@ class HttpClient {
     return {};
   }
 
-  Map<String, String> getAuthHeaders() {
+  Future<Map<String, String>> getAuthHeaders() async {
     if (_authToken != null) {
-      return {"Authorization": "Bearer $_authToken"};
+      return {"X-Authorization": "Bearer $_authToken"};
     }
-    return {};
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? authToken = preferences.getString("authToken");
+    _authToken = authToken;
+    return {"X-Authorization": "Bearer $authToken"};
   }
 
   Future<http.Response> post(String url, Map<String, dynamic> body,
       {bool authRequired = true}) async {
-    Map<String, String>? headers = authRequired ? getAuthHeaders() : null;
+    Map<String, String>? headers = authRequired ? await getAuthHeaders() : null;
     try {
       return await http.post(Uri.parse(url), body: body, headers: headers);
     } on SocketException {
@@ -58,7 +61,7 @@ class HttpClient {
 
   Future<http.Response> put(String url, Map<String, dynamic> body,
       {bool authRequired = true}) async {
-    Map<String, String>? headers = authRequired ? getAuthHeaders() : null;
+    Map<String, String>? headers = authRequired ? await getAuthHeaders() : null;
     try {
       return await http.put(Uri.parse(url), body: body, headers: headers);
     } on SocketException {
@@ -68,7 +71,7 @@ class HttpClient {
   }
 
   Future<http.Response> get(String url, {bool authRequired = true}) async {
-    Map<String, String>? headers = authRequired ? getAuthHeaders() : null;
+    Map<String, String>? headers = authRequired ? await getAuthHeaders() : null;
     try {
       final response = await http.get(Uri.parse(url), headers: headers);
       _responseHandler.checkResponse(response);
@@ -83,7 +86,7 @@ class HttpClient {
   Future<http.Response> delete(String url, {Map? body}) async {
     try {
       return await http.delete(Uri.parse(url),
-          body: body, headers: getAuthHeaders());
+          body: body, headers: await getAuthHeaders());
     } on SocketException {
       ResponseHandler.showNoInternetError();
       rethrow;
@@ -93,7 +96,7 @@ class HttpClient {
   Future<http.Response> upload(String url,
       {required List<XFile> files, String key = 'file'}) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.headers.addAll(getAuthHeaders());
+    request.headers.addAll(await getAuthHeaders());
     for (var file in files) {
       if (kIsWeb) {
         request.files.add(http.MultipartFile.fromBytes(
@@ -123,7 +126,7 @@ class HttpClient {
       required Map<String, String> body}) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
 
-    request.headers.addAll(getAuthHeaders());
+    request.headers.addAll(await getAuthHeaders());
     for (var key in files.keys) {
       if (kIsWeb) {
         request.files.add(http.MultipartFile.fromBytes(
