@@ -4,8 +4,6 @@
 
 import 'dart:convert';
 
-import 'package:objectbox/objectbox.dart';
-
 User userFromJson(String str) => User.fromJson(json.decode(str));
 
 String userToJson(User data) => json.encode(data.toJson());
@@ -69,9 +67,7 @@ List<Profile> profileFromJson(String str) =>
 String profileToJson(List<Profile> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-@Entity()
 class Profile {
-  @Id(assignable: true)
   int id;
   String name;
   String? address;

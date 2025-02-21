@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cross_file/cross_file.dart';
@@ -52,6 +51,8 @@ mixin SessionMixin implements SessionInterface {
     http.Response res = await client.get("$compositionUrl/can_upload/");
     HttpResponse<CompositionUploadCheck> response =
         HttpResponse<CompositionUploadCheck>.fromResponse(res);
+
+    print(response.data);
     if (response.isSuccess) {
       return CompositionUploadCheck.fromJson(response.data);
     } else {

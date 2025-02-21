@@ -4,17 +4,13 @@
 
 import 'dart:convert';
 
-import 'package:objectbox/objectbox.dart';
-
 List<Session> sessionFromJson(String str) =>
     List<Session>.from(json.decode(str).map((x) => Session.fromJson(x)));
 
 String sessionToJson(List<Session> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-@Entity()
 class Session {
-  @Id(assignable: true)
   final int id;
   final DateTime updatedAt;
   final String text;
@@ -92,12 +88,9 @@ class Progress {
       };
 }
 
-@Entity()
 class CurrentSession {
-  @Id(assignable: true)
   int id;
-  ToOne<Session> session = ToOne<Session>();
-  @Property(type: PropertyType.dateNano)
+  Session? session;
   final DateTime dateOpened;
 
   CurrentSession({required this.dateOpened, this.id = 0});

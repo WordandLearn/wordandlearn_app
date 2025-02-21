@@ -1,8 +1,4 @@
-import 'package:objectbox/objectbox.dart';
-
-@Entity()
 class ProfilePicture {
-  @Id(assignable: true)
   int id;
   final String imageUrl;
   final String thumbnailUrl;

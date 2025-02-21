@@ -4,14 +4,11 @@
 
 import 'dart:convert';
 
-import 'package:word_and_learn/objectbox.g.dart';
-
 MiniActivity miniActivityFromJson(String str) =>
     MiniActivity.fromJson(json.decode(str));
 
 String miniActivityToJson(MiniActivity data) => json.encode(data.toJson());
 
-@Entity()
 class MiniActivity {
   String criteria;
   String? activityText;

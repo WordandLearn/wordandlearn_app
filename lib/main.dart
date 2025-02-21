@@ -8,7 +8,6 @@ import 'package:word_and_learn/constants/colors.dart';
 import 'package:word_and_learn/constants/theme.dart';
 import 'package:word_and_learn/utils/navigation_observer.dart';
 import 'package:word_and_learn/utils/notification_utils.dart';
-import 'package:word_and_learn/utils/objectbox_utils.dart';
 
 import 'package:word_and_learn/views/splash_screen.dart';
 import 'package:intl/intl_standalone.dart';
@@ -20,9 +19,7 @@ void main() async {
   Gemini.init(apiKey: "AIzaSyDkAOTIsp59llikprmsliWHwFDSeTMdTyA");
 
   WidgetsFlutterBinding.ensureInitialized();
-  if (!kIsWeb) {
-    await ObjectBox.getInstance();
-  }
+
   await initializeDateFormatting(
       'en_US', ""); // Replace 'en_US' with your desired locale.
   await findSystemLocale();

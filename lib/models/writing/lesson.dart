@@ -4,7 +4,6 @@
 
 import 'dart:convert';
 
-import 'package:objectbox/objectbox.dart';
 import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/utils/sticker_utils.dart';
 
@@ -14,9 +13,7 @@ List<Lesson> lessonFromJson(String str) =>
 String lessonToJson(List<Lesson> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-@Entity()
 class Lesson extends ColorModel {
-  @Id(assignable: true)
   final int id;
   final String title;
   final String description;

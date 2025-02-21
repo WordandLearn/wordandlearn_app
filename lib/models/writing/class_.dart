@@ -3,7 +3,6 @@
 //     final class = classFromJson(jsonString);
 
 import 'dart:convert';
-import 'package:objectbox/objectbox.dart';
 
 List<Class_> classFromJson(String str) =>
     List<Class_>.from(json.decode(str).map((x) => Class_.fromJson(x)));
@@ -11,10 +10,8 @@ List<Class_> classFromJson(String str) =>
 String classToJson(List<Class_> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-@Entity()
 // ignore: camel_case_types
 class Class_ {
-  @Id(assignable: true)
   int id;
   String name;
   int grade;

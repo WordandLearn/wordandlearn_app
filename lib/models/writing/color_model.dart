@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:objectbox/objectbox.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 import 'package:word_and_learn/utils/color_utils.dart';
 
 class ColorModel {
-  @Transient()
   Color? color;
-  @Transient()
   Color get colorValue {
     if (color != null) {
       return color!;
@@ -16,12 +13,10 @@ class ColorModel {
     }
   }
 
-  @Transient()
   Color get darkerColor {
     return TinyColor.fromColor(colorValue).darken(10).color;
   }
 
-  @Transient()
   Color get darkerTextColor {
     //Generates a color depending on the color value that passes accecisbility test, not black or white, just darker colorvalue or lighter
     return TinyColor.fromColor(colorValue).isLight()
