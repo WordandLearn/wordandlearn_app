@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
@@ -15,7 +14,6 @@ import 'package:word_and_learn/utils/exceptions.dart';
 import 'package:word_and_learn/views/writing/lessons/components/lesson_drawer.dart';
 import 'package:word_and_learn/views/writing/lessons/components/lesson_empty_state.dart';
 import 'package:word_and_learn/views/writing/lessons/components/lesson_error_page.dart';
-import 'package:word_and_learn/views/writing/lessons/components/session_error_dialog.dart';
 import 'package:word_and_learn/views/writing/settings/profile/change_picture_page.dart';
 import 'package:word_and_learn/views/writing/settings/subscription_settings.dart';
 import 'components/composition_selector.dart';

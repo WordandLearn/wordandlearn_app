@@ -1,11 +1,11 @@
 import 'package:cross_file/cross_file.dart';
-import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/components/fade_indexed_stack.dart';
 import 'package:word_and_learn/constants/constants.dart';
 import 'package:word_and_learn/controllers/writing_controller.dart';
 import 'package:word_and_learn/models/writing/models.dart';
+import 'package:word_and_learn/utils/file_utils.dart';
 import 'package:word_and_learn/views/writing/exercise/components/exercise_action_button.dart';
 
 import 'components/exercise_appbar.dart';
@@ -34,28 +34,24 @@ class _ExercisePageState extends State<ExercisePage> {
   double progress = 1 / 3;
   int currentPage = 0;
   bool isUploading = false;
-  List<String?>? submissionImagePaths = [];
   ExerciseSubmission? exerciseSubmission;
   ExerciseResult? exerciseResult;
-  Future<List<String?>?> _selectImages() async {
-    List<String?>? imagePaths = await CunningDocumentScanner.getPictures(
-        isGalleryImportAllowed: true, noOfPages: 1);
-    if (imagePaths != null) {
+  List<XFile> images = [];
+  Future<List<XFile>?> _selectImages() async {
+    List<XFile>? files =
+        await FileUtils.pickDocumentFiles(allowMultiple: false);
+    if (files != null) {
       setState(() {
-        submissionImagePaths = imagePaths;
-        // if (currentPage == 0) {
-        //   currentPage++;
-        // }
+        images = files;
       });
     }
-    return imagePaths;
+    return null;
   }
 
   void _submitExercise(Exercise exercise) async {
     setState(() {
       isUploading = true;
     });
-    List<XFile> images = submissionImagePaths!.map((e) => XFile(e!)).toList();
     ExerciseSubmission? submission =
         await writingController.uploadExercise(exercise.id, images);
     if (submission != null) {
@@ -127,7 +123,7 @@ class _ExercisePageState extends State<ExercisePage> {
                                         vertical: defaultPadding,
                                         horizontal: defaultPadding),
                                     child: ExerciseSubmissionPage(
-                                      imagePaths: submissionImagePaths,
+                                      files: images,
                                     ),
                                   ),
                                 ],
@@ -164,10 +160,23 @@ class _ExercisePageState extends State<ExercisePage> {
                                         uploading: isUploading,
                                         onContinue: () async {
                                           if (currentPage == 0) {
-                                            await _selectImages();
-                                            setState(() {
-                                              currentPage++;
-                                            });
+                                            List<XFile>? results =
+                                                await _selectImages();
+                                            if (results != null) {
+                                              setState(() {
+                                                currentPage++;
+                                              });
+                                            } else {
+                                              if (context.mounted) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text(
+                                                        "Please select at least an image of your exercise"),
+                                                  ),
+                                                );
+                                              }
+                                            }
                                           } else {
                                             // submit exercise
                                             _submitExercise(snapshot.data!);

@@ -1,10 +1,11 @@
-import 'package:cunning_document_scanner/cunning_document_scanner.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_detector/flutter_swipe_detector.dart';
 import 'package:word_and_learn/components/animation/tap_bounce.dart';
 import 'package:word_and_learn/components/components.dart';
 import 'package:word_and_learn/constants/constants.dart';
+import 'package:word_and_learn/utils/file_utils.dart';
 import 'package:word_and_learn/views/writing/upload/composition_upload_page.dart';
 
 class UploadOnboardingPage extends StatefulWidget {
@@ -132,19 +133,24 @@ class _UploadOnboardingPageState extends State<UploadOnboardingPage> {
                         activePage++;
                       });
                     } else {
-                      List<String?>? pictures =
-                          await CunningDocumentScanner.getPictures(
-                              isGalleryImportAllowed: true, noOfPages: 2);
-                      if (pictures != null) {
+                      List<XFile>? files = await FileUtils.pickDocumentFiles();
+
+                      if (files != null) {
                         if (context.mounted) {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => CompositionUploadPage(
-                                        imagePaths: pictures,
+                                        images: files,
                                       ),
                                   settings: const RouteSettings(
                                       name: "CompositionUploadPage")));
+                        }
+                      } else {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("No files selected")));
                         }
                       }
                     }

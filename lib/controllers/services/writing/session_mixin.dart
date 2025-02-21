@@ -52,7 +52,6 @@ mixin SessionMixin implements SessionInterface {
     HttpResponse<CompositionUploadCheck> response =
         HttpResponse<CompositionUploadCheck>.fromResponse(res);
 
-    print(response.data);
     if (response.isSuccess) {
       return CompositionUploadCheck.fromJson(response.data);
     } else {

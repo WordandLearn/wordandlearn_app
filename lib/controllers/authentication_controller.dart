@@ -43,8 +43,9 @@ class AuthenticationController extends GetxController {
   }
 
   Future<HttpResponse> activateEmail(String email, String code) async {
-    http.Response res = await client
-        .post("$authUrl/email/activate/", {"code": code, "email": email});
+    http.Response res = await client.post(
+        "$authUrl/email/activate/", {"code": code, "email": email},
+        authRequired: false);
     HttpResponse<User> response = HttpResponse.fromResponse(res);
     return response;
   }

@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -14,6 +15,7 @@ import 'package:word_and_learn/controllers/controllers.dart';
 import 'package:word_and_learn/models/payments/payment_models.dart';
 import 'package:word_and_learn/models/writing/models.dart';
 import 'package:word_and_learn/utils/exceptions.dart';
+import 'package:word_and_learn/utils/file_utils.dart';
 import 'package:word_and_learn/views/writing/lessons/components/session_error_dialog.dart';
 import 'package:word_and_learn/views/writing/settings/subscription_settings.dart';
 import 'package:word_and_learn/views/writing/upload/composition_upload_page.dart';
@@ -70,17 +72,26 @@ class _CompositionSelectorContainerState
       }
     } else {
       if (context.mounted) {
-        List<String?>? pictures = await CunningDocumentScanner.getPictures(
-            noOfPages: 2, isGalleryImportAllowed: true);
-        if (pictures != null) {
+        List<XFile>? files = await FileUtils.pickDocumentFiles();
+
+        if (files != null) {
           if (context.mounted) {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    maintainState: false,
                     builder: (context) => CompositionUploadPage(
-                          imagePaths: pictures,
-                        )));
+                          images: files,
+                        ),
+                    settings:
+                        const RouteSettings(name: "CompositionUploadPage")));
+          }
+        } else {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("No files selected"),
+              ),
+            );
           }
         }
       }
@@ -192,9 +203,10 @@ class _CompositionSelectorContainerState
                 isLoading: loading,
                 onPressed: () async {
                   //Check if the current session is complete
-
-                  if (writingController.subscriptionStatus !=
-                      SubscriptionStatus.trialActive) {
+                  SubscriptionStatus? subscriptionStatus =
+                      writingController.subscriptionStatus;
+                  if (subscriptionStatus != SubscriptionStatus.active ||
+                      subscriptionStatus == SubscriptionStatus.trialActive) {
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -229,7 +241,9 @@ class _CompositionSelectorContainerState
                       writingController.checkUploadComposition().then(
                         (value) async {
                           if (value.canUpload) {
-                            await goToUpload(context);
+                            if (context.mounted) {
+                              await goToUpload(context);
+                            }
                           } else {
                             if (context.mounted) {
                               showDialog(

@@ -18,8 +18,11 @@ class SessionErrorDialog extends StatelessWidget {
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-      child: SizedBox(
-        height: 250,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxHeight: 250,
+          maxWidth: 400,
+        ),
         child: Stack(
           clipBehavior: Clip.none,
           children: [

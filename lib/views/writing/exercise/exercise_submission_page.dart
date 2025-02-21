@@ -1,15 +1,17 @@
 import 'dart:io';
 
+import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
+import 'package:word_and_learn/components/xfile_image_builder.dart';
 import 'package:word_and_learn/constants/constants.dart';
 
 class ExerciseSubmissionPage extends StatefulWidget {
   const ExerciseSubmissionPage({
     super.key,
-    required this.imagePaths,
+    required this.files,
   });
 
-  final List<String?>? imagePaths;
+  final List<XFile> files;
 
   @override
   State<ExerciseSubmissionPage> createState() => _ExerciseSubmissionPageState();
@@ -21,7 +23,6 @@ class _ExerciseSubmissionPageState extends State<ExerciseSubmissionPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Builder(builder: (context) {
-      List<File> files = widget.imagePaths!.map((e) => File(e!)).toList();
       return Column(
         children: [
           Text(
@@ -29,18 +30,17 @@ class _ExerciseSubmissionPageState extends State<ExerciseSubmissionPage> {
             style: Theme.of(context).textTheme.titleLarge,
           ),
           Expanded(
-            child: files.isNotEmpty
+            child: widget.files.isNotEmpty
                 ? Center(
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
                       child: Container(
-                        key: ValueKey<String>(files[activeIndex].path),
-                        child: Image.file(
-                          files[activeIndex],
-                          width: 200,
-                          height: 200,
-                        ),
-                      ),
+                          key: ValueKey<String>(widget.files[activeIndex].path),
+                          child: XFileImageBuilder(
+                            xfile: widget.files[activeIndex],
+                            width: 200,
+                            height: 200,
+                          )),
                     ),
                   )
                 : const SizedBox(
@@ -52,7 +52,7 @@ class _ExerciseSubmissionPageState extends State<ExerciseSubmissionPage> {
                     ),
                   ),
           ),
-          files.length > 1
+          widget.files.length > 1
               ? Center(
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
@@ -65,7 +65,7 @@ class _ExerciseSubmissionPageState extends State<ExerciseSubmissionPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(
-                          files.length,
+                          widget.files.length,
                           (index) => InkWell(
                                 onTap: () {
                                   setState(() {
@@ -85,8 +85,8 @@ class _ExerciseSubmissionPageState extends State<ExerciseSubmissionPage> {
                                       borderRadius: BorderRadius.circular(5)),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(5),
-                                    child: Image.file(
-                                      files[index],
+                                    child: XFileImageBuilder(
+                                      xfile: widget.files[index],
                                       width: 50,
                                       height: 70,
                                     ),

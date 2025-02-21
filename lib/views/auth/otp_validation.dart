@@ -77,19 +77,21 @@ class _OtpValidationPageState extends State<OtpValidationPage> {
                           .then(
                         (value) {
                           if (value.isSuccess) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        "Code Verified, reset your password")));
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ResetPasswordPage(
-                                      uid: value.data["uid"],
-                                      token: value.data["token"]),
-                                  settings: const RouteSettings(
-                                      name: "ResetPasswordPage"),
-                                ));
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          "Code Verified, reset your password")));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ResetPasswordPage(
+                                        uid: value.data["uid"],
+                                        token: value.data["token"]),
+                                    settings: const RouteSettings(
+                                        name: "ResetPasswordPage"),
+                                  ));
+                            }
                           } else {
                             setState(() {
                               error = value.data["error"];
@@ -110,15 +112,17 @@ class _OtpValidationPageState extends State<OtpValidationPage> {
                           .then(
                         (value) {
                           if (value.isSuccess) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        "Account Activated. You can now log in")));
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const LoginPage(),
-                                ));
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          "Account Activated. You can now log in")));
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginPage(),
+                                  ));
+                            }
                           } else {
                             setState(() {
                               error = value.data["error"];

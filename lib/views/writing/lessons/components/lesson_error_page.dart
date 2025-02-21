@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:word_and_learn/components/animation/tap_bounce.dart';
-import 'package:word_and_learn/components/loading_spinner.dart';
-import 'package:word_and_learn/components/primary_icon_button.dart';
 import 'package:word_and_learn/constants/constants.dart';
 
 class LessonErrorPage extends StatelessWidget {
