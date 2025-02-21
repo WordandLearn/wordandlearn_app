@@ -45,246 +45,252 @@ class _LoginPageState extends State<LoginPage> {
       //   "assets/images/joyful_kids.png",
       //   height: size.height * 0.15,
       // ),
-      body: SizedBox(
-        height: size.height,
-        child: LayoutBuilder(builder: (context, constraints) {
-          return Center(
-            child: SizedBox(
-              height: constraints.maxHeight,
-              width: constraints.maxWidth > 600 ? 600 : constraints.maxWidth,
-              child: ListView(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: size.height * 0.1),
-                    child: const Center(
-                      child: LogoType(
-                        width: 150,
+      body: Padding(
+        padding: scrollPadding,
+        child: SizedBox(
+          height: size.height,
+          child: LayoutBuilder(builder: (context, constraints) {
+            return Center(
+              child: SizedBox(
+                height: constraints.maxHeight,
+                width: constraints.maxWidth > 600 ? 600 : constraints.maxWidth,
+                child: ListView(
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: size.height * 0.1),
+                      child: const Center(
+                        child: LogoType(
+                          width: 150,
+                        ),
                       ),
                     ),
-                  ),
-                  error != null
-                      ? Padding(
-                          padding: allPadding * 2,
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.warning_rounded,
-                                color: Colors.red,
-                              ),
-                              const SizedBox(
-                                width: defaultPadding,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  error!,
-                                  style: const TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.w600),
+                    error != null
+                        ? Padding(
+                            padding: allPadding * 2,
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.warning_rounded,
+                                  color: Colors.red,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(
+                                  width: defaultPadding,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    error!,
+                                    style: const TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : const SizedBox.shrink(),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          AuthTextField(
+                            controller: usernameController,
+                            hintText: "Username or Email",
+                            validator: (p0) {
+                              if (p0!.isEmpty) {
+                                return "Username cannot be empty";
+                              }
+                              return null;
+                            },
                           ),
-                        )
-                      : const SizedBox.shrink(),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        AuthTextField(
-                          controller: usernameController,
-                          hintText: "Username or Email",
-                          validator: (p0) {
-                            if (p0!.isEmpty) {
-                              return "Username cannot be empty";
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(
-                          height: defaultPadding * 3,
-                        ),
-                        AuthTextField(
-                          controller: passwordController,
-                          hintText: "Password",
-                          maxLines: 1,
-                          obscureText: true,
-                          validator: (p0) {
-                            if (p0!.isEmpty) {
-                              return "Password cannot be empty";
-                            }
-                            return null;
-                          },
-                        ),
-                      ],
+                          const SizedBox(
+                            height: defaultPadding * 3,
+                          ),
+                          AuthTextField(
+                            controller: passwordController,
+                            hintText: "Password",
+                            maxLines: 1,
+                            obscureText: true,
+                            validator: (p0) {
+                              if (p0!.isEmpty) {
+                                return "Password cannot be empty";
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: defaultPadding * 2),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ForgotPasswordEmailPage(),
-                                  settings: const RouteSettings(
-                                      name: "ForgotPasswordEmailPage")));
-                        },
-                        child: Text(
-                          "Forgot Password?",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(fontWeight: FontWeight.bold),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: defaultPadding * 2),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ForgotPasswordEmailPage(),
+                                    settings: const RouteSettings(
+                                        name: "ForgotPasswordEmailPage")));
+                          },
+                          child: Text(
+                            "Forgot Password?",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: defaultPadding * 0.1,
-                  ),
-                  TapBounce(
-                    scale: 0.99,
-                    duration: const Duration(milliseconds: 150),
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        toggleLoading();
-                        authenticationController
-                            .login(usernameController.text,
-                                passwordController.text)
-                            .then((HttpResponse response) {
-                          if (response.isSuccess) {
-                            if (response.data["user"]["profile"] == null) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) {
-                                        return const ProfileOnboardingPage();
-                                      },
-                                      settings: const RouteSettings(
-                                          name: "ProfileOnboardingPage")));
-                            } else {
-                              if (response.data["user"]["role"] != "C") {
-                                setState(() {
-                                  error = "Only students can login here";
-                                });
+                    const SizedBox(
+                      height: defaultPadding * 0.1,
+                    ),
+                    TapBounce(
+                      scale: 0.99,
+                      duration: const Duration(milliseconds: 150),
+                      onTap: () {
+                        if (_formKey.currentState!.validate()) {
+                          toggleLoading();
+                          authenticationController
+                              .login(usernameController.text,
+                                  passwordController.text)
+                              .then((HttpResponse response) {
+                            if (response.isSuccess) {
+                              if (response.data["user"]["profile"] == null) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) {
+                                          return const ProfileOnboardingPage();
+                                        },
+                                        settings: const RouteSettings(
+                                            name: "ProfileOnboardingPage")));
+                              } else {
+                                if (response.data["user"]["role"] != "C") {
+                                  setState(() {
+                                    error = "Only students can login here";
+                                  });
 
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                          content: Text(
+                                    "Only students can login here",
+                                    style: TextStyle(color: Colors.red),
+                                  )));
+                                  return;
+                                } else {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                          content: Text(
+                                    response.responseMessage ??
+                                        "Login Successful",
+                                    style: const TextStyle(color: Colors.green),
+                                  )));
+                                  Get.put(WritingController());
+
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const LessonsPage(),
+                                          settings: const RouteSettings(
+                                              name: "LessonsPage")));
+                                }
+                              }
+                            } else {
+                              if (response.data['code'] ==
+                                  "EMAIL.NOT_VERIFIED") {
+                                setState(() {
+                                  error = response.errors?.join("\n");
+                                });
                                 ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
+                                    .showSnackBar(SnackBar(
                                         content: Text(
-                                  "Only students can login here",
-                                  style: TextStyle(color: Colors.red),
+                                  response.data['error'],
+                                  style: const TextStyle(color: Colors.red),
                                 )));
+
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) {
+                                    return OtpValidationPage(
+                                      email: usernameController.text,
+                                    );
+                                  },
+                                ));
                                 return;
                               } else {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                         content: Text(
-                                  response.responseMessage ??
-                                      "Login Successful",
-                                  style: const TextStyle(color: Colors.green),
+                                  response.data['error'],
+                                  style: const TextStyle(color: Colors.red),
                                 )));
-                                Get.put(WritingController());
-
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const LessonsPage(),
-                                        settings: const RouteSettings(
-                                            name: "LessonsPage")));
+                                setState(() {
+                                  error = response.errors?.join("\n");
+                                });
                               }
                             }
-                          } else {
-                            if (response.data['code'] == "EMAIL.NOT_VERIFIED") {
-                              setState(() {
-                                error = response.errors?.join("\n");
-                              });
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                      content: Text(
-                                response.data['error'],
-                                style: const TextStyle(color: Colors.red),
-                              )));
-
-                              Navigator.push(context, MaterialPageRoute(
-                                builder: (context) {
-                                  return OtpValidationPage(
-                                    email: usernameController.text,
-                                  );
-                                },
-                              ));
-                              return;
-                            } else {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                      content: Text(
-                                response.data['error'],
-                                style: const TextStyle(color: Colors.red),
-                              )));
-                              setState(() {
-                                error = response.errors?.join("\n");
-                              });
-                            }
-                          }
-                        }).whenComplete(() => toggleLoading());
-                      }
-                    },
-                    child: PrimaryIconButton(
-                        text: "Login",
-                        icon: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
-                          child: !isLoading
-                              ? const Icon(
-                                  Icons.login_rounded,
-                                  color: Colors.white,
-                                  size: 15,
-                                )
-                              : const LoadingSpinner(
-                                  size: 15,
-                                ),
-                        )),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: defaultPadding * 4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text("Don't Have An Account?",
-                            style: TextStyle(
-                                fontSize: 14, color: AppColors.greyTextColor)),
-                        const SizedBox(
-                          width: defaultPadding / 2,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) {
-                                      return const SignUpPage();
-                                    },
-                                    settings: const RouteSettings(
-                                        name: "SignUpPage")));
-                          },
-                          child: const Text(
-                            "Sign Up",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
-                          ),
-                        )
-                      ],
+                          }).whenComplete(() => toggleLoading());
+                        }
+                      },
+                      child: PrimaryIconButton(
+                          text: "Login",
+                          icon: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            child: !isLoading
+                                ? const Icon(
+                                    Icons.login_rounded,
+                                    color: Colors.white,
+                                    size: 15,
+                                  )
+                                : const LoadingSpinner(
+                                    size: 15,
+                                  ),
+                          )),
                     ),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: defaultPadding * 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("Don't Have An Account?",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: AppColors.greyTextColor)),
+                          const SizedBox(
+                            width: defaultPadding / 2,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) {
+                                        return const SignUpPage();
+                                      },
+                                      settings: const RouteSettings(
+                                          name: "SignUpPage")));
+                            },
+                            child: const Text(
+                              "Sign Up",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          );
-        }),
+            );
+          }),
+        ),
       ),
     );
   }

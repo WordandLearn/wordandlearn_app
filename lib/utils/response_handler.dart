@@ -12,7 +12,9 @@ class ResponseHandler {
   bool showedPaymentSnackBar = false;
   bool paymentDialogShowing = false;
   DateTime? lastPaymentDialogTime;
+  Map<String, DateTime> errorDialogTimes = {};
   Duration paymentDialogInterval = const Duration(minutes: 5);
+  Duration errorDialogInterval = const Duration(seconds: 20);
   void _showSnackBar(text) {
     if (navigatorKey.currentContext != null) {
       ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(SnackBar(
@@ -64,33 +66,51 @@ class ResponseHandler {
 
   void handleUnauthorized() {
     // Handle unauthorized response
-    _showSnackBar("You are not allowed to access this. Please Log In Again");
-    // if (navigatorKey.currentContext != null) {
-    //   final newRoute =
-    //       MaterialPageRoute(builder: (context) => const LoginPage());
-    //   predicate(Route<dynamic> route) {
-    //     return route.isFirst;
-    //   }
+    // Show unathorized snackbar if more than the dialog interval has passed
 
-    //   Navigator.pushAndRemoveUntil(
-    //       navigatorKey.currentContext!, newRoute, predicate);
-    // }
+    DateTime? unauthorizedTime = errorDialogTimes["unauthorized"];
+    if (unauthorizedTime != null &&
+        DateTime.now().difference(unauthorizedTime) < errorDialogInterval) {
+      return;
+    } else {
+      errorDialogTimes["unauthorized"] = DateTime.now();
+      _showSnackBar(
+          "You are not authorized to access this resource. Try logging in again.");
+    }
   }
 
   void handlePaymentRequired() {
     // Handle payment required response
-    if (routeObserver.currentRoute == "SubscriptionSettings") return;
-    if (lastPaymentDialogTime != null &&
-        DateTime.now().difference(lastPaymentDialogTime!) <
-            paymentDialogInterval) {
+    // if (routeObserver.currentRoute == "SubscriptionSettings") return;
+    // if (lastPaymentDialogTime != null &&
+    //     DateTime.now().difference(lastPaymentDialogTime!) <
+    //         paymentDialogInterval) {
+    //   return;
+    // } else {
+    //   _showSubscriptionDialog();
+    // }
+    DateTime? paymentTime = errorDialogTimes["payment"];
+    if (paymentTime != null &&
+        DateTime.now().difference(paymentTime) < errorDialogInterval) {
       return;
     } else {
+      errorDialogTimes["payment"] = DateTime.now();
       _showSubscriptionDialog();
     }
   }
 
   void handleInternalServerError() {
-    _showSnackBar("Ooops. An error has occured on our end.");
+    // Handle internal server error response
+    DateTime? internalServerErrorTime = errorDialogTimes["internalServerError"];
+    if (internalServerErrorTime != null &&
+        DateTime.now().difference(internalServerErrorTime) <
+            errorDialogInterval) {
+      return;
+    } else {
+      errorDialogTimes["internalServerError"] = DateTime.now();
+      _showSnackBar("Ooops. An error has occured on our end.");
+    }
+    // _showSnackBar("Ooops. An error has occured on our end.");
   }
 
   void handleBadRequest() {
