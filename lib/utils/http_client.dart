@@ -48,11 +48,19 @@ class HttpClient {
     return {"X-Authorization": "Bearer $authToken"};
   }
 
+  String addTrailingSlash(String url) {
+    if (url.endsWith('/')) {
+      return url;
+    }
+    return '$url/';
+  }
+
   Future<http.Response> post(String url, Map<String, dynamic> body,
       {bool authRequired = true}) async {
     Map<String, String>? headers = authRequired ? await getAuthHeaders() : null;
     try {
-      return await http.post(Uri.parse(url), body: body, headers: headers);
+      return await http.post(Uri.parse(addTrailingSlash(url)),
+          body: body, headers: headers);
     } on SocketException {
       ResponseHandler.showNoInternetError();
       rethrow;
@@ -63,7 +71,8 @@ class HttpClient {
       {bool authRequired = true}) async {
     Map<String, String>? headers = authRequired ? await getAuthHeaders() : null;
     try {
-      return await http.put(Uri.parse(url), body: body, headers: headers);
+      return await http.put(Uri.parse(addTrailingSlash(url)),
+          body: body, headers: headers);
     } on SocketException {
       ResponseHandler.showNoInternetError();
       rethrow;
@@ -73,7 +82,8 @@ class HttpClient {
   Future<http.Response> get(String url, {bool authRequired = true}) async {
     Map<String, String>? headers = authRequired ? await getAuthHeaders() : null;
     try {
-      final response = await http.get(Uri.parse(url), headers: headers);
+      final response =
+          await http.get(Uri.parse(addTrailingSlash(url)), headers: headers);
       _responseHandler.checkResponse(response);
 
       return response;
@@ -85,7 +95,7 @@ class HttpClient {
 
   Future<http.Response> delete(String url, {Map? body}) async {
     try {
-      return await http.delete(Uri.parse(url),
+      return await http.delete(Uri.parse(addTrailingSlash(url)),
           body: body, headers: await getAuthHeaders());
     } on SocketException {
       ResponseHandler.showNoInternetError();
@@ -95,7 +105,8 @@ class HttpClient {
 
   Future<http.Response> upload(String url,
       {required List<XFile> files, String key = 'file'}) async {
-    var request = http.MultipartRequest('POST', Uri.parse(url));
+    var request =
+        http.MultipartRequest('POST', Uri.parse(addTrailingSlash(url)));
     request.headers.addAll(await getAuthHeaders());
     for (var file in files) {
       if (kIsWeb) {
@@ -111,7 +122,7 @@ class HttpClient {
   }
 
   // Future<http.Response> uploadWithKeys(String url, {required Map<String,File> files}) async {
-  //   var request = http.MultipartRequest('POST', Uri.parse(url));
+  //   var request = http.MultipartRequest('POST', Uri.parse(addTrailingSlash(url)));
   //   request.headers.addAll(getAuthHeaders());
   //   for (var key in files.keys) {
   //     request.files
@@ -124,7 +135,8 @@ class HttpClient {
   Future<http.Response> uploadWithKeys(String url,
       {required Map<String, XFile> files,
       required Map<String, String> body}) async {
-    var request = http.MultipartRequest('POST', Uri.parse(url));
+    var request =
+        http.MultipartRequest('POST', Uri.parse(addTrailingSlash(url)));
 
     request.headers.addAll(await getAuthHeaders());
     for (var key in files.keys) {
@@ -148,7 +160,7 @@ class HttpClient {
   }
 
   Future<File> downloadFile(String url) {
-    return http.readBytes(Uri.parse(url)).then((bytes) {
+    return http.readBytes(Uri.parse(addTrailingSlash(url))).then((bytes) {
       String dir = Directory.systemTemp.path;
       File file = File('$dir/${DateTime.now().millisecondsSinceEpoch}.jpg');
       return file.writeAsBytes(bytes);
