@@ -36,7 +36,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return CustomScaffold(
+    return Scaffold(
       backgroundColor: const Color(0xFFF8F5FE),
 
       // bottomImage: Image.asset(
