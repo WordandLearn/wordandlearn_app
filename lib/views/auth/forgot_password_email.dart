@@ -66,18 +66,22 @@ class _ForgotPasswordEmailPageState extends State<ForgotPasswordEmailPage> {
                         .initiatePasswordReset(emailTextController.text)
                         .then(
                       (value) {
-                        if (value.isSuccess) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text("OTP Code Sent. Verify Code")));
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const OtpValidationPage(
-                                        isPasswordReset: true,
-                                      ),
-                                  settings: const RouteSettings(
-                                      name: "OtpValidationPage")));
+                        if (context.mounted) {
+                          if (value.isSuccess) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text("OTP Code Sent. Verify Code")));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const OtpValidationPage(
+                                          isPasswordReset: true,
+                                        ),
+                                    settings: const RouteSettings(
+                                        name: "OtpValidationPage")));
+                          }
                         }
                       },
                     ).whenComplete(

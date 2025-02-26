@@ -210,28 +210,34 @@ class _SubscriptionInactiveWidgetState
                         _writingController.subscribeToPackage(
                             selectedSubscriptionPackage!.id, {}).then(
                           (value) async {
-                            if (value != null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text(
-                                          "Redirecting to our payment gateway")));
-                              await launchUrl(Uri.parse(
-                                  value["data"]["authorization_url"]));
+                            if (context.mounted) {
+                              if (value != null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            "Redirecting to our payment gateway")));
+                                await launchUrl(Uri.parse(
+                                    value["data"]["authorization_url"]));
+                              }
                             }
                           },
                         ).onError(
                           (error, stackTrace) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                    "An error occurred while trying to subscribe to the package"),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      "An error occurred while trying to subscribe to the package"),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
                           },
                         ).whenComplete(
                           () {
-                            context.loaderOverlay.hide();
+                            if (context.mounted) {
+                              context.loaderOverlay.hide();
+                            }
                             setState(() {
                               loading = false;
                             });
@@ -274,6 +280,9 @@ class _SubscriptionInactiveWidgetState
                                 context.loaderOverlay.show();
                                 _writingController.startTrial().then(
                                   (value) {
+                                    if (!context.mounted) {
+                                      return;
+                                    }
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text(
@@ -293,6 +302,9 @@ class _SubscriptionInactiveWidgetState
                                   },
                                 ).onError(
                                   (error, stackTrace) {
+                                    if (!context.mounted) {
+                                      return;
+                                    }
                                     if (error is HttpFetchException) {
                                       if (error.statusCode == 403) {
                                         ScaffoldMessenger.of(context)
@@ -306,6 +318,9 @@ class _SubscriptionInactiveWidgetState
                                         return;
                                       }
                                     } else {
+                                      if (!context.mounted) {
+                                        return;
+                                      }
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         const SnackBar(
@@ -318,6 +333,9 @@ class _SubscriptionInactiveWidgetState
                                   },
                                 ).whenComplete(
                                   () {
+                                    if (!context.mounted) {
+                                      return;
+                                    }
                                     context.loaderOverlay.hide();
                                   },
                                 );

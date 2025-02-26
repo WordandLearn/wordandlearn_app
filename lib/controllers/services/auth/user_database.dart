@@ -1,7 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:word_and_learn/controllers/services/interfaces/user_interface.dart';
 import 'package:word_and_learn/models/writing/models.dart';
-import 'package:word_and_learn/utils/objectbox_utils.dart';
 
 class UserDatabase implements UserDatabaseInterface {
   @override

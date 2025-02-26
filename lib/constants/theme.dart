@@ -4,7 +4,7 @@ import 'package:word_and_learn/constants/constants.dart';
 class AppTheme {
   static ThemeData getTheme() {
     return ThemeData(
-        scaffoldBackgroundColor: AppColors.containerColor,
+        scaffoldBackgroundColor: Colors.white,
         colorScheme: const ColorScheme.light(
           primary: AppColors.buttonColor,
           secondary: AppColors.secondaryColor,

@@ -94,40 +94,44 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _writingController.updateChildProfileDetails(body).then((value) {
       if (value != null) {
         updateValues(value);
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Row(
+            children: [
+              Icon(
+                CupertinoIcons.check_mark_circled_solid,
+                color: Colors.green,
+              ),
+              SizedBox(
+                width: defaultPadding,
+              ),
+              Text(
+                "Profile Updated Successfully",
+                style: TextStyle(color: Colors.green),
+              )
+            ],
+          )));
+        }
+      }
+    }).onError((error, stackTrace) {
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Row(
           children: [
             Icon(
-              CupertinoIcons.check_mark_circled_solid,
-              color: Colors.green,
+              CupertinoIcons.xmark_circle_fill,
+              color: Colors.red,
             ),
             SizedBox(
               width: defaultPadding,
             ),
             Text(
-              "Profile Updated Successfully",
-              style: TextStyle(color: Colors.green),
+              "Could not Update Profile",
+              style: TextStyle(color: Colors.red),
             )
           ],
         )));
       }
-    }).onError((error, stackTrace) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Row(
-        children: [
-          Icon(
-            CupertinoIcons.xmark_circle_fill,
-            color: Colors.red,
-          ),
-          SizedBox(
-            width: defaultPadding,
-          ),
-          Text(
-            "Could not Update Profile",
-            style: TextStyle(color: Colors.red),
-          )
-        ],
-      )));
     }).whenComplete(
       () {
         setState(() {

@@ -96,16 +96,18 @@ class _SessionReportCardState extends State<SessionReportCard> {
                                           Uri.parse(widget.session!.reportUrl!))
                                       .onError(
                                     (error, stackTrace) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return const SessionErrorDialog(
-                                            title: "Could not open report",
-                                            reason:
-                                                "An error occurred while opening the report. Please try again later.",
-                                          );
-                                        },
-                                      );
+                                      if (context.mounted) {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return const SessionErrorDialog(
+                                              title: "Could not open report",
+                                              reason:
+                                                  "An error occurred while opening the report. Please try again later.",
+                                            );
+                                          },
+                                        );
+                                      }
                                       if (error != null) {
                                         throw error;
                                       } else {
@@ -133,6 +135,10 @@ class _SessionReportCardState extends State<SessionReportCard> {
                                     },
                                   ).onError(
                                     (error, stackTrace) {
+                                      if (!context.mounted) {
+                                        return;
+                                      }
+
                                       showDialog(
                                           context: context,
                                           builder: (context) {

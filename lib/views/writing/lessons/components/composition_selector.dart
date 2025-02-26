@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -249,24 +248,28 @@ class _CompositionSelectorContainerState
                       ).onError(
                         (error, stackTrace) {
                           if (error is HttpFetchException) {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return SessionErrorDialog(
-                                  title: error.statusCode < 500
-                                      ? "You cannot upload a composition"
-                                      : "Could not check if session is complete",
-                                  reason: error.statusCode < 500
-                                      ? "Ensure you have completed the current session, or you havent reached your plan upload limit."
-                                      : "An error occurred while checking if the session is complete. Don't worry its an issue on our end, you can try again later",
-                                );
-                              },
-                            );
+                            if (context.mounted) {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return SessionErrorDialog(
+                                    title: error.statusCode < 500
+                                        ? "You cannot upload a composition"
+                                        : "Could not check if session is complete",
+                                    reason: error.statusCode < 500
+                                        ? "Ensure you have completed the current session, or you havent reached your plan upload limit."
+                                        : "An error occurred while checking if the session is complete. Don't worry its an issue on our end, you can try again later",
+                                  );
+                                },
+                              );
+                            }
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        "Could not check if session is complete")));
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          "Could not check if session is complete")));
+                            }
                           }
                         },
                       ).whenComplete(

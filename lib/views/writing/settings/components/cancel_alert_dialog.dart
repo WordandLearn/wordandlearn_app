@@ -118,6 +118,9 @@ class _CancelAlertDialogState extends State<CancelAlertDialog> {
                         },
                       ).onError(
                         (error, stackTrace) {
+                          if (!context.mounted) {
+                            return;
+                          }
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
                                   content: Row(
@@ -141,7 +144,9 @@ class _CancelAlertDialogState extends State<CancelAlertDialog> {
                           setState(() {
                             loading = false;
                           });
-                          Navigator.pop(context);
+                          if (context.mounted) {
+                            Navigator.pop(context);
+                          }
                         },
                       );
                     } else {

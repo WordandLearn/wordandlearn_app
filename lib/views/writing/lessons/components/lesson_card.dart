@@ -49,6 +49,9 @@ class _LessonCardState extends State<LessonCard> {
       onTap: () {
         _startBounceAnimation();
         Future.delayed(const Duration(milliseconds: 200), () {
+          if (!context.mounted) {
+            return;
+          }
           if (widget.lesson.unlocked) {
             showModalBottomSheet(
                 context: context,

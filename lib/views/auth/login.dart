@@ -159,79 +159,82 @@ class _LoginPageState extends State<LoginPage> {
                               .login(usernameController.text,
                                   passwordController.text)
                               .then((HttpResponse response) {
-                            if (response.isSuccess) {
-                              if (response.data["user"]["profile"] == null) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) {
-                                          return const ProfileOnboardingPage();
-                                        },
-                                        settings: const RouteSettings(
-                                            name: "ProfileOnboardingPage")));
-                              } else {
-                                if (response.data["user"]["role"] != "C") {
-                                  setState(() {
-                                    error = "Only students can login here";
-                                  });
+                            if (context.mounted) {
+                              if (response.isSuccess) {
+                                if (response.data["user"]["profile"] == null) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) {
+                                            return const ProfileOnboardingPage();
+                                          },
+                                          settings: const RouteSettings(
+                                              name: "ProfileOnboardingPage")));
+                                } else {
+                                  if (response.data["user"]["role"] != "C") {
+                                    setState(() {
+                                      error = "Only students can login here";
+                                    });
 
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(const SnackBar(
+                                            content: Text(
+                                      "Only students can login here",
+                                      style: TextStyle(color: Colors.red),
+                                    )));
+                                    return;
+                                  } else {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                            content: Text(
+                                      response.responseMessage ??
+                                          "Login Successful",
+                                      style:
+                                          const TextStyle(color: Colors.green),
+                                    )));
+                                    Get.put(WritingController());
+
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const LessonsPage(),
+                                            settings: const RouteSettings(
+                                                name: "LessonsPage")));
+                                  }
+                                }
+                              } else {
+                                if (response.data['code'] ==
+                                    "EMAIL.NOT_VERIFIED") {
+                                  setState(() {
+                                    error = response.errors?.join("\n");
+                                  });
                                   ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
+                                      .showSnackBar(SnackBar(
                                           content: Text(
-                                    "Only students can login here",
-                                    style: TextStyle(color: Colors.red),
+                                    response.data['error'],
+                                    style: const TextStyle(color: Colors.red),
                                   )));
+
+                                  Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) {
+                                      return OtpValidationPage(
+                                        email: usernameController.text,
+                                      );
+                                    },
+                                  ));
                                   return;
                                 } else {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
                                           content: Text(
-                                    response.responseMessage ??
-                                        "Login Successful",
-                                    style: const TextStyle(color: Colors.green),
+                                    response.data['error'],
+                                    style: const TextStyle(color: Colors.red),
                                   )));
-                                  Get.put(WritingController());
-
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const LessonsPage(),
-                                          settings: const RouteSettings(
-                                              name: "LessonsPage")));
+                                  setState(() {
+                                    error = response.errors?.join("\n");
+                                  });
                                 }
-                              }
-                            } else {
-                              if (response.data['code'] ==
-                                  "EMAIL.NOT_VERIFIED") {
-                                setState(() {
-                                  error = response.errors?.join("\n");
-                                });
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                        content: Text(
-                                  response.data['error'],
-                                  style: const TextStyle(color: Colors.red),
-                                )));
-
-                                Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) {
-                                    return OtpValidationPage(
-                                      email: usernameController.text,
-                                    );
-                                  },
-                                ));
-                                return;
-                              } else {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                        content: Text(
-                                  response.data['error'],
-                                  style: const TextStyle(color: Colors.red),
-                                )));
-                                setState(() {
-                                  error = response.errors?.join("\n");
-                                });
                               }
                             }
                           }).whenComplete(() => toggleLoading());

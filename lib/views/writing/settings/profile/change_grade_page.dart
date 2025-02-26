@@ -32,36 +32,43 @@ class _ChangeGradePageState extends State<ChangeGradePage> {
       _writingController
           .updateChildProfileDetails({"grade": gradeController.text}).then(
         (value) {
+          if (!context.mounted) {
+            return;
+          }
           if (value != null) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Row(
-              children: [
-                Icon(
-                  CupertinoIcons.check_mark_circled,
-                  color: Colors.green,
-                ),
-                SizedBox(
-                  width: defaultPadding,
-                ),
-                Text("Grade Updated Successfully")
-              ],
-            )));
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Row(
+                children: [
+                  Icon(
+                    CupertinoIcons.check_mark_circled,
+                    color: Colors.green,
+                  ),
+                  SizedBox(
+                    width: defaultPadding,
+                  ),
+                  Text("Grade Updated Successfully")
+                ],
+              )));
+            }
           }
         },
       ).onError((error, stackTrace) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Row(
-          children: [
-            Icon(
-              CupertinoIcons.xmark_circle_fill,
-              color: Colors.red,
-            ),
-            SizedBox(
-              width: defaultPadding,
-            ),
-            Text("Failed to update Grade")
-          ],
-        )));
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Row(
+            children: [
+              Icon(
+                CupertinoIcons.xmark_circle_fill,
+                color: Colors.red,
+              ),
+              SizedBox(
+                width: defaultPadding,
+              ),
+              Text("Failed to update Grade")
+            ],
+          )));
+        }
       }).whenComplete(
         () {
           setState(() {

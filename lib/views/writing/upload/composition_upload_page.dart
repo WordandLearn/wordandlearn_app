@@ -97,17 +97,19 @@ class _CompositionUploadPageState extends State<CompositionUploadPage> {
                             (value) {
                               if (context.mounted) {
                                 if (value.isSuccess) {
-                                  showModalBottomSheet(
-                                      context: context,
-                                      isDismissible: false,
-                                      isScrollControlled: true,
-                                      backgroundColor: Colors.transparent,
-                                      builder: (context) {
-                                        return SizedBox(
-                                          child: CompositionWaitingPage(
-                                              taskId: value.data['task_id']),
-                                        );
-                                      });
+                                  if (context.mounted) {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        isDismissible: false,
+                                        isScrollControlled: true,
+                                        backgroundColor: Colors.transparent,
+                                        builder: (context) {
+                                          return SizedBox(
+                                            child: CompositionWaitingPage(
+                                                taskId: value.data['task_id']),
+                                          );
+                                        });
+                                  }
                                 }
                               } else {
                                 if (value.statusCode == 400) {

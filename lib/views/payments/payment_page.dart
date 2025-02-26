@@ -243,20 +243,22 @@ class _PaymentPageState extends State<PaymentPage> {
                           },
                         ).onError(
                           (error, stackTrace) {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                                    content: Row(
-                              children: [
-                                Icon(
-                                  Icons.info,
-                                  color: Colors.red,
-                                ),
-                                SizedBox(
-                                  width: defaultPadding,
-                                ),
-                                Text("Could not contact payment gateway")
-                              ],
-                            )));
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                      content: Row(
+                                children: [
+                                  Icon(
+                                    Icons.info,
+                                    color: Colors.red,
+                                  ),
+                                  SizedBox(
+                                    width: defaultPadding,
+                                  ),
+                                  Text("Could not contact payment gateway")
+                                ],
+                              )));
+                            }
                           },
                         ).whenComplete(
                           () {

@@ -127,10 +127,12 @@ class _OtpValidationPageState extends State<OtpValidationPage> {
                             setState(() {
                               error = value.data["error"];
                             });
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content:
-                                        Text("Code is invalid or expired")));
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                          Text("Code is invalid or expired")));
+                            }
                           }
                         },
                       ).whenComplete(

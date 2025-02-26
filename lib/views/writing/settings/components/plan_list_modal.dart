@@ -42,16 +42,19 @@ class _PlanListModalState extends State<PlanListModal> {
     context.loaderOverlay.show();
     _writingController.subscribeToPackage(selectedPackage!.id, {}).then(
       (value) async {
-        if (value != null) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text("Redirecting to our payment gateway")));
-          await launchUrl(Uri.parse(value["data"]["authorization_url"]));
+        if (context.mounted) {
+          if (value != null) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text("Redirecting to our payment gateway")));
+            await launchUrl(Uri.parse(value["data"]["authorization_url"]));
+          }
         }
       },
     ).whenComplete(
       () {
-        context.loaderOverlay.hide();
-        if (context.mounted) {}
+        if (context.mounted) {
+          context.loaderOverlay.hide();
+        }
         setState(() {
           loading = false;
         });

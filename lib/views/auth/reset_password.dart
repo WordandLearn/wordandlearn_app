@@ -91,22 +91,24 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             token: widget.token, uid: widget.uid, body: body)
                         .then(
                       (value) {
-                        if (value.isSuccess) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text("Password reset successfully"),
-                            backgroundColor: Colors.green,
-                          ));
-                          Navigator.popUntil(
-                            context,
-                            (route) => route.isFirst,
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text("Password reset failed"),
-                            backgroundColor: Colors.red,
-                          ));
+                        if (context.mounted) {
+                          if (value.isSuccess) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Password reset successfully"),
+                              backgroundColor: Colors.green,
+                            ));
+                            Navigator.popUntil(
+                              context,
+                              (route) => route.isFirst,
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Password reset failed"),
+                              backgroundColor: Colors.red,
+                            ));
+                          }
                         }
                       },
                     ).whenComplete(

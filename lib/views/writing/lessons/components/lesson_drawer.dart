@@ -307,13 +307,15 @@ class _LessonDrawerState extends State<LessonDrawer> {
                     Navigator.pop(context);
                     writingController.logout().then((value) {
                       Get.delete<WritingController>();
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginPage(),
-                        ),
-                        (route) => false,
-                      );
+                      if (context.mounted) {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(),
+                          ),
+                          (route) => false,
+                        );
+                      }
                     });
                   });
                 });

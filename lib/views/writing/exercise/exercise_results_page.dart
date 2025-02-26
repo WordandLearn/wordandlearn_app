@@ -217,11 +217,13 @@ class _ExerciseResultsPageState extends State<ExerciseResultsPage> {
                                         .markExerciseCompleted(widget.exercise)
                                         .then(
                                       (value) {
-                                        Navigator.popUntil(
-                                            context,
-                                            (route) =>
-                                                route.settings.name ==
-                                                "LessonTopicsPage");
+                                        if (context.mounted) {
+                                          Navigator.popUntil(
+                                              context,
+                                              (route) =>
+                                                  route.settings.name ==
+                                                  "LessonTopicsPage");
+                                        }
                                       },
                                     );
 

@@ -96,52 +96,67 @@ class _LessonEmptyStateState extends State<LessonEmptyState> {
                   ],
                 ),
               ),
-              TapBounce(
-                onTap: () {
-                  setState(() {
-                    loading = true;
-                  });
-                  writingController.checkUploadComposition().then((value) {
-                    if (value.canUpload) {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return const UploadOnboardingPage();
-                      }));
-                    } else {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return SessionErrorDialog(
-                            title: "Cannot Upload A Composition",
-                            reason: value.reason ??
-                                "There is an error on our end, you can try again later",
-                          );
+              Column(
+                children: [
+                  TapBounce(
+                    onTap: () {
+                      setState(() {
+                        loading = true;
+                      });
+                      writingController.checkUploadComposition().then((value) {
+                        if (context.mounted) {
+                          if (value.canUpload) {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return const UploadOnboardingPage();
+                            }));
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return SessionErrorDialog(
+                                  title: "Cannot Upload A Composition",
+                                  reason: value.reason ??
+                                      "There is an error on our end, you can try again later",
+                                );
+                              },
+                            );
+                          }
+                        }
+                      }).onError(
+                        (error, stackTrace) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        "An error occurred. Please try again later")));
+                          }
                         },
+                      ).whenComplete(
+                        () => setState(() {
+                          loading = false;
+                        }),
                       );
-                    }
-                  }).onError(
-                    (error, stackTrace) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text(
-                              "An error occurred. Please try again later")));
                     },
-                  ).whenComplete(
-                    () => setState(() {
-                      loading = false;
-                    }),
-                  );
-                },
-                child: PrimaryIconButton(
-                    text: "Upload New Composition",
-                    icon: loading
-                        ? const LoadingSpinner(
-                            size: 17,
-                          )
-                        : const Icon(
-                            FeatherIcons.camera,
-                            size: 17,
-                            color: Colors.white,
-                          )),
+                    child: PrimaryIconButton(
+                        text: "Upload Your First Composition",
+                        icon: loading
+                            ? const LoadingSpinner(
+                                size: 17,
+                              )
+                            : const Icon(
+                                FeatherIcons.camera,
+                                size: 17,
+                                color: Colors.white,
+                              )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: defaultPadding),
+                    child: Divider(
+                      color: Theme.of(context).dividerColor,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

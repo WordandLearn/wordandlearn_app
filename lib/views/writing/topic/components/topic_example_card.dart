@@ -119,10 +119,10 @@ class _TopicExampleCardState extends State<TopicExampleCard> {
                                         _showAlertDialog(context);
                                       }
                                     },
-                                    child: const SizedBox.shrink(),
                                     duration: TimerUtil.timeToRead(
                                         widget.example.transformedText +
                                             widget.example.originalText),
+                                    child: const SizedBox.shrink(),
                                   ),
                                   const SizedBox(
                                     width: 10,

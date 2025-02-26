@@ -337,27 +337,29 @@ class _ProfileOnboardingPageState extends State<ProfileOnboardingPage> {
 
                               authenticationController.createProfile(body).then(
                                 (value) {
-                                  if (value.isSuccess) {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(const SnackBar(
-                                      content:
-                                          Text("Profile Set Up Successfully"),
-                                    ));
-                                    Get.put(WritingController());
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const LessonsPage(),
-                                            settings: const RouteSettings(
-                                                name: "LessonsPage")));
-                                  } else {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(const SnackBar(
-                                      content: Text(
-                                          "An error occurred check the values entered"),
-                                      backgroundColor: AppColors.redColor,
-                                    ));
+                                  if (context.mounted) {
+                                    if (value.isSuccess) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content:
+                                            Text("Profile Set Up Successfully"),
+                                      ));
+                                      Get.put(WritingController());
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const LessonsPage(),
+                                              settings: const RouteSettings(
+                                                  name: "LessonsPage")));
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text(
+                                            "An error occurred check the values entered"),
+                                        backgroundColor: AppColors.redColor,
+                                      ));
+                                    }
                                   }
                                 },
                               ).whenComplete(
@@ -392,13 +394,15 @@ class _ProfileOnboardingPageState extends State<ProfileOnboardingPage> {
                       onTap: () async {
                         authenticationController.logout().then(
                           (value) {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const LoginPage(),
-                                  settings:
-                                      const RouteSettings(name: "LoginPage"),
-                                ));
+                            if (context.mounted) {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginPage(),
+                                    settings:
+                                        const RouteSettings(name: "LoginPage"),
+                                  ));
+                            }
                           },
                         );
                       },

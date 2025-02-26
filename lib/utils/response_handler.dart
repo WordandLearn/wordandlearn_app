@@ -30,7 +30,7 @@ class ResponseHandler {
           barrierDismissible: false,
           builder: (context) {
             return PopScope(
-              onPopInvoked: (invoked) {
+              onPopInvokedWithResult: (invoked, _) {
                 paymentDialogShowing = false;
               },
               child: SessionErrorDialog(

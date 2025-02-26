@@ -178,6 +178,9 @@ class _ChangePicturePageState extends State<ChangePicturePage> {
                                     .addProfilePicture(selectedFile!)
                                     .onError(
                                   (error, stackTrace) {
+                                    if (!context.mounted) {
+                                      return;
+                                    }
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(const SnackBar(
                                             content: Row(
@@ -201,6 +204,9 @@ class _ChangePicturePageState extends State<ChangePicturePage> {
                                 ).then(
                                   (value) {
                                     if (value != null) {
+                                      if (!context.mounted) {
+                                        return;
+                                      }
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(
                                               content: Row(
