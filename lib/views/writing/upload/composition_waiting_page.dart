@@ -30,9 +30,6 @@ class _CompositionWaitingPageState extends State<CompositionWaitingPage> {
           progress = response.models.first;
         });
       }
-      if (response.models.first.state == TaskState.success) {
-        _writingController.refetch();
-      }
     }
   }
 

@@ -293,9 +293,10 @@ class _CompositionUploadPageState extends State<CompositionUploadPage> {
                                                       if (snapshot.hasData) {
                                                         return Image.memory(
                                                           snapshot.data!,
+
                                                           // width: 200,
                                                           height:
-                                                              size.height * 0.6,
+                                                              size.height * 0.1,
                                                         );
                                                       }
                                                       return const LoadingSpinner();

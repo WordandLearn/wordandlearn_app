@@ -31,15 +31,15 @@ class StickerUtils {
   ];
 
   static List<String> errorAssetsUrl = [
-    "sad dog.png",
-    "sad_dirty_dog.png",
-    "crying_dog.png",
+    "sad.png",
+    "tired.png",
+    "angry.png",
+    "confused.png"
   ];
 
   static List<String> successAssetsUrl = [
-    "monkey_pencil.png",
-    "fly_happy.png",
-    "panda_happy.png"
+    "well-done.png",
+    "writing.png",
   ];
 
   static String getRandomSticker() {
@@ -51,12 +51,12 @@ class StickerUtils {
   static String getRandomErrorSticker() {
     String randomItem = (errorAssetsUrl.toList()..shuffle()).first;
 
-    return "assets/stickers/$randomItem";
+    return "assets/mascot/$randomItem";
   }
 
   static String getRandomSuccessSticker() {
     String randomItem = (successAssetsUrl.toList()..shuffle()).first;
 
-    return "assets/stickers/$randomItem";
+    return "assets/mascot/$randomItem";
   }
 }
